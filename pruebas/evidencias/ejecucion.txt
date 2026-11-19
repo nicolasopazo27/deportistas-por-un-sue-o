@@ -1,0 +1,119 @@
+
+ RUN  v5.1.1 /home/claude/repo/prototipo
+
+stderr | src/test/casos_prueba.test.tsx > Matriz 03 · prototipo > CP-P01 · RF-01 · derivación vacía rechazada
+The current testing environment is not configured to support act(...)
+
+ ✓ src/test/casos_prueba.test.tsx > Matriz 03 · prototipo > CP-P01 · RF-01 · derivación vacía rechazada 226ms
+stderr | src/test/casos_prueba.test.tsx > Matriz 03 · prototipo > CP-P02 · RF-01, RF-04 · registro y recuperación tras remontar
+The current testing environment is not configured to support act(...)
+
+stderr | src/test/casos_prueba.test.tsx > Matriz 03 · prototipo > CP-P02 · RF-01, RF-04 · registro y recuperación tras remontar
+The current testing environment is not configured to support act(...)
+
+ ✓ src/test/casos_prueba.test.tsx > Matriz 03 · prototipo > CP-P02 · RF-01, RF-04 · registro y recuperación tras remontar 560ms
+stderr | src/test/casos_prueba.test.tsx > Matriz 03 · prototipo > CP-P03 · RF-02 · advertencia por RUT existente y cancelar no duplica
+The current testing environment is not configured to support act(...)
+
+ ✓ src/test/casos_prueba.test.tsx > Matriz 03 · prototipo > CP-P03 · RF-02 · advertencia por RUT existente y cancelar no duplica 356ms
+ ✓ src/test/casos_prueba.test.tsx > Matriz 03 · prototipo > CP-P04 · RF-12 · filtro por comuna 137ms
+ ✓ src/test/casos_prueba.test.tsx > Matriz 03 · prototipo > CP-P05 · RF-13 · filtro por enfermedad 106ms
+stderr | src/test/casos_prueba.test.tsx > Matriz 03 · prototipo > CP-P06 · RF-06, RF-21, RF-03 · atención realizada suma sesión y avisa al área social
+The current testing environment is not configured to support act(...)
+
+stderr | src/test/casos_prueba.test.tsx > Matriz 03 · prototipo > CP-P07 · RF-07 · atención no realizada sin motivo rechazada
+The current testing environment is not configured to support act(...)
+
+ ✓ src/test/casos_prueba.test.tsx > Matriz 03 · prototipo > CP-P06 · RF-06, RF-21, RF-03 · atención realizada suma sesión y avisa al área social 149ms
+stderr | src/test/casos_prueba.test.tsx > Matriz 03 · prototipo > CP-P08 · RF-08 · alertas generadas por umbral y revisión individual
+The current testing environment is not configured to support act(...)
+
+ ✓ src/test/casos_prueba.test.tsx > Matriz 03 · prototipo > CP-P07 · RF-07 · atención no realizada sin motivo rechazada 137ms
+ ✓ src/test/casos_prueba.test.tsx > Matriz 03 · prototipo > CP-P08 · RF-08 · alertas generadas por umbral y revisión individual 96ms
+stderr | src/test/casos_prueba.test.tsx > Matriz 03 · prototipo > CP-P09 · RF-09 · baja con causal conserva el historial
+The current testing environment is not configured to support act(...)
+
+stderr | src/test/casos_prueba.test.tsx > Matriz 03 · prototipo > CP-P09 · RF-09 · baja con causal conserva el historial
+The current testing environment is not configured to support act(...)
+
+stderr | src/test/casos_prueba.test.tsx > Matriz 03 · prototipo > CP-P10 · RF-18 · ayuda sin número de guía rechazada
+The current testing environment is not configured to support act(...)
+
+ ✓ src/test/casos_prueba.test.tsx > Matriz 03 · prototipo > CP-P09 · RF-09 · baja con causal conserva el historial 155ms
+stderr | src/test/casos_prueba.test.tsx > Matriz 03 · prototipo > CP-P11 · RNF-3 · perfil Consulta no puede guardar atención ni ver datos de salud
+The current testing environment is not configured to support act(...)
+
+stderr | src/test/casos_prueba.test.tsx > Matriz 03 · prototipo > CP-P11 · RNF-3 · perfil Consulta no puede guardar atención ni ver datos de salud
+The current testing environment is not configured to support act(...)
+
+ ✓ src/test/casos_prueba.test.tsx > Matriz 03 · prototipo > CP-P10 · RF-18 · ayuda sin número de guía rechazada 112ms
+stderr | src/test/casos_prueba.test.tsx > Matriz 03 · prototipo > CP-P12 · RF-18 · TENS no puede registrar entregas (corrección de INC-02)
+The current testing environment is not configured to support act(...)
+
+ ✓ src/test/casos_prueba.test.tsx > Matriz 03 · prototipo > CP-P11 · RNF-3 · perfil Consulta no puede guardar atención ni ver datos de salud 131ms
+ ✓ src/test/casos_prueba.test.tsx > Matriz 03 · prototipo > CP-P12 · RF-18 · TENS no puede registrar entregas (corrección de INC-02) 100ms
+stderr | src/test/casos_prueba.test.tsx > Matriz 03 · prototipo > CP-P13 · RF-01 · RUT y teléfono demasiado largos
+The current testing environment is not configured to support act(...)
+
+ ✓ src/test/casos_prueba.test.tsx > Matriz 03 · prototipo > CP-P13 · RF-01 · RUT y teléfono demasiado largos 258ms
+stderr | src/test/casos_prueba.test.tsx > Matriz 03 · prototipo > CP-P16 · RF-02 · continuar tras la coincidencia asocia al caso activo
+The current testing environment is not configured to support act(...)
+
+ ✓ src/test/casos_prueba.test.tsx > Matriz 03 · prototipo > CP-P14 · RNF-3 · acceso directo a una ficha sin sesión 7ms
+ ✓ src/test/casos_prueba.test.tsx > Matriz 03 · prototipo > CP-P15 · RF-08 · límite del umbral y ciclo de la alerta 1ms
+ ✓ src/test/casos_prueba.test.tsx > Matriz 03 · prototipo > CP-P16 · RF-02 · continuar tras la coincidencia asocia al caso activo 281ms
+ ✓ src/test/casos_prueba.test.tsx > Matriz 03 · prototipo > CP-P17 · RF-11, RNF-4 · informe mensual en XLSX íntegro y descarga registrada 50ms
+stderr | src/test/casos_prueba.test.tsx > Matriz 03 · prototipo > CP-P18 · RF-10, RF-11 · período inválido en reportes
+The current testing environment is not configured to support act(...)
+
+stderr | src/test/casos_prueba.test.tsx > Matriz 03 · prototipo > CP-P19 · RF-25, RNF-3 · exportación sin permiso
+The current testing environment is not configured to support act(...)
+
+stderr | src/test/casos_prueba.test.tsx > Matriz 03 · prototipo > CP-P19 · RF-25, RNF-3 · exportación sin permiso
+The current testing environment is not configured to support act(...)
+
+ ✓ src/test/casos_prueba.test.tsx > Matriz 03 · prototipo > CP-P18 · RF-10, RF-11 · período inválido en reportes 150ms
+stderr | src/test/casos_prueba.test.tsx > Matriz 03 · prototipo > CP-P20 · RF-23 · observación con autoría
+The current testing environment is not configured to support act(...)
+
+ ✓ src/test/casos_prueba.test.tsx > Matriz 03 · prototipo > CP-P19 · RF-25, RNF-3 · exportación sin permiso 138ms
+ ✓ src/test/casos_prueba.test.tsx > Matriz 03 · prototipo > CP-P20 · RF-23 · observación con autoría 254ms
+stderr | src/test/casos_prueba.test.tsx > Matriz 03 · prototipo > CP-P21 · RF-05, RF-06 · TENS confirma el término del ciclo
+The current testing environment is not configured to support act(...)
+
+ ✓ src/test/casos_prueba.test.tsx > Matriz 03 · prototipo > CP-P21 · RF-05, RF-06 · TENS confirma el término del ciclo 120ms
+stderr | src/test/casos_prueba.test.tsx > Matriz 03 · prototipo > CP-P22 · RNF-1 · botón Volver en todas las vistas de registro
+The current testing environment is not configured to support act(...)
+
+stderr | src/test/casos_prueba.test.tsx > Matriz 03 · prototipo > CP-P22 · RNF-1 · botón Volver en todas las vistas de registro
+The current testing environment is not configured to support act(...)
+
+stderr | src/test/casos_prueba.test.tsx > Matriz 03 · prototipo > CP-P22 · RNF-1 · botón Volver en todas las vistas de registro
+The current testing environment is not configured to support act(...)
+
+stderr | src/test/casos_prueba.test.tsx > Matriz 03 · prototipo > CP-P22 · RNF-1 · botón Volver en todas las vistas de registro
+The current testing environment is not configured to support act(...)
+
+stderr | src/test/casos_prueba.test.tsx > Matriz 03 · prototipo > CP-P22 · RNF-1 · botón Volver en todas las vistas de registro
+The current testing environment is not configured to support act(...)
+
+stderr | src/test/casos_prueba.test.tsx > Matriz 03 · prototipo > CP-P22 · RNF-1 · botón Volver en todas las vistas de registro
+The current testing environment is not configured to support act(...)
+
+stderr | src/test/casos_prueba.test.tsx > Matriz 03 · prototipo > CP-P22 · RNF-1 · botón Volver en todas las vistas de registro
+The current testing environment is not configured to support act(...)
+
+stderr | src/test/casos_prueba.test.tsx > Matriz 03 · prototipo > CP-P22 · RNF-1 · botón Volver en todas las vistas de registro
+The current testing environment is not configured to support act(...)
+
+stderr | src/test/casos_prueba.test.tsx > Matriz 03 · prototipo > CP-P22 · RNF-1 · botón Volver en todas las vistas de registro
+The current testing environment is not configured to support act(...)
+
+ ✓ src/test/casos_prueba.test.tsx > Matriz 03 · prototipo > CP-P22 · RNF-1 · botón Volver en todas las vistas de registro 402ms
+ ✓ src/test/casos_prueba.test.tsx > Matriz 03 · prototipo > CP-P23 · RF-08 · la alerta revisada no se vuelve a generar 2ms
+
+ Test Files  1 passed (1)
+      Tests  23 passed (23)
+   Start at  12:59:30
+   Duration  6.05s (tests 67%, import 18%, environment 11%, transform 3%, setup 2%)
+

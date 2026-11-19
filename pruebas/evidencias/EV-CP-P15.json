@@ -1,0 +1,11 @@
+{
+  "id": "CP-P15",
+  "requisito": "RF-08",
+  "prueba": "Casos con T−1, T y T+1 días (T=10); revisar dos veces; actualizar el caso T+1.",
+  "esperado": "Solo T+1 genera alerta; la segunda revisión no duplica; al actualizar el caso la alerta se resuelve.",
+  "obtenido": "Primera revisión: 1 alerta (caso KT-2); segunda: 0; estado tras actualizar: RESUELTA.",
+  "aprobada": true,
+  "estado": "Aprobada",
+  "fechaUTC": "2026-11-19T15:59:35.282Z",
+  "almacenamiento": null
+}

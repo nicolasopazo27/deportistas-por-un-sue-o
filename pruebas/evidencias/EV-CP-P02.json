@@ -1,0 +1,256 @@
+{
+  "id": "CP-P02",
+  "requisito": "RF-01, RF-04",
+  "prueba": "Registrar una derivación válida, desmontar la aplicación y volver a montarla.",
+  "esperado": "La ficha se crea y se recupera desde el almacenamiento al remontar.",
+  "obtenido": "Beneficiarios: 3. Ficha recuperada con RUT, comuna y observación tras remontar. Persistencia local (no SQL).",
+  "aprobada": true,
+  "estado": "Aprobada",
+  "fechaUTC": "2026-11-19T15:59:33.534Z",
+  "almacenamiento": {
+    "version": 1,
+    "parametros": {
+      "umbralDiasAlerta": 14
+    },
+    "beneficiarios": [
+      {
+        "id": "B-01",
+        "rut": "12345678-5",
+        "nombres": "Camila",
+        "apellidos": "Rojas Soto",
+        "comuna": "Santiago",
+        "apoderado": {
+          "nombre": "María Soto Pérez",
+          "telefono": "+56 9 1234 5678",
+          "prevision": "FONASA"
+        },
+        "situacionDocumental": "DOCUMENTADO",
+        "electrodependiente": false,
+        "enfermedades": [
+          {
+            "nombre": "Renal",
+            "descripcion": "Control nefrológico mensual (dato ficticio)."
+          }
+        ],
+        "hospitalizaciones": [],
+        "bajas": [],
+        "ayudas": [],
+        "fechaRegistro": "2026-10-10T15:59:32.978Z",
+        "observaciones": [],
+        "casos": [
+          {
+            "id": "K-01",
+            "estado": "EN_ATENCION",
+            "fechaInicio": "2026-10-10",
+            "ultimaActualizacion": "2026-10-31T15:59:32.978Z",
+            "derivaciones": [
+              {
+                "id": "D-01",
+                "fecha": "2026-10-10",
+                "tipoIngreso": "INGRESO",
+                "area": "DENTAL",
+                "origen": "LLAMADO_SEMANAL",
+                "observacion": "Requiere traslado.",
+                "advertenciaIgnorada": false,
+                "autor": "Trabajo social (demo)"
+              }
+            ],
+            "atenciones": [
+              {
+                "id": "A-01",
+                "fecha": "2026-10-24",
+                "profesional": "Diego Fuentes · Dental",
+                "prestacion": "Atención dental",
+                "numeroSesion": 1,
+                "asistencia": "ASISTIO",
+                "resultado": "REALIZADA",
+                "autor": "TENS (demo)"
+              },
+              {
+                "id": "A-02",
+                "fecha": "2026-10-31",
+                "profesional": "Diego Fuentes · Dental",
+                "prestacion": "Atención dental",
+                "numeroSesion": 2,
+                "asistencia": "ASISTIO",
+                "resultado": "REALIZADA",
+                "autor": "TENS (demo)"
+              }
+            ],
+            "urgencias": []
+          }
+        ],
+        "historial": [
+          {
+            "fecha": "2026-10-10T15:59:32.978Z",
+            "tipo": "Derivación",
+            "detalle": "Ingreso · Dental · llamado semanal",
+            "autor": "Trabajo social (demo)"
+          },
+          {
+            "fecha": "2026-10-24T15:59:32.978Z",
+            "tipo": "Atención",
+            "detalle": "Sesión 1 · Realizada · Atención dental",
+            "autor": "TENS (demo)"
+          },
+          {
+            "fecha": "2026-10-31T15:59:32.978Z",
+            "tipo": "Atención",
+            "detalle": "Sesión 2 · Realizada · Atención dental",
+            "autor": "TENS (demo)"
+          }
+        ]
+      },
+      {
+        "id": "B-02",
+        "rut": "21234567-9",
+        "nombres": "Tomás",
+        "apellidos": "Díaz Pérez",
+        "comuna": "Maipú",
+        "apoderado": {
+          "nombre": "Andrea Pérez Lagos",
+          "telefono": "+56 9 8765 4321",
+          "prevision": "ISAPRE"
+        },
+        "situacionDocumental": "POR_VERIFICAR",
+        "electrodependiente": true,
+        "enfermedades": [
+          {
+            "nombre": "Oncológica"
+          }
+        ],
+        "hospitalizaciones": [],
+        "bajas": [],
+        "ayudas": [],
+        "fechaRegistro": "2026-09-20T15:59:32.978Z",
+        "observaciones": [],
+        "casos": [
+          {
+            "id": "K-02",
+            "estado": "EN_ATENCION",
+            "fechaInicio": "2026-09-20",
+            "ultimaActualizacion": "2026-10-09T15:59:32.978Z",
+            "derivaciones": [
+              {
+                "id": "D-02",
+                "fecha": "2026-09-20",
+                "tipoIngreso": "INGRESO",
+                "area": "KINESIOLOGIA",
+                "origen": "SOLICITUD_APODERADO",
+                "advertenciaIgnorada": false,
+                "autor": "Trabajo social (demo)"
+              }
+            ],
+            "atenciones": [],
+            "urgencias": []
+          }
+        ],
+        "historial": [
+          {
+            "fecha": "2026-09-20T15:59:32.978Z",
+            "tipo": "Derivación",
+            "detalle": "Ingreso · Kinesiología · solicitud del apoderado",
+            "autor": "Trabajo social (demo)"
+          }
+        ]
+      },
+      {
+        "id": "B-3r4mfo2mu",
+        "rut": "22345678-2",
+        "nombres": "Sofía",
+        "apellidos": "Muñoz Araya",
+        "comuna": "Recoleta",
+        "apoderado": {
+          "nombre": "Inés Araya Núñez",
+          "telefono": "+56 9 2222 3333"
+        },
+        "situacionDocumental": "POR_VERIFICAR",
+        "electrodependiente": false,
+        "enfermedades": [],
+        "hospitalizaciones": [],
+        "casos": [
+          {
+            "id": "K-glq3fm2mu",
+            "estado": "EN_ATENCION",
+            "fechaInicio": "2026-11-19",
+            "ultimaActualizacion": "2026-11-19T15:59:33.462Z",
+            "derivaciones": [
+              {
+                "id": "D-xspvf42mu",
+                "fecha": "2026-11-19",
+                "tipoIngreso": "INGRESO",
+                "area": "KINESIOLOGIA",
+                "origen": "LLAMADO_SEMANAL",
+                "observacion": "Niña postrada, requiere visita domiciliaria",
+                "advertenciaIgnorada": false,
+                "autor": "Valentina Muñoz"
+              }
+            ],
+            "atenciones": [],
+            "urgencias": []
+          }
+        ],
+        "bajas": [],
+        "ayudas": [],
+        "observaciones": [
+          {
+            "id": "O-av2d9a2mu",
+            "fechaHora": "2026-11-19T15:59:33.462Z",
+            "texto": "Niña postrada, requiere visita domiciliaria",
+            "autor": "Valentina Muñoz"
+          }
+        ],
+        "historial": [
+          {
+            "fecha": "2026-11-19T15:59:33.462Z",
+            "tipo": "Derivación",
+            "detalle": "Ingreso · Kinesiología",
+            "autor": "Valentina Muñoz"
+          }
+        ],
+        "fechaRegistro": "2026-11-19T15:59:33.462Z"
+      }
+    ],
+    "alertas": [
+      {
+        "id": "AL-319aoo29e",
+        "idBeneficiario": "B-01",
+        "idCaso": "K-01",
+        "fechaGeneracion": "2026-11-19T15:59:32.978Z",
+        "diasSinActualizacion": 19,
+        "umbralDias": 14,
+        "estado": "ACTIVA"
+      },
+      {
+        "id": "AL-bpeft029e",
+        "idBeneficiario": "B-02",
+        "idCaso": "K-02",
+        "fechaGeneracion": "2026-11-19T15:59:32.978Z",
+        "diasSinActualizacion": 41,
+        "umbralDias": 14,
+        "estado": "ACTIVA"
+      }
+    ],
+    "notificaciones": [
+      {
+        "id": "N-fify7p29e",
+        "tipo": "ALERTA_CASO",
+        "canal": "PLATAFORMA",
+        "rolDestino": "TRABAJO_SOCIAL",
+        "mensaje": "Caso de Camila Rojas Soto lleva 19 días sin actualización (umbral 14).",
+        "estado": "PENDIENTE",
+        "fecha": "2026-11-19T15:59:32.978Z"
+      },
+      {
+        "id": "N-ikobyt29e",
+        "tipo": "ALERTA_CASO",
+        "canal": "PLATAFORMA",
+        "rolDestino": "TRABAJO_SOCIAL",
+        "mensaje": "Caso de Tomás Díaz Pérez lleva 41 días sin actualización (umbral 14).",
+        "estado": "PENDIENTE",
+        "fecha": "2026-11-19T15:59:32.978Z"
+      }
+    ],
+    "reportes": []
+  }
+}
