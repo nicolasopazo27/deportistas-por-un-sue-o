@@ -1,0 +1,11 @@
+{
+  "id": "CP-P17",
+  "requisito": "RF-11, RNF-4",
+  "prueba": "Generar el informe consolidado en XLSX con un lote que incluye tildes y ñ; releer el archivo.",
+  "esperado": "Filas del archivo = registros de origen, sin duplicados y con caracteres preservados.",
+  "obtenido": "Registros de origen: 5; filas verificadas en el XLSX: 5; claves duplicadas: false; «Sofía Muñoz Ñúñez» y «Peñalolén» preservados: true.",
+  "aprobada": true,
+  "estado": "Aprobada",
+  "fechaUTC": "2026-11-19T15:59:35.612Z",
+  "almacenamiento": null
+}

@@ -1,0 +1,11 @@
+{
+  "id": "CP-P23",
+  "requisito": "RF-08",
+  "prueba": "Revisar una alerta y volver a ejecutar la revisión periódica.",
+  "esperado": "No se crea una segunda alerta para el mismo caso mientras la anterior no se resuelva.",
+  "obtenido": "Alertas totales: 2; nuevas en la segunda revisión: 0.",
+  "aprobada": true,
+  "estado": "Aprobada",
+  "fechaUTC": "2026-11-19T15:59:36.679Z",
+  "almacenamiento": null
+}

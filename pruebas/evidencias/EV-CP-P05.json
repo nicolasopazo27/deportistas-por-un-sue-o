@@ -1,0 +1,200 @@
+{
+  "id": "CP-P05",
+  "requisito": "RF-13",
+  "prueba": "Filtrar por la enfermedad Oncológica con perfil Trabajo social.",
+  "esperado": "Solo aparece Tomás Díaz Pérez.",
+  "obtenido": "1 fila(s): Tomás Díaz Pérez.",
+  "aprobada": true,
+  "estado": "Aprobada",
+  "fechaUTC": "2026-11-19T15:59:34.131Z",
+  "almacenamiento": {
+    "version": 1,
+    "parametros": {
+      "umbralDiasAlerta": 14
+    },
+    "beneficiarios": [
+      {
+        "id": "B-01",
+        "rut": "12345678-5",
+        "nombres": "Camila",
+        "apellidos": "Rojas Soto",
+        "comuna": "Santiago",
+        "apoderado": {
+          "nombre": "María Soto Pérez",
+          "telefono": "+56 9 1234 5678",
+          "prevision": "FONASA"
+        },
+        "situacionDocumental": "DOCUMENTADO",
+        "electrodependiente": false,
+        "enfermedades": [
+          {
+            "nombre": "Renal",
+            "descripcion": "Control nefrológico mensual (dato ficticio)."
+          }
+        ],
+        "hospitalizaciones": [],
+        "bajas": [],
+        "ayudas": [],
+        "fechaRegistro": "2026-10-10T15:59:34.030Z",
+        "observaciones": [],
+        "casos": [
+          {
+            "id": "K-01",
+            "estado": "EN_ATENCION",
+            "fechaInicio": "2026-10-10",
+            "ultimaActualizacion": "2026-10-31T15:59:34.030Z",
+            "derivaciones": [
+              {
+                "id": "D-01",
+                "fecha": "2026-10-10",
+                "tipoIngreso": "INGRESO",
+                "area": "DENTAL",
+                "origen": "LLAMADO_SEMANAL",
+                "observacion": "Requiere traslado.",
+                "advertenciaIgnorada": false,
+                "autor": "Trabajo social (demo)"
+              }
+            ],
+            "atenciones": [
+              {
+                "id": "A-01",
+                "fecha": "2026-10-24",
+                "profesional": "Diego Fuentes · Dental",
+                "prestacion": "Atención dental",
+                "numeroSesion": 1,
+                "asistencia": "ASISTIO",
+                "resultado": "REALIZADA",
+                "autor": "TENS (demo)"
+              },
+              {
+                "id": "A-02",
+                "fecha": "2026-10-31",
+                "profesional": "Diego Fuentes · Dental",
+                "prestacion": "Atención dental",
+                "numeroSesion": 2,
+                "asistencia": "ASISTIO",
+                "resultado": "REALIZADA",
+                "autor": "TENS (demo)"
+              }
+            ],
+            "urgencias": []
+          }
+        ],
+        "historial": [
+          {
+            "fecha": "2026-10-10T15:59:34.030Z",
+            "tipo": "Derivación",
+            "detalle": "Ingreso · Dental · llamado semanal",
+            "autor": "Trabajo social (demo)"
+          },
+          {
+            "fecha": "2026-10-24T15:59:34.030Z",
+            "tipo": "Atención",
+            "detalle": "Sesión 1 · Realizada · Atención dental",
+            "autor": "TENS (demo)"
+          },
+          {
+            "fecha": "2026-10-31T15:59:34.030Z",
+            "tipo": "Atención",
+            "detalle": "Sesión 2 · Realizada · Atención dental",
+            "autor": "TENS (demo)"
+          }
+        ]
+      },
+      {
+        "id": "B-02",
+        "rut": "21234567-9",
+        "nombres": "Tomás",
+        "apellidos": "Díaz Pérez",
+        "comuna": "Maipú",
+        "apoderado": {
+          "nombre": "Andrea Pérez Lagos",
+          "telefono": "+56 9 8765 4321",
+          "prevision": "ISAPRE"
+        },
+        "situacionDocumental": "POR_VERIFICAR",
+        "electrodependiente": true,
+        "enfermedades": [
+          {
+            "nombre": "Oncológica"
+          }
+        ],
+        "hospitalizaciones": [],
+        "bajas": [],
+        "ayudas": [],
+        "fechaRegistro": "2026-09-20T15:59:34.030Z",
+        "observaciones": [],
+        "casos": [
+          {
+            "id": "K-02",
+            "estado": "EN_ATENCION",
+            "fechaInicio": "2026-09-20",
+            "ultimaActualizacion": "2026-10-09T15:59:34.030Z",
+            "derivaciones": [
+              {
+                "id": "D-02",
+                "fecha": "2026-09-20",
+                "tipoIngreso": "INGRESO",
+                "area": "KINESIOLOGIA",
+                "origen": "SOLICITUD_APODERADO",
+                "advertenciaIgnorada": false,
+                "autor": "Trabajo social (demo)"
+              }
+            ],
+            "atenciones": [],
+            "urgencias": []
+          }
+        ],
+        "historial": [
+          {
+            "fecha": "2026-09-20T15:59:34.030Z",
+            "tipo": "Derivación",
+            "detalle": "Ingreso · Kinesiología · solicitud del apoderado",
+            "autor": "Trabajo social (demo)"
+          }
+        ]
+      }
+    ],
+    "alertas": [
+      {
+        "id": "AL-fc3f9g32m",
+        "idBeneficiario": "B-01",
+        "idCaso": "K-01",
+        "fechaGeneracion": "2026-11-19T15:59:34.030Z",
+        "diasSinActualizacion": 19,
+        "umbralDias": 14,
+        "estado": "ACTIVA"
+      },
+      {
+        "id": "AL-6a43s832m",
+        "idBeneficiario": "B-02",
+        "idCaso": "K-02",
+        "fechaGeneracion": "2026-11-19T15:59:34.030Z",
+        "diasSinActualizacion": 41,
+        "umbralDias": 14,
+        "estado": "ACTIVA"
+      }
+    ],
+    "notificaciones": [
+      {
+        "id": "N-2v3pkk32m",
+        "tipo": "ALERTA_CASO",
+        "canal": "PLATAFORMA",
+        "rolDestino": "TRABAJO_SOCIAL",
+        "mensaje": "Caso de Camila Rojas Soto lleva 19 días sin actualización (umbral 14).",
+        "estado": "PENDIENTE",
+        "fecha": "2026-11-19T15:59:34.030Z"
+      },
+      {
+        "id": "N-ecvvmc32m",
+        "tipo": "ALERTA_CASO",
+        "canal": "PLATAFORMA",
+        "rolDestino": "TRABAJO_SOCIAL",
+        "mensaje": "Caso de Tomás Díaz Pérez lleva 41 días sin actualización (umbral 14).",
+        "estado": "PENDIENTE",
+        "fecha": "2026-11-19T15:59:34.030Z"
+      }
+    ],
+    "reportes": []
+  }
+}
