@@ -1,0 +1,45 @@
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+--- T01 RUT inválido (esperado: ck_beneficiario_rut)
+psql:repo/database/pruebas_integridad.sql:14: ERROR:  new row for relation "beneficiario" violates check constraint "ck_beneficiario_rut"
+DETAIL:  Failing row contains (2, 12.345.678-5, X, Y, null, 1, 1, POR_VERIFICAR, f, 2026-11-19 12:59:17.880349-03).
+--- T06 NO_REALIZADA sin motivo (esperado: ck_atencion_motivo)
+psql:repo/database/pruebas_integridad.sql:16: ERROR:  new row for relation "atencion" violates check constraint "ck_atencion_motivo"
+DETAIL:  Failing row contains (2, 1, 1, 1, 2026-11-19, null, NO_ASISTIO, NO_REALIZADA, null, null, null, 1, 2026-11-19 12:59:17.880573-03).
+--- T07 REALIZADA sin asistencia (esperado: ck_atencion_realizada_asistio)
+psql:repo/database/pruebas_integridad.sql:18: ERROR:  new row for relation "atencion" violates check constraint "ck_atencion_realizada_asistio"
+DETAIL:  Failing row contains (3, 1, 1, 1, 2026-11-19, 2, NO_ASISTIO, REALIZADA, null, null, null, 1, 2026-11-19 12:59:17.880731-03).
+--- T10 sesión repetida (esperado: uq_atencion_caso_sesion)
+psql:repo/database/pruebas_integridad.sql:20: ERROR:  duplicate key value violates unique constraint "uq_atencion_caso_sesion"
+DETAIL:  Key (id_caso, numero_sesion)=(1, 1) already exists.
+--- T12 segunda alerta ACTIVA (esperado: ux_alerta_activa_por_caso)
+psql:repo/database/pruebas_integridad.sql:22: ERROR:  duplicate key value violates unique constraint "ux_alerta_activa_por_caso"
+DETAIL:  Key (id_caso)=(1) already exists.
+--- T15 apoderado sin contacto (esperado: ck_apoderado_contacto)
+psql:repo/database/pruebas_integridad.sql:24: ERROR:  new row for relation "apoderado" violates check constraint "ck_apoderado_contacto"
+DETAIL:  Failing row contains (2, null, Sin Contacto, null, null, null).
+--- T18 baja repetida (esperado: uq_baja_beneficiario_causal_fecha)
+psql:repo/database/pruebas_integridad.sql:26: ERROR:  duplicate key value violates unique constraint "uq_baja_beneficiario_causal_fecha"
+DETAIL:  Key (id_beneficiario, id_causal, fecha_baja)=(1, 2, 2026-11-19) already exists.
+--- T20 ayuda sin guía (esperado: ck_ayuda_entregada_numero_guia)
+psql:repo/database/pruebas_integridad.sql:28: ERROR:  new row for relation "ayuda_entregada" violates check constraint "ck_ayuda_entregada_numero_guia"
+DETAIL:  Failing row contains (1, 1, 1, 2026-11-19,   , 1, 2026-11-19 12:59:17.881657-03).
+--- T22 informe mensual sin período (esperado: ck_reporte_periodo_oblig)
+psql:repo/database/pruebas_integridad.sql:30: ERROR:  new row for relation "reporte_generado" violates check constraint "ck_reporte_periodo_oblig"
+DETAIL:  Failing row contains (1, INFORME_MENSUAL, XLSX, null, null, null, null, f, null, GENERADO, 1, 2026-11-19 12:59:17.881883-03).
+--- T25 borrar beneficiario con historial (esperado: fk_caso_atencion_id_beneficiario)
+psql:repo/database/pruebas_integridad.sql:32: ERROR:  update or delete on table "beneficiario" violates foreign key constraint "fk_caso_atencion_id_beneficiario" on table "caso_atencion"
+DETAIL:  Key (id_beneficiario)=(1) is still referenced from table "caso_atencion".
+--- Vista v_caso_resumen (esperado: 1 sesión realizada)
+ id_caso | sesiones_realizadas | ciclo_terminado 
+---------+---------------------+-----------------
+       1 |                   1 | f
+(1 row)
+
