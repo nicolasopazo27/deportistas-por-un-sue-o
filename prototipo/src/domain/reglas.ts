@@ -9,6 +9,7 @@ export const PREVISIONES = ['FONASA', 'ISAPRE', 'Otra', 'Sin previsión'];
 export const PRESTACIONES = ['Atención dental', 'Kinesiología'];
 export const PROFESIONALES = ['Camila Ríos · Kinesiología', 'Diego Fuentes · Dental', 'Paula Vera · Dental'];
 export const MOTIVOS = ['Contraindicación médica', 'Falta de adherencia al programa', 'Caso complejo de atender'];
+export const CENTROS_SALUD = ['Hospital Dr. Luis Calvo Mackenna', 'Hospital Exequiel González Cortés', 'Hospital Roberto del Río', 'Hospital Sótero del Río', 'CESFAM de la comuna', 'Teletón', 'Otro'];
 export const TIPOS_AYUDA = ['ORASMI', 'Vivienda', 'Insumos', 'Alimentos', 'Medicamentos', 'Traslado'];
 export const CAUSALES = [
   { codigo: 'FALLECIMIENTO', nombre: 'Fallecimiento' },
@@ -27,18 +28,32 @@ export const ESTADOS_CASO = [
 ] as const;
 
 // ---------- Control de acceso (equivalente a IControlAcceso, M1). Perfiles provisionales DP-07 ----------
-const PERMISOS: Record<Rol, Permiso[]> = {
+export const PERMISOS: Record<Rol, Permiso[]> = {
   TRABAJO_SOCIAL: ['DERIVACION_REGISTRAR', 'FICHA_CONSULTAR', 'FICHA_EDITAR', 'SALUD_VER', 'SALUD_EDITAR',
     'DATOS_SENSIBLES_VER', 'DATOS_SENSIBLES_EDITAR', 'OBSERVACION_REGISTRAR', 'ALERTA_CONSULTAR', 'BAJA_REGISTRAR',
-    'AYUDA_REGISTRAR', 'URGENCIA_MARCAR', 'REPORTE_GENERAR', 'EXPORTAR_FICHA', 'PARAMETROS_EDITAR'],
-  COMUNICACION: ['DERIVACION_REGISTRAR'],
+    'AYUDA_REGISTRAR', 'URGENCIA_MARCAR', 'REPORTE_GENERAR', 'EXPORTAR_FICHA', 'PARAMETROS_EDITAR',
+    'POSTULACION_REGISTRAR', 'POSTULACION_EVALUAR', 'FOTO_EDITAR'],
+  COMUNICACION: ['DERIVACION_REGISTRAR', 'FICHA_CONSULTAR'],
   TENS: ['FICHA_CONSULTAR', 'OBSERVACION_REGISTRAR', 'ATENCION_REGISTRAR', 'CICLO_ACTUALIZAR', 'ALERTA_CONSULTAR', 'URGENCIA_MARCAR'],
   PROFESIONAL: ['FICHA_CONSULTAR', 'SALUD_VER', 'SALUD_EDITAR', 'ATENCION_REGISTRAR'],
+  // Tutor: propuesto por el mandante para realizar la postulación, porque conoce al NNA (Certamen 1).
+  TUTOR: ['POSTULACION_REGISTRAR', 'FICHA_CONSULTAR', 'OBSERVACION_REGISTRAR', 'FOTO_EDITAR'],
   CONSULTA: ['FICHA_CONSULTAR'],
 };
 export const NOMBRE_ROL: Record<Rol, string> = {
   TRABAJO_SOCIAL: 'Trabajo social', COMUNICACION: 'Encargada de comunicación', TENS: 'TENS',
-  PROFESIONAL: 'Profesional dental/kine', CONSULTA: 'Consulta',
+  PROFESIONAL: 'Profesional dental/kine', TUTOR: 'Tutor', CONSULTA: 'Consulta',
+};
+export const DESCRIPCION_PERMISO: Record<Permiso, string> = {
+  POSTULACION_REGISTRAR: 'Registrar postulaciones de NNA', POSTULACION_EVALUAR: 'Evaluar postulaciones (ingreso al programa)',
+  DERIVACION_REGISTRAR: 'Registrar derivaciones a prestaciones', FICHA_CONSULTAR: 'Consultar fichas',
+  FICHA_EDITAR: 'Editar datos de la ficha', FOTO_EDITAR: 'Cargar foto identificatoria', SALUD_VER: 'Ver antecedentes de salud',
+  SALUD_EDITAR: 'Editar antecedentes de salud', DATOS_SENSIBLES_VER: 'Ver datos sensibles (documental, previsión)',
+  DATOS_SENSIBLES_EDITAR: 'Editar datos sensibles', OBSERVACION_REGISTRAR: 'Registrar observaciones',
+  ATENCION_REGISTRAR: 'Registrar atenciones', CICLO_ACTUALIZAR: 'Actualizar estado y cerrar ciclo',
+  ALERTA_CONSULTAR: 'Consultar y revisar alertas', BAJA_REGISTRAR: 'Registrar bajas', AYUDA_REGISTRAR: 'Registrar ayudas entregadas',
+  URGENCIA_MARCAR: 'Marcar urgencias', REPORTE_GENERAR: 'Generar reportes', EXPORTAR_FICHA: 'Exportar con datos del apoderado',
+  PARAMETROS_EDITAR: 'Configurar umbrales de alerta',
 };
 export function puede(rol: Rol | undefined, permiso: Permiso): boolean {
   return !!rol && PERMISOS[rol].includes(permiso);
@@ -65,28 +80,43 @@ export function telefonoValido(t: string): boolean {
 }
 
 // ---------- Derivación (CU-01) ----------
-export interface DatosDerivacion {
-  nombre: string; rut: string; comuna: string; apoderado: string; telefono: string;
-  area: string; tipoIngreso: string; fecha: string; origen: string; observacion: string;
-}
+// La derivación envía a un NNA YA INGRESADO al programa hacia una prestación (dental, kine u otra).
+// El ingreso al programa ocurre por una postulación aceptada (M8). Así se separan ambos conceptos.
+export interface DatosDerivacion { idBeneficiario: string; area: string; tipoIngreso: string; fecha: string; origen: string; observacion: string }
 export function validarDerivacion(d: DatosDerivacion): Record<string, string> {
   const e: Record<string, string> = {};
-  const nombre = d.nombre.trim();
-  if (!nombre) e.nombre = 'Ingrese el nombre del beneficiario.';
-  else if (nombre.split(/\s+/).length < 2) e.nombre = 'Ingrese nombres y apellidos.';
-  else if (nombre.length > 160) e.nombre = 'El nombre es demasiado largo.';
-  if (!d.rut.trim()) e.rut = 'Ingrese el RUT.';
+  if (!d.idBeneficiario) e.idBeneficiario = 'Busque y seleccione un beneficiario ingresado al programa.';
+  if (!d.area) e.area = 'Seleccione la prestación a la que se deriva.';
+  if (!d.tipoIngreso) e.tipoIngreso = 'Indique si es primera derivación o reingreso.';
+  if (!d.fecha) e.fecha = 'Ingrese la fecha de la derivación.';
+  if (d.observacion.length > 500) e.observacion = 'Máximo 500 caracteres.';
+  return e;
+}
+
+// ---------- Postulación (M8) ----------
+export interface DatosPostulacion {
+  nombres: string; apellidos: string; rut: string; fechaNacimiento: string; comuna: string;
+  apoderado: string; telefono: string; prevision: string; patologias: string[]; centrosSalud: string[];
+  credencial: boolean; numeroCredencial: string; porcentaje: string; electrodependiente: boolean; descripcion: string; motivo: string;
+}
+export function validarPostulacion(d: DatosPostulacion): Record<string, string> {
+  const e: Record<string, string> = {};
+  if (!d.nombres.trim()) e.nombres = 'Ingrese los nombres del NNA.';
+  if (!d.apellidos.trim()) e.apellidos = 'Ingrese los apellidos del NNA.';
+  if (`${d.nombres} ${d.apellidos}`.length > 160) e.nombres = 'El nombre es demasiado largo.';
+  if (!d.rut.trim()) e.rut = 'Ingrese el RUT del NNA.';
   else if (normalizarRut(d.rut).length > 10) e.rut = 'El RUT es demasiado largo (formato 12345678-5).';
   else if (!rutValido(d.rut)) e.rut = 'RUT inválido: revise el formato 12345678-5 y el dígito verificador.';
+  if (d.fechaNacimiento && d.fechaNacimiento > hoyISO()) e.fechaNacimiento = 'La fecha de nacimiento no puede ser futura.';
   if (!d.comuna) e.comuna = 'Seleccione la comuna.';
   if (!d.apoderado.trim()) e.apoderado = 'Ingrese el nombre del apoderado.';
   if (!d.telefono.trim()) e.telefono = 'Ingrese un teléfono de contacto.';
   else if (d.telefono.replace(/[^0-9]/g, '').length > 11) e.telefono = 'El teléfono es demasiado largo.';
   else if (!telefonoValido(d.telefono)) e.telefono = 'Teléfono inválido (ej.: +56 9 1234 5678).';
-  if (!d.area) e.area = 'Seleccione la categoría de atención.';
-  if (!d.tipoIngreso) e.tipoIngreso = 'Seleccione ingreso o reingreso.';
-  if (!d.fecha) e.fecha = 'Ingrese la fecha de la derivación.';
-  if (d.observacion.length > 500) e.observacion = 'Máximo 500 caracteres.';
+  if (d.patologias.length === 0) e.patologias = 'Indique al menos una patología o «Por completar».';
+  if (d.credencial && !d.numeroCredencial.trim()) e.numeroCredencial = 'Ingrese el número de la credencial de discapacidad.';
+  if (d.porcentaje && (Number(d.porcentaje) < 0 || Number(d.porcentaje) > 100)) e.porcentaje = 'Porcentaje entre 0 y 100.';
+  if (!d.motivo.trim()) e.motivo = 'Describa el motivo de la postulación.';
   return e;
 }
 
@@ -99,7 +129,16 @@ export function estaDeBaja(b: Beneficiario): boolean { return b.bajas.length > 0
 export function buscarCoincidencia(lista: Beneficiario[], rut: string, nombre: string): Beneficiario | undefined {
   const r = normalizarRut(rut);
   const n = nombre.trim().toLowerCase().replace(/\s+/g, ' ');
-  return lista.find(b => b.rut === r) ?? lista.find(b => `${b.nombres} ${b.apellidos}`.toLowerCase() === n);
+  return lista.find(b => b.rut === r) ?? (n ? lista.find(b => `${b.nombres} ${b.apellidos}`.toLowerCase() === n) : undefined);
+}
+export const nombreCompleto = (b: { nombres: string; apellidos: string }) => `${b.nombres} ${b.apellidos}`;
+export const iniciales = (b: { nombres: string; apellidos: string }) => `${b.nombres[0] ?? ''}${b.apellidos[0] ?? ''}`.toUpperCase();
+export function edad(fechaNac?: string): string {
+  if (!fechaNac) return '—';
+  const n = new Date(fechaNac), h = new Date();
+  let a = h.getFullYear() - n.getFullYear();
+  if (h.getMonth() < n.getMonth() || (h.getMonth() === n.getMonth() && h.getDate() < n.getDate())) a--;
+  return `${a} años`;
 }
 // RN-01: reingreso si el beneficiario tiene un ciclo anterior cerrado.
 export function sugerirTipoIngreso(b?: Beneficiario): 'INGRESO' | 'REINGRESO' {
@@ -145,6 +184,6 @@ export const nuevoId = (p: string) => `${p}-${Math.random().toString(36).slice(2
 export function estadoTexto(b: Beneficiario): { texto: string; tono: 'rojo' | 'verde' | 'gris' | 'amarillo' } {
   if (estaDeBaja(b)) return { texto: 'Baja', tono: 'gris' };
   const c = casoActivo(b);
-  if (!c) return { texto: 'Ciclo terminado', tono: 'verde' };
+  if (!c) return b.casos.length ? { texto: 'Ciclo terminado', tono: 'verde' } : { texto: 'Ingresado, sin derivación', tono: 'gris' };
   return { texto: ESTADOS_CASO.find(e => e.codigo === c.estado)!.nombre, tono: c.urgencias.length ? 'rojo' : 'amarillo' };
 }

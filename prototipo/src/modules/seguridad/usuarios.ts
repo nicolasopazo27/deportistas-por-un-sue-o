@@ -6,6 +6,7 @@ export const USUARIOS_DEMO: Usuario[] = [
   { id: 'U-02', nombre: 'Carolina Pino', email: 'comunicacion@demo.cl', rol: 'COMUNICACION' },
   { id: 'U-03', nombre: 'Javiera Lagos', email: 'tens@demo.cl', rol: 'TENS' },
   { id: 'U-04', nombre: 'Diego Fuentes', email: 'profesional@demo.cl', rol: 'PROFESIONAL' },
+  { id: 'U-06', nombre: 'Francisca Herrera', email: 'tutor@demo.cl', rol: 'TUTOR' },
   { id: 'U-05', nombre: 'Roberto Díaz', email: 'consulta@demo.cl', rol: 'CONSULTA' },
 ];
 export const CLAVE_DEMO = 'demo2026';

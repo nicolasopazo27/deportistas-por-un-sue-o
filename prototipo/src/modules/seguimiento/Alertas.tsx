@@ -15,6 +15,7 @@ export default function Alertas() {
   const [filtro, setFiltro] = useState('');
   const [aplicado, setAplicado] = useState('');
   const [umbral, setUmbral] = useState(String(estado.parametros.umbralDiasAlerta));
+  const [umbralDer, setUmbralDer] = useState(String(estado.parametros.umbralDiasDerivacion));
   const [msg, setMsg] = useState('');
   const [err, setErr] = useState('');
   const lista = estado.alertas.filter(a => !aplicado || a.estado === aplicado).slice().reverse();
@@ -23,17 +24,17 @@ export default function Alertas() {
 
   return (
     <section>
-      <Encabezado titulo="Alertas de seguimiento" subtitulo="Seguimiento · Área interna" codigo="M04 · CU-03 Gestionar atención y seguimiento" />
-      <Aviso tipo="alerta">Umbral de ensayo: <b>{estado.parametros.umbralDiasAlerta} días</b> sin actualización. El umbral, la periodicidad y el canal definitivos están pendientes de validación con el mandante (DP-04).</Aviso>
+      <Encabezado titulo="Alertas de seguimiento" subtitulo="Atención · Seguimiento de derivaciones y casos" codigo="M04 · CU-03 Gestionar atención y seguimiento" />
+      <Aviso tipo="alerta">Se alerta cuando una <b>derivación</b> lleva más de <b>{estado.parametros.umbralDiasDerivacion} días</b> sin atención, o cuando un <b>caso</b> lleva más de <b>{estado.parametros.umbralDiasAlerta} días</b> sin actualización (valores de ensayo). El umbral, la periodicidad y el canal definitivos están pendientes de validación con el mandante (DP-04).</Aviso>
       {msg && <Aviso tipo="exito">{msg}</Aviso>}
       {err && <Aviso tipo="error">{err}</Aviso>}
       <table className="tabla" aria-label="Alertas">
-        <thead><tr><th>Beneficiario</th><th>Última actualización</th><th>Tiempo sin actualizar</th><th>Estado alerta</th><th>Acción</th></tr></thead>
+        <thead><tr><th>Beneficiario</th><th>Tipo de alerta</th><th>Última actualización</th><th>Días</th><th>Estado alerta</th><th>Acción</th></tr></thead>
         <tbody>
-          {lista.length === 0 && <tr><td colSpan={5} className="vacio">No hay alertas para el filtro seleccionado.</td></tr>}
+          {lista.length === 0 && <tr><td colSpan={6} className="vacio">No hay alertas para el filtro seleccionado.</td></tr>}
           {lista.map(a => (
             <tr key={a.id}>
-              <td>{nombre(a.idBeneficiario)}</td><td>{fmtFecha(ultima(a.idBeneficiario, a.idCaso))}</td>
+              <td>{nombre(a.idBeneficiario)}</td><td>{a.tipo === 'DERIVACION_SIN_ATENCION' ? 'Derivación sin atención' : 'Caso sin actualización'}</td><td>{fmtFecha(ultima(a.idBeneficiario, a.idCaso))}</td>
               <td>{a.diasSinActualizacion} días</td><td><Etiqueta texto={TEXTO[a.estado]} tono={TONO[a.estado]} /></td>
               <td className="celda-acciones">
                 <button type="button" className="enlace" onClick={() => nav(`/atenciones?b=${a.idBeneficiario}`)}>Abrir caso</button>
@@ -56,8 +57,14 @@ export default function Alertas() {
       </div>
       {puede(usuario?.rol, 'PARAMETROS_EDITAR') && (
         <form className="filtros" onSubmit={e => { e.preventDefault(); const r = ejecutar(x => cambiarUmbral(x, usuario!, Number(umbral))); if (r.ok) { setMsg('Umbral actualizado.'); setErr(''); } else setErr(Object.values(r.errores)[0]); }}>
-          <Texto label="Umbral T (días, valor de ensayo)" type="number" value={umbral} onChange={setUmbral} />
+          <Texto label="Umbral caso sin actualización (días)" type="number" value={umbral} onChange={setUmbral} />
           <Boton tipo="secundario" type="submit">Guardar umbral</Boton>
+        </form>
+      )}
+      {puede(usuario?.rol, 'PARAMETROS_EDITAR') && (
+        <form className="filtros" onSubmit={e => { e.preventDefault(); const r = ejecutar(x => cambiarUmbral(x, usuario!, Number(umbralDer), 'DERIVACION')); if (r.ok) { setMsg('Umbral de derivación actualizado.'); setErr(''); } else setErr(Object.values(r.errores)[0]); }}>
+          <Texto label="Umbral derivación sin atención (días)" type="number" value={umbralDer} onChange={setUmbralDer} />
+          <Boton tipo="secundario" type="submit">Guardar umbral de derivación</Boton>
         </form>
       )}
     </section>

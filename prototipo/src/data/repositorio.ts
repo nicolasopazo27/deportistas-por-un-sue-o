@@ -2,7 +2,7 @@
 // conocen dónde se guardan los datos. En el prototipo la implementación usa localStorage;
 // en la etapa con backend se reemplaza por una implementación sobre la API/PostgreSQL 16.
 import type { EstadoSistema } from '../domain/tipos';
-import { crearDatosIniciales } from './seed';
+import { crearDatosIniciales, VERSION_DATOS } from './seed';
 
 export interface IRepositorioEstado {
   cargar(): EstadoSistema;
@@ -10,8 +10,7 @@ export interface IRepositorioEstado {
   reiniciar(): EstadoSistema;
 }
 
-export const CLAVE_ALMACENAMIENTO = 'dpus-gestion-v1';
-export const VERSION_DATOS = 1;
+export const CLAVE_ALMACENAMIENTO = 'dpus-gestion-v2';
 
 export class RepositorioLocalStorage implements IRepositorioEstado {
   private almacen: Storage;

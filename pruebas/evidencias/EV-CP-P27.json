@@ -1,0 +1,11 @@
+{
+  "id": "CP-P27",
+  "requisito": "Imagen identificatoria del NNA (mandante), RNF-3",
+  "prueba": "Cargar foto con perfil Consulta, luego un PDF y luego un PNG con Trabajo social.",
+  "esperado": "Consulta no puede; el formato no admitido se rechaza; la imagen válida queda en la ficha y en el historial.",
+  "obtenido": "Consulta: denegado; PDF: rechazado; PNG: guardado; historial: «Foto identificatoria».",
+  "aprobada": true,
+  "estado": "Aprobada",
+  "fechaUTC": "2026-11-19T18:45:16.891Z",
+  "almacenamiento": null
+}

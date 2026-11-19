@@ -11,7 +11,7 @@ import { CLAVE_DEMO, USUARIOS_DEMO } from './usuarios';
 
 
 
-const INICIO: Record<string, string> = { TRABAJO_SOCIAL: '/beneficiarios', COMUNICACION: '/derivaciones', TENS: '/atenciones', PROFESIONAL: '/atenciones', CONSULTA: '/beneficiarios' };
+const INICIO: Record<string, string> = { TUTOR: '/postulaciones' };
 
 export default function Ingreso() {
   const { iniciarSesion, reiniciarDatos } = useSistema();
@@ -26,7 +26,7 @@ export default function Ingreso() {
     const u = USUARIOS_DEMO.find(x => x.email === email);
     if (!u || clave !== CLAVE_DEMO) { setError('Usuario o contraseña incorrectos.'); return; }
     iniciarSesion(u);
-    nav(loc.state?.desde && loc.state.desde !== '/' ? loc.state.desde : INICIO[u.rol], { replace: true });
+    nav(loc.state?.desde && loc.state.desde !== '/' ? loc.state.desde : INICIO[u.rol] ?? '/inicio', { replace: true });
   };
 
   return (

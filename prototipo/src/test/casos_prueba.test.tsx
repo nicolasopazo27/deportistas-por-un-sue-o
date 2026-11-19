@@ -1,69 +1,82 @@
 // Casos de prueba del prototipo (Matriz 03). Integración de componentes React con DOM emulado (jsdom).
-// Cada caso parte del conjunto inicial de dos beneficiarios ficticios y deja su evidencia en pruebas/evidencias/.
+// Cada caso parte del conjunto inicial ficticio (2 beneficiarios y 2 postulaciones) y deja su evidencia en pruebas/evidencias/.
 import { beforeEach, describe, expect, it } from 'vitest';
 import { screen, within, waitFor, cleanup } from '@testing-library/react';
 import { act } from 'react';
 import { almacenamiento, evidencia, ingresar, ir, montar, reiniciarEntorno } from './ayudantes';
 import { crearDatosIniciales } from '../data/seed';
-import { marcarAlertaRevisada, registrarAtencion, revisarAlertas, registrarDerivacion } from '../data/servicios';
+import { actualizarFicha, actualizarFoto, evaluarPostulacion, marcarAlertaRevisada, registrarAtencion, registrarPostulacion, revisarAlertas } from '../data/servicios';
 import { consolidar, generarXlsx } from '../modules/reportes/exportar';
 import type { Usuario } from '../domain/tipos';
 import ExcelJS from 'exceljs';
 
-const SOCIAL = 'social@demo.cl', TENS = 'tens@demo.cl', CONSULTA = 'consulta@demo.cl';
+const SOCIAL = 'social@demo.cl', TENS = 'tens@demo.cl', CONSULTA = 'consulta@demo.cl', TUTOR = 'tutor@demo.cl', COMUNICACION = 'comunicacion@demo.cl';
+const U_SOCIAL: Usuario = { id: 'U-01', nombre: 'Valentina Muñoz', email: SOCIAL, rol: 'TRABAJO_SOCIAL' };
+const U_TUTOR: Usuario = { id: 'U-06', nombre: 'Francisca Herrera', email: TUTOR, rol: 'TUTOR' };
 const nBenef = () => almacenamiento().beneficiarios.length;
 const camila = () => almacenamiento().beneficiarios.find((b: { id: string }) => b.id === 'B-01');
+const tomas = () => almacenamiento().beneficiarios.find((b: { id: string }) => b.id === 'B-02');
+const POST_OK = { nombres: 'Martina', apellidos: 'Núñez Peña', rut: '9876543-3', fechaNacimiento: '2016-04-02', comuna: 'Peñalolén', apoderado: 'Jorge Núñez', telefono: '+56 9 7777 8888', prevision: 'FONASA', patologias: ['Neurológica'], centrosSalud: ['Teletón'], credencial: true, numeroCredencial: 'CD-777', porcentaje: '50', electrodependiente: false, descripcion: 'Dato ficticio', motivo: 'Requiere apoyo kinesiológico' };
+
+async function llenarPostulacion(user: ReturnType<typeof montar>['user'], d: { nombres: string; apellidos: string; rut: string; telefono: string }) {
+  await user.type(screen.getByLabelText('Nombres *'), d.nombres);
+  await user.type(screen.getByLabelText('Apellidos *'), d.apellidos);
+  await user.type(screen.getByLabelText('RUT del NNA *'), d.rut);
+  await user.selectOptions(screen.getByLabelText('Comuna *'), 'Recoleta');
+  await user.type(screen.getByLabelText('Nombre del apoderado *'), 'Inés Araya Núñez');
+  await user.type(screen.getByLabelText('Teléfono *'), d.telefono);
+  await user.click(screen.getByLabelText('Neurológica'));
+  await user.type(screen.getByLabelText('Motivo de la postulación *'), 'Requiere apoyo kinesiológico (dato ficticio).');
+}
+async function elegirBeneficiario(user: ReturnType<typeof montar>['user'], texto: string, nombre: string) {
+  await user.type(screen.getByLabelText('Buscar beneficiario ingresado (nombre o RUT) *'), texto);
+  await user.click(await screen.findByRole('option', { name: new RegExp(nombre) }));
+}
 
 beforeEach(() => reiniciarEntorno());
 
-describe('Matriz 03 · prototipo', () => {
-  it('CP-P01 · RF-01 · derivación vacía rechazada', async () => {
-    const { user } = montar(); await ingresar(user, SOCIAL); await act(() => ir('/derivaciones'));
-    await user.clear(screen.getByLabelText('Fecha *'));
-    await user.click(screen.getByRole('button', { name: 'Guardar derivación' }));
+describe('Matriz 03 · prototipo v2', () => {
+  it('CP-P01 · M8 · postulación vacía rechazada', async () => {
+    const { user } = montar(); await ingresar(user, TUTOR); await act(() => ir('/postulaciones?nueva=1'));
+    await user.click(screen.getByRole('button', { name: 'Enviar postulación' }));
     const errores = screen.getAllByRole('alert').map(e => e.textContent);
-    const ok = nBenef() === 2 && errores.length >= 7;
-    evidencia('CP-P01', { requisito: 'RF-01', prueba: 'Enviar el formulario de derivación vacío.', esperado: 'Se rechaza el formulario sin agregar beneficiarios.', obtenido: `Beneficiarios: ${nBenef()}. Errores mostrados (${errores.length}): ${errores.join(' | ')}`, aprobada: ok });
+    const ok = almacenamiento().postulaciones.length === 2 && errores.length >= 7;
+    evidencia('CP-P01', { requisito: 'M8 (observación mandante), RF-01', prueba: 'Tutor envía el formulario de postulación vacío.', esperado: 'Se rechaza sin crear postulación y se indican los campos obligatorios.', obtenido: `Postulaciones: ${almacenamiento().postulaciones.length}. Errores (${errores.length}): ${errores.join(' | ')}`, aprobada: ok });
     expect(ok).toBe(true);
   });
 
-  it('CP-P02 · RF-01, RF-04 · registro y recuperación tras remontar', async () => {
-    const { user, unmount } = montar(); await ingresar(user, SOCIAL); await act(() => ir('/derivaciones'));
-    await user.type(screen.getByLabelText('Nombre del beneficiario *'), 'Sofía Muñoz Araya');
-    await user.type(screen.getByLabelText('RUT *'), '22345678-2');
-    await user.selectOptions(screen.getByLabelText('Comuna *'), 'Recoleta');
-    await user.type(screen.getByLabelText('Apoderado *'), 'Inés Araya Núñez');
-    await user.type(screen.getByLabelText('Contacto (teléfono) *'), '+56 9 2222 3333');
-    await user.selectOptions(screen.getByLabelText('Categoría de atención *'), 'KINESIOLOGIA');
-    await user.selectOptions(screen.getByLabelText('Ingreso o reingreso *'), 'INGRESO');
-    await user.type(screen.getByLabelText('Observación'), 'Niña postrada, requiere visita domiciliaria');
-    await user.click(screen.getByRole('button', { name: 'Guardar derivación' }));
-    await screen.findByText(/Derivación registrada/);
-    unmount(); cleanup();
-    const r2 = montar(); await act(() => ir('/beneficiarios'));
-    await r2.user.click(await screen.findByRole('button', { name: 'Sofía Muñoz Araya' }));
-    const ficha = screen.getByLabelText(/Ficha de Sofía/);
-    const ok = nBenef() === 3 && within(ficha).getByText('22345678-2') !== null && within(ficha).getByText('Recoleta') !== null && within(ficha).getAllByText(/Niña postrada/).length > 0;
-    evidencia('CP-P02', { requisito: 'RF-01, RF-04', prueba: 'Registrar una derivación válida, desmontar la aplicación y volver a montarla.', esperado: 'La ficha se crea y se recupera desde el almacenamiento al remontar.', obtenido: `Beneficiarios: ${nBenef()}. Ficha recuperada con RUT, comuna y observación tras remontar. Persistencia local (no SQL).`, aprobada: ok });
+  it('CP-P02 · M8, RF-04 · postulación del tutor, aceptación e ingreso con recuperación tras remontar', async () => {
+    const r1 = montar(); await ingresar(r1.user, TUTOR); await act(() => ir('/postulaciones?nueva=1'));
+    await llenarPostulacion(r1.user, { nombres: 'Martina', apellidos: 'Núñez Peña', rut: '9876543-3', telefono: '+56 9 7777 8888' });
+    await r1.user.click(screen.getByRole('button', { name: 'Enviar postulación' }));
+    await screen.findByText(/enviada al área social/);
+    const p = almacenamiento().postulaciones.at(-1);
+    r1.unmount(); cleanup(); window.sessionStorage.clear(); window.location.hash = '#/ingreso';
+    const r2 = montar(); await ingresar(r2.user, SOCIAL); await act(() => ir(`/postulaciones?p=${p.id}`));
+    await r2.user.click(screen.getByRole('button', { name: 'Aceptar e ingresar al programa' }));
+    await r2.user.click(within(await screen.findByRole('dialog')).getByRole('button', { name: 'Aceptar postulación' }));
+    await screen.findByLabelText(/Ficha de Martina Núñez Peña/);
+    r2.unmount(); cleanup();
+    const r3 = montar(); await act(() => ir('/beneficiarios'));
+    await r3.user.click(await screen.findByRole('button', { name: 'Martina Núñez Peña' }));
+    const ficha = screen.getByLabelText(/Ficha de Martina/);
+    const b = almacenamiento().beneficiarios.at(-1);
+    const ok = nBenef() === 3 && p.tutor === 'Francisca Herrera' && almacenamiento().postulaciones.find((x: { id: string }) => x.id === p.id).estado === 'ACEPTADA' && b.historial[0].tipo === 'Ingreso al programa' && within(ficha).getByText(/9876543-3/) !== null;
+    evidencia('CP-P02', { requisito: 'M8, RF-01, RF-04', prueba: 'Tutor registra postulación; Trabajo social la acepta; se remonta la aplicación y se abre la ficha.', esperado: 'La postulación queda aceptada, se crea la ficha (ingreso al programa) y se recupera tras remontar.', obtenido: `Postulación ${p.id} registrada por ${p.tutor}; estado final ACEPTADA; beneficiarios: ${nBenef()}; primer evento: «${b.historial[0].tipo}»; ficha recuperada tras remontar. Persistencia local (no SQL).`, aprobada: ok });
     expect(ok).toBe(true);
   });
 
-  it('CP-P03 · RF-02 · advertencia por RUT existente y cancelar no duplica', async () => {
+  it('CP-P03 · RF-02 · advertencia de caso activo al derivar y cancelar no duplica', async () => {
     const { user } = montar(); await ingresar(user, SOCIAL); await act(() => ir('/derivaciones'));
-    await user.type(screen.getByLabelText('Nombre del beneficiario *'), 'Camila Rojas Soto');
-    await user.type(screen.getByLabelText('RUT *'), '12345678-5');
-    await user.selectOptions(screen.getByLabelText('Comuna *'), 'Santiago');
-    await user.type(screen.getByLabelText('Apoderado *'), 'María Soto Pérez');
-    await user.type(screen.getByLabelText('Contacto (teléfono) *'), '+56 9 1234 5678');
-    await user.selectOptions(screen.getByLabelText('Categoría de atención *'), 'DENTAL');
-    await user.selectOptions(screen.getByLabelText('Ingreso o reingreso *'), 'INGRESO');
+    await elegirBeneficiario(user, '12345678', 'Camila Rojas Soto');
+    await user.selectOptions(screen.getByLabelText('Prestación a la que se deriva *'), 'DENTAL');
     await user.click(screen.getByRole('button', { name: 'Guardar derivación' }));
     const modal = await screen.findByRole('dialog', { name: 'Caso activo encontrado' });
     const muestra = within(modal).getByText(/Camila Rojas Soto · Santiago/) !== null;
     await user.click(within(modal).getByRole('button', { name: 'Cancelar' }));
     const derivs = camila().casos[0].derivaciones.length;
-    const ok = muestra && nBenef() === 2 && derivs === 1;
-    evidencia('CP-P03', { requisito: 'RF-02', prueba: 'Ingresar el RUT de un beneficiario con caso activo y cancelar ante la advertencia.', esperado: 'Se muestra el caso activo y cancelar no crea ficha ni derivación.', obtenido: `Advertencia con el caso de Camila Rojas Soto. Beneficiarios: ${nBenef()}; derivaciones del caso: ${derivs}.`, aprobada: ok });
+    const ok = muestra && nBenef() === 2 && derivs === 1 && camila().casos.length === 1;
+    evidencia('CP-P03', { requisito: 'RF-02', prueba: 'Buscar por RUT a Camila (caso activo), derivar a Dental y cancelar ante la advertencia.', esperado: 'Se muestra el caso activo y cancelar no crea caso ni derivación.', obtenido: `Advertencia con el caso de Camila Rojas Soto. Beneficiarios: ${nBenef()}; casos: ${camila().casos.length}; derivaciones del caso: ${derivs}.`, aprobada: ok });
     expect(ok).toBe(true);
   });
 
@@ -76,7 +89,7 @@ describe('Matriz 03 · prototipo', () => {
     await user.click(screen.getByRole('button', { name: 'Buscar' }));
     const vacio = screen.queryByText('Sin resultados para los filtros seleccionados.') !== null;
     const ok = filas1.length === 1 && filas1[0].includes('Camila Rojas Soto') && vacio && nBenef() === 2;
-    evidencia('CP-P04', { requisito: 'RF-12', prueba: 'Filtrar por Santiago y luego por Puente Alto.', esperado: 'Santiago devuelve solo a Camila; Puente Alto queda sin resultados.', obtenido: `Santiago: ${filas1.length} fila(s) (${filas1.map(f => f.slice(0, 17)).join(', ')}). Puente Alto: ${vacio ? 'sin resultados' : 'con filas'}. Fichas sin modificar.`, aprobada: ok });
+    evidencia('CP-P04', { requisito: 'RF-12', prueba: 'Filtrar por Santiago y luego por Puente Alto.', esperado: 'Santiago devuelve solo a Camila; Puente Alto queda sin resultados.', obtenido: `Santiago: ${filas1.length} fila(s). Puente Alto: ${vacio ? 'sin resultados' : 'con filas'}. Fichas sin modificar.`, aprobada: ok });
     expect(ok).toBe(true);
   });
 
@@ -86,25 +99,24 @@ describe('Matriz 03 · prototipo', () => {
     await user.click(screen.getByRole('button', { name: 'Buscar' }));
     const filas = within(screen.getByLabelText('Listado de beneficiarios')).getAllByRole('row').slice(1).map(r => r.textContent ?? '');
     const ok = filas.length === 1 && filas[0].includes('Tomás Díaz Pérez');
-    evidencia('CP-P05', { requisito: 'RF-13', prueba: 'Filtrar por la enfermedad Oncológica con perfil Trabajo social.', esperado: 'Solo aparece Tomás Díaz Pérez.', obtenido: `${filas.length} fila(s): ${filas.map(f => f.slice(0, 16)).join(', ')}.`, aprobada: ok });
+    evidencia('CP-P05', { requisito: 'RF-13', prueba: 'Filtrar por la enfermedad Oncológica con perfil Trabajo social.', esperado: 'Solo aparece Tomás Díaz Pérez.', obtenido: `${filas.length} fila(s): ${filas.map(f => f.replace(/^[A-Z]{2}/, '').slice(0, 16)).join(', ')}.`, aprobada: ok });
     expect(ok).toBe(true);
   });
 
-  it('CP-P06 · RF-06, RF-21, RF-03 · atención realizada suma sesión y avisa al área social', async () => {
+  it('CP-P06 · RF-06, RF-21, RF-03 · atención realizada con observación suma sesión y avisa al área social', async () => {
     const { user } = montar(); await ingresar(user, TENS); await act(() => ir('/atenciones?b=B-01'));
-    const antes = camila().casos[0].atenciones.length;
     await user.selectOptions(screen.getByLabelText('Profesional *'), 'Diego Fuentes · Dental');
     await user.selectOptions(screen.getByLabelText('Prestación *'), 'Atención dental');
     await user.selectOptions(screen.getByLabelText('Asistencia *'), 'ASISTIO');
     await user.selectOptions(screen.getByLabelText('Resultado *'), 'REALIZADA');
+    await user.type(screen.getByLabelText('Observación de la atención'), 'Buena tolerancia');
     await user.click(screen.getByRole('button', { name: 'Guardar atención' }));
     await screen.findByText(/Atención guardada/);
     const c = camila().casos[0];
-    const despues = c.atenciones.length, sesiones = c.atenciones.filter((a: { resultado: string }) => a.resultado === 'REALIZADA').length;
+    const ult = c.atenciones.at(-1);
     const aviso = almacenamiento().notificaciones.some((n: { tipo: string; rolDestino: string }) => n.tipo === 'ATENCION_REALIZADA' && n.rolDestino === 'TRABAJO_SOCIAL');
-    const hist = camila().historial.at(-1).detalle;
-    const ok = antes === 2 && despues === 3 && sesiones === 3 && aviso && hist.includes('Sesión 3');
-    evidencia('CP-P06', { requisito: 'RF-06, RF-21, RF-03', prueba: 'TENS registra una atención realizada para Camila.', esperado: 'Se guarda la atención, suma una sesión, queda en el historial y se avisa al área social.', obtenido: `Atenciones ${antes} → ${despues}; sesiones realizadas ${sesiones}; historial: «${hist}»; aviso en plataforma al área social: ${aviso ? 'sí' : 'no'}. Sin envío por correo.`, aprobada: ok });
+    const ok = c.atenciones.length === 3 && ult.numeroSesion === 3 && ult.observacion === 'Buena tolerancia' && aviso && camila().historial.at(-1).detalle.includes('Sesión 3');
+    evidencia('CP-P06', { requisito: 'RF-06, RF-21, RF-03 · observación por atención (mandante)', prueba: 'TENS registra una atención realizada con observación para Camila.', esperado: 'Se guarda la atención con su observación, suma una sesión, queda en el historial y se avisa al área social.', obtenido: `Atenciones 2 → ${c.atenciones.length}; sesión ${ult.numeroSesion}; observación «${ult.observacion}»; historial: «${camila().historial.at(-1).detalle}»; aviso al área social: ${aviso ? 'sí' : 'no'}.`, aprobada: ok });
     expect(ok).toBe(true);
   });
 
@@ -116,24 +128,22 @@ describe('Matriz 03 · prototipo', () => {
     await user.selectOptions(screen.getByLabelText('Resultado *'), 'NO_REALIZADA');
     await user.click(screen.getByRole('button', { name: 'Guardar atención' }));
     const msg = screen.queryByText('Debe indicar el motivo para guardar una atención no realizada.') !== null;
-    const n = camila().casos[0].atenciones.length;
-    const ok = msg && n === 2;
-    evidencia('CP-P07', { requisito: 'RF-07', prueba: 'Guardar una atención No realizada sin motivo.', esperado: 'Se rechaza el guardado y se exige el motivo.', obtenido: `Mensaje de motivo obligatorio: ${msg ? 'visible' : 'no visible'}; atenciones sin cambios (${n}).`, aprobada: ok });
+    const ok = msg && camila().casos[0].atenciones.length === 2;
+    evidencia('CP-P07', { requisito: 'RF-07', prueba: 'Guardar una atención No realizada sin motivo.', esperado: 'Se rechaza el guardado y se exige el motivo.', obtenido: `Mensaje de motivo obligatorio: ${msg ? 'visible' : 'no visible'}; atenciones sin cambios (${camila().casos[0].atenciones.length}).`, aprobada: ok });
     expect(ok).toBe(true);
   });
 
-  it('CP-P08 · RF-08 · alertas generadas por umbral y revisión individual', async () => {
+  it('CP-P08 · RF-08 · alertas por umbral (caso y derivación) y revisión individual', async () => {
     const { user } = montar(); await ingresar(user, SOCIAL); await act(() => ir('/alertas'));
     const al0 = almacenamiento().alertas;
-    const tabla = screen.getByLabelText('Alertas');
-    const fila = within(tabla).getByText('Tomás Díaz Pérez').closest('tr')!;
+    const fila = within(screen.getByLabelText('Alertas')).getByText('Tomás Díaz Pérez').closest('tr')!;
+    const tipoTxt = fila.textContent ?? '';
     await user.click(within(fila).getByRole('button', { name: 'Revisar' }));
     const al = almacenamiento().alertas;
-    const tomas = al.find((a: { idBeneficiario: string }) => a.idBeneficiario === 'B-02');
-    const cami = al.find((a: { idBeneficiario: string }) => a.idBeneficiario === 'B-01');
-    const hist = almacenamiento().beneficiarios[1].historial.at(-1).tipo;
-    const ok = al0.length === 2 && tomas.estado === 'REVISADA' && cami.estado === 'ACTIVA' && hist === 'Revisión de alerta';
-    evidencia('CP-P08', { requisito: 'RF-08', prueba: 'Abrir Alertas (umbral de ensayo 14 días) y revisar la alerta de Tomás.', esperado: 'Al abrir el sistema se generan alertas para los casos sobre el umbral; solo la alerta elegida pasa a Revisada y queda en el historial.', obtenido: `Alertas generadas al abrir: ${al0.length} (19 y 41 días > 14). Tomás: ${tomas.estado}; Camila: ${cami.estado}; historial: «${hist}».`, aprobada: ok });
+    const t = al.find((a: { idBeneficiario: string }) => a.idBeneficiario === 'B-02');
+    const c = al.find((a: { idBeneficiario: string }) => a.idBeneficiario === 'B-01');
+    const ok = al0.length === 2 && t.tipo === 'DERIVACION_SIN_ATENCION' && c.tipo === 'CASO_SIN_ACTUALIZACION' && tipoTxt.includes('Derivación sin atención') && t.estado === 'REVISADA' && c.estado === 'ACTIVA' && tomas().historial.at(-1).tipo === 'Revisión de alerta';
+    evidencia('CP-P08', { requisito: 'RF-08 · alertas asociadas a derivaciones (mandante)', prueba: 'Abrir Alertas (umbrales de ensayo: caso 14 días, derivación 7 días) y revisar la alerta de Tomás.', esperado: 'Se genera alerta de derivación sin atención (Tomás) y de caso sin actualización (Camila); solo la elegida pasa a Revisada.', obtenido: `Alertas al abrir: ${al0.length}. Tomás: ${t.tipo} → ${t.estado}; Camila: ${c.tipo} → ${c.estado}; historial: «${tomas().historial.at(-1).tipo}».`, aprobada: ok });
     expect(ok).toBe(true);
   });
 
@@ -144,9 +154,9 @@ describe('Matriz 03 · prototipo', () => {
     await user.click(screen.getByRole('button', { name: 'Confirmar baja' }));
     await user.click(within(await screen.findByRole('dialog')).getByRole('button', { name: 'Registrar baja' }));
     await act(() => ir('/beneficiarios?b=B-01'));
-    const estadoTabla = within(screen.getByLabelText('Listado de beneficiarios')).getByText('Camila Rojas Soto').closest('tr')!.textContent;
+    const fila = within(screen.getByLabelText('Listado de beneficiarios')).getByText('Camila Rojas Soto').closest('tr')!.textContent ?? '';
     const c = camila();
-    const ok = c.bajas.length === 1 && c.bajas[0].causal === 'EGRESO' && c.historial.length === h0 + 1 && (estadoTabla ?? '').includes('Baja');
+    const ok = c.bajas.length === 1 && c.bajas[0].causal === 'EGRESO' && c.historial.length === h0 + 1 && fila.includes('Baja');
     evidencia('CP-P09', { requisito: 'RF-09', prueba: 'Registrar baja por Egreso de Camila y consultar el listado.', esperado: 'La baja queda con causal; el estado muestra Baja y el historial previo se conserva.', obtenido: `Bajas: ${c.bajas.length} (${c.bajas[0]?.causal}); historial ${h0} → ${c.historial.length}; listado muestra estado Baja.`, aprobada: ok });
     expect(ok).toBe(true);
   });
@@ -161,36 +171,34 @@ describe('Matriz 03 · prototipo', () => {
     expect(ok).toBe(true);
   });
 
-  it('CP-P11 · RNF-3 · perfil Consulta no puede guardar atención ni ver datos de salud', async () => {
+  it('CP-P11 · RNF-3 · perfil Consulta no guarda atenciones ni ve datos de salud', async () => {
     const { user } = montar(); await ingresar(user, CONSULTA); await act(() => ir('/atenciones?b=B-01'));
     const deshab = (screen.getByRole('button', { name: 'Guardar atención' }) as HTMLButtonElement).disabled;
     await act(() => ir('/beneficiarios?b=B-01'));
     const restringido = screen.getAllByText('Acceso restringido para su perfil').length >= 2;
-    const sinFiltroSalud = screen.queryByLabelText('Filtro enfermedad') === null;
-    const ok = deshab && restringido && sinFiltroSalud;
-    evidencia('CP-P11', { requisito: 'RNF-3', prueba: 'Ingresar con perfil Consulta a Atenciones y a la ficha.', esperado: 'Guardar atención deshabilitado y datos de salud/sensibles ocultos.', obtenido: `Guardar atención deshabilitado: ${deshab}; datos sensibles y de salud restringidos: ${restringido}; filtro por enfermedad oculto: ${sinFiltroSalud}. Control en el navegador; la autorización en servidor queda para la etapa con backend.`, aprobada: ok });
+    await user.click(screen.getByRole('tab', { name: 'Antecedentes' }));
+    const antecRestr = screen.queryByText(/antecedentes de salud del NNA están restringidos/) !== null;
+    const ok = deshab && restringido && antecRestr && screen.queryByLabelText('Filtro enfermedad') === null;
+    evidencia('CP-P11', { requisito: 'RNF-3', prueba: 'Ingresar con perfil Consulta a Atenciones y a la ficha (pestañas Resumen y Antecedentes).', esperado: 'Guardar atención deshabilitado; datos sensibles y antecedentes de salud ocultos.', obtenido: `Guardar atención deshabilitado: ${deshab}; datos restringidos en resumen: ${restringido}; antecedentes restringidos: ${antecRestr}. Control en el navegador; la autorización en servidor corresponde a la etapa con backend.`, aprobada: ok });
     expect(ok).toBe(true);
   });
 
-  it('CP-P12 · RF-18 · TENS no puede registrar entregas (corrección de INC-02)', async () => {
+  it('CP-P12 · RF-18, RF-20 · TENS no registra entregas pero sí marca urgencia', async () => {
     const { user } = montar(); await ingresar(user, TENS); await act(() => ir('/ayudas?b=B-01'));
     const boton = screen.getByRole('button', { name: 'Guardar entrega' }) as HTMLButtonElement;
-    const urg = screen.getByRole('button', { name: 'Marcar urgencia' }) as HTMLButtonElement;
-    await user.click(urg);
-    const ok = boton.disabled && !urg.disabled && camila().ayudas.length === 0 && camila().casos[0].urgencias.length === 1;
-    evidencia('CP-P12', { requisito: 'RF-18, RF-20', prueba: 'Con perfil TENS, intentar registrar una entrega y marcar urgencia.', esperado: 'TENS no puede registrar entregas (reservado al equipo social) pero sí marcar urgencia.', obtenido: `Guardar entrega deshabilitado: ${boton.disabled}; ayudas: ${camila().ayudas.length}; urgencias marcadas: ${camila().casos[0].urgencias.length}.`, aprobada: ok });
+    await user.click(screen.getByRole('button', { name: 'Marcar urgencia' }));
+    const ok = boton.disabled && camila().ayudas.length === 0 && camila().casos[0].urgencias.length === 1;
+    evidencia('CP-P12', { requisito: 'RF-18, RF-20 (corrección de INC-02)', prueba: 'Con perfil TENS, intentar registrar una entrega y marcar urgencia.', esperado: 'TENS no puede registrar entregas (reservado al equipo social) pero sí marcar urgencia.', obtenido: `Guardar entrega deshabilitado: ${boton.disabled}; ayudas: ${camila().ayudas.length}; urgencias: ${camila().casos[0].urgencias.length}.`, aprobada: ok });
     expect(ok).toBe(true);
   });
 
-  it('CP-P13 · RF-01 · RUT y teléfono demasiado largos', async () => {
-    const { user } = montar(); await ingresar(user, SOCIAL); await act(() => ir('/derivaciones'));
-    await user.type(screen.getByLabelText('Nombre del beneficiario *'), 'Prueba Larga Uno');
-    await user.type(screen.getByLabelText('RUT *'), '1234567890123-5');
-    await user.type(screen.getByLabelText('Contacto (teléfono) *'), '+56 9 1234 5678 9999 0000');
-    await user.click(screen.getByRole('button', { name: 'Guardar derivación' }));
+  it('CP-P13 · M8, RF-01 · RUT y teléfono demasiado largos en la postulación', async () => {
+    const { user } = montar(); await ingresar(user, TUTOR); await act(() => ir('/postulaciones?nueva=1'));
+    await llenarPostulacion(user, { nombres: 'Prueba', apellidos: 'Larga Uno', rut: '1234567890123-5', telefono: '+56 9 1234 5678 9999 0000' });
+    await user.click(screen.getByRole('button', { name: 'Enviar postulación' }));
     const rut = screen.queryByText(/El RUT es demasiado largo/) !== null, tel = screen.queryByText('El teléfono es demasiado largo.') !== null;
-    const ok = rut && tel && nBenef() === 2;
-    evidencia('CP-P13', { requisito: 'RF-01', prueba: 'Ingresar RUT y teléfono con largo excesivo.', esperado: 'El formulario rechaza ambos datos y no guarda.', obtenido: `Error RUT: ${rut}; error teléfono: ${tel}; beneficiarios: ${nBenef()}.`, aprobada: ok });
+    const ok = rut && tel && almacenamiento().postulaciones.length === 2;
+    evidencia('CP-P13', { requisito: 'M8, RF-01', prueba: 'Ingresar RUT y teléfono con largo excesivo en la postulación.', esperado: 'El formulario rechaza ambos datos y no guarda.', obtenido: `Error RUT: ${rut}; error teléfono: ${tel}; postulaciones: ${almacenamiento().postulaciones.length}.`, aprobada: ok });
     expect(ok).toBe(true);
   });
 
@@ -198,7 +206,7 @@ describe('Matriz 03 · prototipo', () => {
     window.location.hash = '#/beneficiarios?b=B-01';
     montar();
     await screen.findByRole('button', { name: 'Ingresar' });
-    const sinDatos = screen.queryByText('Camila Rojas Soto') === null && screen.queryByText('12345678-5') === null;
+    const sinDatos = screen.queryByText('Camila Rojas Soto') === null && screen.queryByText(/12345678-5/) === null;
     const ok = window.location.hash.startsWith('#/ingreso') && sinDatos;
     evidencia('CP-P14', { requisito: 'RNF-3', prueba: 'Abrir la URL de una ficha con la sesión cerrada.', esperado: 'Se redirige al inicio de sesión sin mostrar datos.', obtenido: `Ruta final: ${window.location.hash}; datos de la ficha visibles: ${!sinDatos}. Autenticación simulada en el navegador.`, aprobada: ok });
     expect(ok).toBe(true);
@@ -210,49 +218,38 @@ describe('Matriz 03 · prototipo', () => {
     const hace = (n: number) => { const d = new Date(hoy); d.setDate(d.getDate() - n); return d.toISOString(); };
     const base = e.beneficiarios[0];
     e.beneficiarios = [9, 10, 11].map((n, i) => ({ ...structuredClone(base), id: `T-${i}`, rut: `1000000${i}-0`, casos: [{ ...structuredClone(base.casos[0]), id: `KT-${i}`, ultimaActualizacion: hace(n) }] }));
-    const n1 = revisarAlertas(e, hoy);
-    const n2 = revisarAlertas(e, hoy);
-    const u: Usuario = { id: 'U-03', nombre: 'Javiera Lagos', email: 'tens@demo.cl', rol: 'TENS' };
+    const n1 = revisarAlertas(e, hoy), n2 = revisarAlertas(e, hoy);
+    const u: Usuario = { id: 'U-03', nombre: 'Javiera Lagos', email: TENS, rol: 'TENS' };
     registrarAtencion(e, u, 'T-2', { fecha: hoy.toISOString().slice(0, 10), profesional: 'Diego Fuentes · Dental', prestacion: 'Atención dental', asistencia: 'ASISTIO', resultado: 'REALIZADA' });
-    const estadoT1 = e.alertas[0]?.estado;
-    const ok = n1 === 1 && e.alertas[0].idCaso === 'KT-2' && n2 === 0 && estadoT1 === 'RESUELTA';
-    evidencia('CP-P15', { requisito: 'RF-08', prueba: 'Casos con T−1, T y T+1 días (T=10); revisar dos veces; actualizar el caso T+1.', esperado: 'Solo T+1 genera alerta; la segunda revisión no duplica; al actualizar el caso la alerta se resuelve.', obtenido: `Primera revisión: ${n1} alerta (caso ${e.alertas[0]?.idCaso}); segunda: ${n2}; estado tras actualizar: ${estadoT1}.`, aprobada: ok });
+    const ok = n1 === 1 && e.alertas[0].idCaso === 'KT-2' && n2 === 0 && e.alertas[0].estado === 'RESUELTA';
+    evidencia('CP-P15', { requisito: 'RF-08', prueba: 'Casos con T−1, T y T+1 días (T=10); revisar dos veces; actualizar el caso T+1.', esperado: 'Solo T+1 genera alerta; la segunda revisión no duplica; al actualizar el caso la alerta se resuelve.', obtenido: `Primera revisión: ${n1} alerta (caso ${e.alertas[0]?.idCaso}); segunda: ${n2}; estado tras actualizar: ${e.alertas[0]?.estado}.`, aprobada: ok });
     expect(ok).toBe(true);
   });
 
-  it('CP-P16 · RF-02 · continuar tras la coincidencia asocia al caso activo', async () => {
-    const { user } = montar(); await ingresar(user, SOCIAL); await act(() => ir('/derivaciones'));
-    await user.type(screen.getByLabelText('Nombre del beneficiario *'), 'Camila Rojas Soto');
-    await user.type(screen.getByLabelText('RUT *'), '12345678-5');
-    await user.selectOptions(screen.getByLabelText('Comuna *'), 'Santiago');
-    await user.type(screen.getByLabelText('Apoderado *'), 'María Soto Pérez');
-    await user.type(screen.getByLabelText('Contacto (teléfono) *'), '+56 9 1234 5678');
-    await user.selectOptions(screen.getByLabelText('Categoría de atención *'), 'KINESIOLOGIA');
-    await user.selectOptions(screen.getByLabelText('Ingreso o reingreso *'), 'INGRESO');
+  it('CP-P16 · RF-02 · continuar tras la advertencia asocia al caso activo', async () => {
+    const { user } = montar(); await ingresar(user, COMUNICACION); await act(() => ir('/derivaciones'));
+    await elegirBeneficiario(user, 'Camila', 'Camila Rojas Soto');
+    await user.selectOptions(screen.getByLabelText('Prestación a la que se deriva *'), 'KINESIOLOGIA');
     await user.click(screen.getByRole('button', { name: 'Guardar derivación' }));
     await user.click(within(await screen.findByRole('dialog')).getByRole('button', { name: 'Asociar al caso activo' }));
     const c = camila();
     const ok = nBenef() === 2 && c.casos.length === 1 && c.casos[0].derivaciones.length === 2 && c.casos[0].derivaciones[1].advertenciaIgnorada === true;
-    evidencia('CP-P16', { requisito: 'RF-02', prueba: 'Confirmar la advertencia de coincidencia y revisar caso y derivaciones.', esperado: 'Con el supuesto DP-02, la derivación se asocia al caso activo sin crear otro caso ni otra ficha.', obtenido: `Beneficiarios: ${nBenef()}; casos de Camila: ${c.casos.length}; derivaciones del caso: ${c.casos[0].derivaciones.length}; advertencia_ignorada: ${c.casos[0].derivaciones[1]?.advertenciaIgnorada}. Regla pendiente de validación (DP-02).`, aprobada: ok });
+    evidencia('CP-P16', { requisito: 'RF-02', prueba: 'Encargada de comunicación confirma la advertencia de caso activo al derivar a Camila.', esperado: 'Con el supuesto DP-02, la derivación se asocia al caso activo sin crear otro caso ni otra ficha.', obtenido: `Beneficiarios: ${nBenef()}; casos: ${c.casos.length}; derivaciones del caso: ${c.casos[0].derivaciones.length}; advertencia_ignorada: ${c.casos[0].derivaciones[1]?.advertenciaIgnorada}. Regla pendiente de validación (DP-02).`, aprobada: ok });
     expect(ok).toBe(true);
   });
 
-  it('CP-P17 · RF-11, RNF-4 · informe mensual en XLSX íntegro y descarga registrada', async () => {
+  it('CP-P17 · RF-11, RNF-4 · informe mensual XLSX íntegro con tildes y ñ', async () => {
     const e = crearDatosIniciales();
-    const u: Usuario = { id: 'U-01', nombre: 'Valentina Muñoz', email: 'social@demo.cl', rol: 'TRABAJO_SOCIAL' };
     const hoy = new Date().toISOString().slice(0, 10);
-    registrarDerivacion(e, u, { nombre: 'Sofía Muñoz Ñúñez', rut: '22345678-2', comuna: 'Peñalolén', apoderado: 'José Ñúñez', telefono: '+56 9 3333 4444', area: 'DENTAL', tipoIngreso: 'INGRESO', fecha: hoy, origen: 'LLAMADO_SEMANAL', observacion: 'Atención con tildes: árbol, niño' });
-    const desde = '2000-01-01';
-    const tablas = consolidar(e, 'INFORME_MENSUAL', desde, hoy, false);
+    registrarPostulacion(e, U_TUTOR, { ...POST_OK, nombres: 'Sofía', apellidos: 'Ñúñez Peña', rut: '9876543-3' });
+    const tablas = consolidar(e, 'INFORME_MENSUAL', '2000-01-01', hoy, false);
     const origen = tablas.reduce((s, t) => s + t.filas.length, 0);
     const { buffer, filasVerificadas } = await generarXlsx(tablas);
     const wb = new ExcelJS.Workbook(); await wb.xlsx.load(buffer);
-    const textos = wb.getWorksheet('Derivaciones')!.getSheetValues().flat().map(String);
-    const conserva = textos.includes('Sofía Muñoz Ñúñez') && textos.includes('Peñalolén');
-    const claves = tablas[0].filas.map(f => `${f[0]}|${f[2]}`);
-    const sinDuplicados = new Set(claves).size === claves.length;
-    const ok = filasVerificadas === origen && origen > 0 && conserva && sinDuplicados;
-    evidencia('CP-P17', { requisito: 'RF-11, RNF-4', prueba: 'Generar el informe consolidado en XLSX con un lote que incluye tildes y ñ; releer el archivo.', esperado: 'Filas del archivo = registros de origen, sin duplicados y con caracteres preservados.', obtenido: `Registros de origen: ${origen}; filas verificadas en el XLSX: ${filasVerificadas}; claves duplicadas: ${!sinDuplicados}; «Sofía Muñoz Ñúñez» y «Peñalolén» preservados: ${conserva}.`, aprobada: ok });
+    const textos = wb.getWorksheet('Postulaciones')!.getSheetValues().flat().map(String);
+    const conserva = textos.includes('Sofía Ñúñez Peña') && textos.includes('Peñalolén');
+    const ok = filasVerificadas === origen && origen > 0 && conserva;
+    evidencia('CP-P17', { requisito: 'RF-11, RNF-4', prueba: 'Generar el informe consolidado (postulaciones, derivaciones, atenciones, bajas, ayudas) en XLSX y releerlo.', esperado: 'Filas del archivo = registros de origen y caracteres preservados.', obtenido: `Registros de origen: ${origen}; filas verificadas: ${filasVerificadas}; «Sofía Ñúñez Peña» y «Peñalolén» preservados: ${conserva}.`, aprobada: ok });
     expect(ok).toBe(true);
   });
 
@@ -275,7 +272,7 @@ describe('Matriz 03 · prototipo', () => {
     await act(() => ir('/beneficiarios?b=B-01'));
     const sinExport = screen.queryByRole('button', { name: 'Exportar ficha (XLSX)' }) === null;
     const ok = bajar && sinExport && almacenamiento().reportes.length === 0;
-    evidencia('CP-P19', { requisito: 'RF-25, RNF-3', prueba: 'Con perfil Consulta, intentar descargar reportes y exportar la ficha con datos del apoderado.', esperado: 'Se deniega la salida protegida.', obtenido: `Descargar deshabilitado: ${bajar}; botón de exportar ficha oculto: ${sinExport}; descargas registradas: ${almacenamiento().reportes.length}.`, aprobada: ok });
+    evidencia('CP-P19', { requisito: 'RF-25, RNF-3', prueba: 'Con perfil Consulta, intentar descargar reportes y exportar la ficha.', esperado: 'Se deniega la salida protegida.', obtenido: `Descargar deshabilitado: ${bajar}; exportar ficha oculto: ${sinExport}; descargas: ${almacenamiento().reportes.length}.`, aprobada: ok });
     expect(ok).toBe(true);
   });
 
@@ -286,9 +283,8 @@ describe('Matriz 03 · prototipo', () => {
     await user.type(within(dlg).getByLabelText('Observación'), 'Seguimiento de prueba');
     await user.click(within(dlg).getByRole('button', { name: 'Guardar observación' }));
     const o = camila().observaciones.at(-1);
-    const otra = almacenamiento().beneficiarios[1].observaciones.length;
-    const ok = o?.texto === 'Seguimiento de prueba' && o.autor === 'Javiera Lagos' && otra === 0;
-    evidencia('CP-P20', { requisito: 'RF-23', prueba: 'Agregar «Seguimiento de prueba» a Camila con perfil TENS.', esperado: 'La observación queda en B-01 con autoría y no se asocia a B-02.', obtenido: `Texto: «${o?.texto}»; autor: ${o?.autor}; observaciones de Tomás: ${otra}.`, aprobada: ok });
+    const ok = o?.texto === 'Seguimiento de prueba' && o.autor === 'Javiera Lagos' && tomas().observaciones.length === 0;
+    evidencia('CP-P20', { requisito: 'RF-23', prueba: 'Agregar «Seguimiento de prueba» a Camila con perfil TENS.', esperado: 'La observación queda en B-01 con autoría y no se asocia a B-02.', obtenido: `Texto: «${o?.texto}»; autor: ${o?.autor}; observaciones de Tomás: ${tomas().observaciones.length}.`, aprobada: ok });
     expect(ok).toBe(true);
   });
 
@@ -301,27 +297,80 @@ describe('Matriz 03 · prototipo', () => {
     expect(ok).toBe(true);
   });
 
-  it('CP-P22 · RNF-1 · botón Volver en todas las vistas de registro', async () => {
+  it('CP-P22 · RNF-1 · botón Volver en todas las vistas', async () => {
     const { user } = montar(); await ingresar(user, SOCIAL);
-    const vistas = ['/derivaciones', '/beneficiarios?b=B-01', '/atenciones?b=B-01', '/alertas', '/bajas?b=B-01', '/ayudas?b=B-01', '/reportes'];
+    const vistas = ['/postulaciones', '/derivaciones', '/beneficiarios?b=B-01', '/atenciones?b=B-01', '/alertas', '/bajas?b=B-01', '/ayudas?b=B-01', '/reportes', '/perfiles'];
     const sin: string[] = [];
     for (const v of vistas) { await act(() => ir(v)); if (!screen.queryByRole('button', { name: /^Volver/ })) sin.push(v); }
     await act(() => ir('/derivaciones')); await act(() => ir('/bajas?b=B-01'));
     await user.click(screen.getByRole('button', { name: 'Volver' }));
     await waitFor(() => expect(window.location.hash).toContain('/derivaciones'));
     const ok = sin.length === 0;
-    evidencia('CP-P22', { requisito: 'RNF-1', prueba: 'Recorrer las siete vistas y usar Volver desde Bajas (origen: Derivaciones).', esperado: 'Todas tienen control Volver y este regresa a la pantalla anterior.', obtenido: `Vistas sin Volver: ${sin.length ? sin.join(', ') : 'ninguna'}; tras Volver la ruta es ${window.location.hash}.`, aprobada: ok });
+    evidencia('CP-P22', { requisito: 'RNF-1', prueba: 'Recorrer nueve vistas y usar Volver desde Bajas (origen: Derivaciones).', esperado: 'Todas tienen control Volver y este regresa a la pantalla anterior.', obtenido: `Vistas sin Volver: ${sin.length ? sin.join(', ') : 'ninguna'}; tras Volver la ruta es ${window.location.hash}.`, aprobada: ok });
     expect(ok).toBe(true);
   });
 
   it('CP-P23 · RF-08 · la alerta revisada no se vuelve a generar', () => {
     const e = crearDatosIniciales();
     revisarAlertas(e);
-    const u: Usuario = { id: 'U-01', nombre: 'Valentina Muñoz', email: 'social@demo.cl', rol: 'TRABAJO_SOCIAL' };
-    marcarAlertaRevisada(e, u, e.alertas[0].id);
+    marcarAlertaRevisada(e, U_SOCIAL, e.alertas[0].id);
     const otra = revisarAlertas(e);
     const ok = e.alertas.length === 2 && otra === 0;
     evidencia('CP-P23', { requisito: 'RF-08', prueba: 'Revisar una alerta y volver a ejecutar la revisión periódica.', esperado: 'No se crea una segunda alerta para el mismo caso mientras la anterior no se resuelva.', obtenido: `Alertas totales: ${e.alertas.length}; nuevas en la segunda revisión: ${otra}.`, aprobada: ok });
+    expect(ok).toBe(true);
+  });
+
+  it('CP-P24 · RF-01 · derivar a un NNA recién ingresado crea su caso; no se deriva a quien no ingresó', async () => {
+    const { user } = montar(); await ingresar(user, SOCIAL); await act(() => ir('/postulaciones?p=P-02'));
+    await user.click(screen.getByRole('button', { name: 'Aceptar e ingresar al programa' }));
+    await user.click(within(await screen.findByRole('dialog')).getByRole('button', { name: 'Aceptar postulación' }));
+    await act(() => ir('/derivaciones'));
+    await user.type(screen.getByLabelText('Buscar beneficiario ingresado (nombre o RUT) *'), 'Sofía');
+    const noIngresada = screen.queryByText(/No hay beneficiarios ingresados con ese dato/) !== null;
+    await user.clear(screen.getByLabelText('Buscar beneficiario ingresado (nombre o RUT) *'));
+    await user.click(await screen.findByRole('option', { name: /Benjamín Soto Lagos/ }).catch(async () => { await user.type(screen.getByLabelText('Buscar beneficiario ingresado (nombre o RUT) *'), 'Benjamín'); return screen.findByRole('option', { name: /Benjamín Soto Lagos/ }); }));
+    await user.selectOptions(screen.getByLabelText('Prestación a la que se deriva *'), 'KINESIOLOGIA');
+    await user.click(screen.getByRole('button', { name: 'Guardar derivación' }));
+    await screen.findByText(/Derivación registrada para/);
+    const b = almacenamiento().beneficiarios.find((x: { rut: string }) => x.rut === '23456789-6');
+    const ok = noIngresada && b && b.casos.length === 1 && b.casos[0].derivaciones[0].area === 'KINESIOLOGIA' && b.casos[0].derivaciones[0].tipoIngreso === 'INGRESO';
+    evidencia('CP-P24', { requisito: 'RF-01 · separación ingreso/derivación (mandante)', prueba: 'Aceptar la postulación de Benjamín y derivarlo a Kinesiología; buscar a Sofía (postulación no aceptada).', esperado: 'Benjamín queda con un caso nuevo (primera derivación); Sofía no aparece porque no ingresó al programa.', obtenido: `Sofía no ingresada encontrada en el buscador: ${!noIngresada}; casos de Benjamín: ${b?.casos.length}; área: ${b?.casos[0]?.derivaciones[0]?.area}; tipo: ${b?.casos[0]?.derivaciones[0]?.tipoIngreso}.`, aprobada: !!ok });
+    expect(ok).toBeTruthy();
+  });
+
+  it('CP-P25 · M8 · el tutor postula pero no evalúa; el rechazo exige comentario', () => {
+    const e = crearDatosIniciales();
+    const r1 = registrarPostulacion(e, U_TUTOR, POST_OK);
+    const id = r1.ok ? r1.dato!.id : '';
+    const r2 = evaluarPostulacion(e, U_TUTOR, id, 'ACEPTADA', '');
+    const r3 = evaluarPostulacion(e, U_SOCIAL, id, 'RECHAZADA', '');
+    const r4 = registrarPostulacion(e, U_TUTOR, POST_OK);
+    const r5 = registrarPostulacion(e, U_TUTOR, { ...POST_OK, rut: '12345678-5' });
+    const ok = r1.ok && !r2.ok && 'permiso' in (r2.ok ? {} : r2.errores) && !r3.ok && !r4.ok && !r5.ok && e.beneficiarios.length === 2;
+    evidencia('CP-P25', { requisito: 'M8 · perfil Tutor (mandante), RNF-3', prueba: 'Tutor registra y trata de aceptar; Trabajo social rechaza sin comentario; se repite el RUT y se postula a un NNA ya ingresado.', esperado: 'El tutor no puede evaluar; el rechazo exige motivo; no se duplican postulaciones en curso ni se postula a quien ya ingresó.', obtenido: `Registro tutor: ${r1.ok}; tutor acepta: ${r2.ok ? 'permitido' : 'denegado'}; rechazo sin comentario: ${r3.ok ? 'aceptado' : 'rechazado'}; RUT repetido: ${r4.ok ? 'aceptado' : 'rechazado'}; NNA ya ingresado: ${r5.ok ? 'aceptado' : 'rechazado'}.`, aprobada: !!ok });
+    expect(ok).toBeTruthy();
+  });
+
+  it('CP-P26 · RF-14 · antecedentes del NNA: credencial, centro y hospitalización', () => {
+    const e = crearDatosIniciales();
+    const r0 = actualizarFicha(e, U_SOCIAL, 'B-02', { credencial: { tiene: true, numero: '' } });
+    const r1 = actualizarFicha(e, U_SOCIAL, 'B-02', { credencial: { tiene: true, numero: 'CD-999', porcentaje: 70 }, centroSalud: 'Teletón', hospitalizacion: { ingreso: '2026-05-01', alta: '2026-05-10', centro: 'Teletón', descripcion: 'Dato ficticio' } });
+    const r2 = actualizarFicha(e, U_SOCIAL, 'B-02', { hospitalizacion: { ingreso: '2026-06-10', alta: '2026-06-01', descripcion: 'Fechas incoherentes' } });
+    const b = e.beneficiarios[1];
+    const ok = !r0.ok && r1.ok && !r2.ok && b.credencial.numero === 'CD-999' && b.centrosSalud.includes('Teletón') && b.hospitalizaciones.length === 1;
+    evidencia('CP-P26', { requisito: 'RF-14 · antecedentes del NNA (mandante)', prueba: 'Registrar credencial sin número, luego credencial completa, centro y hospitalización; después una hospitalización con alta anterior al ingreso.', esperado: 'Se exige el número de credencial; se guardan los antecedentes válidos y se rechaza la hospitalización incoherente.', obtenido: `Credencial sin número: ${r0.ok ? 'aceptada' : 'rechazada'}; antecedentes válidos: ${r1.ok}; hospitalización incoherente: ${r2.ok ? 'aceptada' : 'rechazada'}; credencial ${b.credencial.numero} (${b.credencial.porcentaje}%), centros: ${b.centrosSalud.join(', ')}; hospitalizaciones: ${b.hospitalizaciones.length}.`, aprobada: ok });
+    expect(ok).toBe(true);
+  });
+
+  it('CP-P27 · Foto identificatoria del NNA con permiso y formato válido', () => {
+    const e = crearDatosIniciales();
+    const png = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==';
+    const consulta: Usuario = { id: 'U-05', nombre: 'Roberto Díaz', email: CONSULTA, rol: 'CONSULTA' };
+    const r1 = actualizarFoto(e, consulta, 'B-01', png);
+    const r2 = actualizarFoto(e, U_SOCIAL, 'B-01', 'data:application/pdf;base64,AAAA');
+    const r3 = actualizarFoto(e, U_SOCIAL, 'B-01', png);
+    const ok = !r1.ok && !r2.ok && r3.ok && e.beneficiarios[0].foto === png && e.beneficiarios[0].historial.at(-1)!.tipo === 'Foto identificatoria';
+    evidencia('CP-P27', { requisito: 'Imagen identificatoria del NNA (mandante), RNF-3', prueba: 'Cargar foto con perfil Consulta, luego un PDF y luego un PNG con Trabajo social.', esperado: 'Consulta no puede; el formato no admitido se rechaza; la imagen válida queda en la ficha y en el historial.', obtenido: `Consulta: ${r1.ok ? 'permitido' : 'denegado'}; PDF: ${r2.ok ? 'aceptado' : 'rechazado'}; PNG: ${r3.ok ? 'guardado' : 'rechazado'}; historial: «${e.beneficiarios[0].historial.at(-1)!.tipo}».`, aprobada: ok });
     expect(ok).toBe(true);
   });
 });

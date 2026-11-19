@@ -11,7 +11,9 @@ Aplicación web interna para registrar derivaciones, centralizar la ficha de ges
 
 ## 1. Modalidad de demostración (entrega del 23/11)
 
-**Demostración local reproducible.** El prototipo es una aplicación React que corre en el navegador y guarda los datos en el almacenamiento local (`localStorage`). El despliegue en la nube con backend y PostgreSQL corresponde a la etapa siguiente (ver sección 7).
+**Demostración en línea:** https://nicolasopazo27.github.io/deportistas-por-un-sue-o/ (GitHub Pages, rama `gh-pages`).
+
+**Demostración local reproducible:** ver sección 3. El prototipo es una aplicación React que corre en el navegador y guarda los datos en el almacenamiento local (`localStorage`). El despliegue con backend y PostgreSQL corresponde a la etapa siguiente (ver sección 7).
 
 ## 2. Requisitos del ambiente
 
@@ -37,7 +39,7 @@ Otros comandos (dentro de `prototipo/`):
 
 | Comando | Qué hace |
 |---|---|
-| `npm test` | Ejecuta los 23 casos de prueba automatizados y regenera las evidencias en `pruebas/evidencias/` |
+| `npm test` | Ejecuta los 27 casos de prueba automatizados y regenera las evidencias en `pruebas/evidencias/` |
 | `npm run build` | Compila la versión de producción en `prototipo/dist/` (se puede abrir con `npm run preview`) |
 | `npm run lint` | Revisa la calidad del código |
 
@@ -47,28 +49,41 @@ Contraseña de todos los usuarios de demostración: **`demo2026`**
 
 | Usuario | Perfil | Puede |
 |---|---|---|
-| `social@demo.cl` | Trabajo social | Todo: derivaciones, fichas, datos de salud, bajas, ayudas, alertas, reportes y exportaciones |
-| `comunicacion@demo.cl` | Encargada de comunicación | Registrar derivaciones |
+| `social@demo.cl` | Trabajo social | Todo: evaluar postulaciones, derivaciones, fichas, datos de salud, foto, bajas, ayudas, alertas, reportes y exportaciones |
+| `comunicacion@demo.cl` | Encargada de comunicación | Registrar derivaciones y consultar fichas |
+| `tutor@demo.cl` | Tutor/a | Postular a un NNA, consultar fichas, agregar observaciones y foto (no evalúa postulaciones) |
 | `tens@demo.cl` | TENS | Fichas, atenciones, ciclo, alertas, observaciones y marcar urgencias (no registra ayudas) |
 | `profesional@demo.cl` | Profesional dental/kine | Fichas, datos de salud y atenciones |
 | `consulta@demo.cl` | Consulta | Solo consultar fichas (sin datos sensibles ni exportaciones) |
 
-En la pantalla de ingreso está el enlace **«Restablecer datos de demostración»**, que vuelve al conjunto inicial de dos beneficiarios (Camila Rojas Soto y Tomás Díaz Pérez).
+En la pantalla de ingreso está el enlace **«Restablecer datos de demostración»**, que vuelve al conjunto inicial: dos beneficiarios (Camila Rojas Soto y Tomás Díaz Pérez) y dos postulaciones en curso (Sofía Muñoz Araya y Benjamín Soto Lagos).
 
 ## 5. Funcionalidades implementadas
 
 | Pantalla | Módulo | Caso de uso | Requisitos |
 |---|---|---|---|
-| Ingreso | M1 Seguridad y acceso | Transversal | RNF-3 |
+| Ingreso e Inicio (panel) | M1 Seguridad y acceso | Transversal | RNF-1, RNF-3 |
+| Postulaciones | M8 Postulación e ingreso | CU-01 | RF-01, RF-04 |
 | M01 Nueva derivación | M3 Derivación | CU-01 | RF-01, RF-02 · RN-01, RN-02 |
 | M02 Ficha del beneficiario | M2 Beneficiario y ficha | CU-02 | RF-04, RF-12 a RF-17, RF-23 |
 | M03 Atención y ciclo | M4 Atención y seguimiento | CU-03 | RF-03, RF-05 a RF-07, RF-21, RF-22 |
-| M04 Alertas de seguimiento | M4 Atención y seguimiento | CU-03 | RF-08 |
+| M04 Alertas (caso sin actualización y derivación sin atención) | M4 Atención y seguimiento | CU-03 | RF-08 |
 | M05 Baja de beneficiario | M5 Bajas | CU-04 | RF-09 · RN-05 |
 | M06 Ayudas y urgencia | M6 Ayudas y urgencia | CU-05 | RF-18, RF-20 |
 | M07 Reportes y exportaciones | M7 Reportes | CU-06 | RF-10, RF-11, RF-25 · RNF-4 |
+| Perfiles y permisos | M1 Seguridad y acceso | Transversal | RNF-3 |
 
-Todas las vistas tienen botón **Volver** (RNF-1). Fuera del alcance de esta versión: postulaciones, stock de bodega (RF-19), informes sociales (RF-24), rutas e integración con Dental Soft.
+### Mejoras incorporadas a partir de las observaciones del mandante (Certamen 1)
+
+1. **Postulación separada de la derivación:** el NNA entra por una postulación (la puede registrar un tutor), el área social la evalúa y, al aceptarla, se crea la ficha. Solo se deriva a beneficiarios ya ingresados.
+2. **Perfil Tutor** con permisos acotados y vista **Perfiles y permisos** con la matriz por rol.
+3. **Antecedentes del NNA:** credencial de discapacidad, centros de salud y hospitalizaciones.
+4. **Foto identificatoria** del NNA en la ficha.
+5. **Observación por atención**, además de las observaciones generales de la ficha.
+6. **Alertas asociadas a derivaciones:** aviso cuando una derivación pasa más de N días sin atención (umbral configurable), además del caso sin actualización.
+7. **Panel de inicio** con el flujo del NNA, indicadores y pendientes; menú agrupado por etapa del proceso.
+
+Todas las vistas tienen botón **Volver** (RNF-1). Fuera del alcance de esta versión: stock de bodega (RF-19), informes sociales (RF-24), rutas e integración con Dental Soft.
 
 ## 6. Estructura del repositorio
 
@@ -79,11 +94,11 @@ Todas las vistas tienen botón **Volver** (RNF-1). Fuera del alcance de esta ver
 │       ├── data/           Repositorio (patrón Repository), servicios por módulo y datos iniciales ficticios
 │       ├── components/     Cabecera, menú lateral y componentes de formulario
 │       ├── modules/        Una carpeta por módulo: seguridad, derivaciones, beneficiarios,
-│       │                   seguimiento, bajas, ayudas, reportes
+│       │                   postulaciones, seguimiento, bajas, ayudas, reportes, perfiles
 │       └── test/           Casos de prueba automatizados (Matriz 03)
 ├── database/               Script DDL PostgreSQL 16 (28 tablas, 41 FK, 43 índices, 2 vistas),
 │                           pruebas de integridad y su resultado
-├── pruebas/evidencias/     EV-CP-P01 … EV-CP-P23 (.json y .html), resultados.json, ejecucion.txt
+├── pruebas/evidencias/     EV-CP-P01 … EV-CP-P27 (.json y .html), resultados.json, ejecucion.txt
 └── docs/                   BPMN AS-IS / TO-BE e informe final
 ```
 
@@ -101,14 +116,14 @@ Resultado verificado (`database/resultado_pruebas_integridad.txt`): 28 tablas, 4
 
 ## 8. Pruebas
 
-`npm test` ejecuta 23 casos (CP-P01 a CP-P23) mediante integración de componentes React con DOM emulado (jsdom). Cada caso parte del conjunto inicial ficticio y deja su evidencia en `pruebas/evidencias/`. Última ejecución: **23 aprobados, 0 fallidos**. Los HTML de evidencia son registros del DOM emulado, no capturas de navegador.
+`npm test` ejecuta 27 casos (CP-P01 a CP-P27) mediante integración de componentes React con DOM emulado (jsdom). Cada caso parte del conjunto inicial ficticio y deja su evidencia en `pruebas/evidencias/`. Última ejecución: **27 aprobados, 0 fallidos**. Los HTML de evidencia son registros del DOM emulado, no capturas de navegador.
 
 ## 9. Limitaciones conocidas y siguiente etapa
 
 - La autenticación y los permisos se verifican en el navegador; la autenticación real (contraseñas con hash y permisos verificados en servidor) requiere el backend.
 - Los datos viven en el navegador de cada equipo: no se comparten entre usuarios ni computadores.
 - Los avisos al área social son en la plataforma; el envío por correo requiere el backend.
-- El umbral de alertas (14 días) es un **valor de ensayo** pendiente de validar con la Fundación (DP-04).
+- Los umbrales de alertas (14 días para casos y 7 días para derivaciones) son **valores de ensayo** pendiente de validar con la Fundación (DP-04).
 - El reporte ministerial definitivo depende de la plantilla oficial (DP-05).
 
 **Etapa siguiente (prevista):** backend del monolito modular sobre PostgreSQL 16 con autenticación individual, despliegue en la nube con HTTPS y respaldos diarios, avisos por correo y ejecución de los casos CP-01 a CP-34 sobre el sistema completo.

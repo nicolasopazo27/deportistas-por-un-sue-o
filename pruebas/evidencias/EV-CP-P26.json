@@ -1,0 +1,11 @@
+{
+  "id": "CP-P26",
+  "requisito": "RF-14 · antecedentes del NNA (mandante)",
+  "prueba": "Registrar credencial sin número, luego credencial completa, centro y hospitalización; después una hospitalización con alta anterior al ingreso.",
+  "esperado": "Se exige el número de credencial; se guardan los antecedentes válidos y se rechaza la hospitalización incoherente.",
+  "obtenido": "Credencial sin número: rechazada; antecedentes válidos: true; hospitalización incoherente: rechazada; credencial CD-999 (70%), centros: Hospital Exequiel González Cortés, Teletón; hospitalizaciones: 1.",
+  "aprobada": true,
+  "estado": "Aprobada",
+  "fechaUTC": "2026-11-19T18:45:16.890Z",
+  "almacenamiento": null
+}
