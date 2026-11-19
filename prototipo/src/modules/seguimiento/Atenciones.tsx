@@ -7,7 +7,7 @@ import { ESTADOS_CASO, MOTIVOS, PRESTACIONES, PROFESIONALES, casoActivo, fmtFech
 import type { Atencion, EstadoCaso } from '../../domain/tipos';
 import { Aviso, Boton, Encabezado, Selector, Texto, Volver } from '../../components/ui';
 
-const VACIA: Partial<Atencion> = { fecha: hoyISO(), profesional: '', prestacion: '', asistencia: undefined, resultado: undefined, motivo: '', referenciaDentalSoft: '' };
+const VACIA: Partial<Atencion> = { fecha: hoyISO(), profesional: '', prestacion: '', asistencia: undefined, resultado: undefined, motivo: '', referenciaDentalSoft: '', observacion: '' };
 
 export default function Atenciones() {
   const { estado, usuario, ejecutar } = useSistema();
@@ -38,13 +38,14 @@ export default function Atenciones() {
 
   return (
     <section>
-      <Encabezado titulo="Atención y ciclo" subtitulo="Registro de atención · Área interna" codigo="M03 · CU-03 Gestionar atención y seguimiento" />
+      <Encabezado titulo="Atención y ciclo" subtitulo="Atención · Etapa 3: registrar atenciones del caso derivado" codigo="M03 · CU-03 Gestionar atención y seguimiento" />
       {!puedeRegistrar && <Aviso tipo="alerta">Su perfil solo permite consultar. El registro de atenciones está reservado a TENS y profesionales.</Aviso>}
       {msg && <Aviso tipo="exito">{msg}</Aviso>}
       {err.permiso && <Aviso tipo="error">{err.permiso}</Aviso>}
       <div className="grilla grilla-3">
         <Selector label="Beneficiario *" value={idB} onChange={v => { setParams(v ? { b: v } : {}); setErr({}); setMsg(''); }} error={err.beneficiario} placeholder="Seleccionar beneficiario"
           opciones={conCaso.map(x => ({ valor: x.id, texto: `${x.nombres} ${x.apellidos}` }))} />
+        {conCaso.length === 0 && <p className="sugerencia">No hay casos activos: primero derive al beneficiario a una prestación.</p>}
         <Texto label="Fecha *" type="date" value={a.fecha ?? ''} onChange={set('fecha')} error={err.fecha} max={hoyISO()} />
         <Selector label="Profesional *" value={a.profesional ?? ''} onChange={set('profesional')} opciones={PROFESIONALES} error={err.profesional} />
         <Selector label="Prestación *" value={a.prestacion ?? ''} onChange={set('prestacion')} opciones={PRESTACIONES} error={err.prestacion} />
@@ -55,6 +56,7 @@ export default function Atenciones() {
           placeholder={a.resultado === 'REALIZADA' ? 'No aplica si la atención fue realizada' : 'Seleccionar motivo'} />
         <Texto label="Referencia Dental Soft (opcional)" value={a.referenciaDentalSoft ?? ''} onChange={set('referenciaDentalSoft')} placeholder="N.º de registro clínico" />
         <Texto label="Sesión" value={caso ? (a.resultado === 'NO_REALIZADA' ? 'No suma sesión' : `Sesión ${sesionesRealizadas(caso) + 1}`) : '—'} onChange={() => {}} disabled />
+        <Texto label="Observación de la atención" value={a.observacion ?? ''} onChange={set('observacion')} error={err.observacion} placeholder="Ej.: buena tolerancia, continuar ejercicios en casa" ancho="completo" />
       </div>
       <Aviso tipo="alerta">El detalle clínico se registra en Dental Soft; aquí solo los datos de gestión. Alertas según umbral de ensayo (pendiente de validar).</Aviso>
       <div className="acciones">
@@ -72,9 +74,9 @@ export default function Atenciones() {
             <div className="dato"><span>Ciclo terminado</span><b>{caso.fechaCierreCiclo ? 'Sí' : 'No'}</b></div>
           </div>
           <table className="tabla" aria-label="Atenciones del caso">
-            <thead><tr><th>Fecha</th><th>Sesión</th><th>Prestación</th><th>Profesional</th><th>Resultado</th><th>Motivo</th></tr></thead>
+            <thead><tr><th>Fecha</th><th>Sesión</th><th>Prestación</th><th>Profesional</th><th>Resultado</th><th>Motivo / observación</th></tr></thead>
             <tbody>{caso.atenciones.length === 0 ? <tr><td colSpan={6} className="vacio">Sin atenciones registradas.</td></tr> :
-              caso.atenciones.map(x => <tr key={x.id}><td>{fmtFecha(x.fecha)}</td><td>{x.numeroSesion ?? '—'}</td><td>{x.prestacion}</td><td>{x.profesional}</td><td>{x.resultado === 'REALIZADA' ? 'Realizada' : 'No realizada'}</td><td>{x.motivo ?? '—'}</td></tr>)}</tbody>
+              caso.atenciones.map(x => <tr key={x.id}><td>{fmtFecha(x.fecha)}</td><td>{x.numeroSesion ?? '—'}</td><td>{x.prestacion}</td><td>{x.profesional}</td><td>{x.resultado === 'REALIZADA' ? 'Realizada' : 'No realizada'}</td><td>{[x.motivo, x.observacion].filter(Boolean).join(' · ') || '—'}</td></tr>)}</tbody>
           </table>
           <div className="grilla grilla-3">
             <Selector label="Estado del caso" value={caso.estado} disabled={!puedeCiclo} onChange={v => ciclo({ estado: v as EstadoCaso }, 'Estado del caso actualizado.')}

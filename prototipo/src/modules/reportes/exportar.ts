@@ -19,8 +19,9 @@ export function consolidar(e: EstadoSistema, tipo: TipoSalida, desde: string, ha
   const baj = { titulo: 'Bajas', columnas: ['Fecha', 'Beneficiario', 'RUT', 'Comuna', 'Causal', 'Observación'], filas: B.flatMap(b => b.bajas.filter(x => enPeriodo(x.fecha, desde, hasta)).map(x => [fmtFecha(x.fecha), nombre(b), b.rut, b.comuna, CAUSALES.find(c => c.codigo === x.causal)?.nombre ?? x.causal, x.observacion ?? ''])) };
   const ayu = { titulo: 'Ayudas entregadas', columnas: ['Fecha', 'Beneficiario', 'Tipo', 'N.º guía'], filas: B.flatMap(b => b.ayudas.filter(x => enPeriodo(x.fecha, desde, hasta)).map(x => [fmtFecha(x.fecha), nombre(b), x.tipo, x.numeroGuia])) };
   const urg = { titulo: 'Urgencias', columnas: ['Fecha', 'Beneficiario', 'Motivo'], filas: B.flatMap(b => b.casos.flatMap(c => c.urgencias.filter(u => enPeriodo(u.fecha, desde, hasta)).map(u => [fmtFecha(u.fecha), nombre(b), u.motivo ?? '']))) };
+  const pos = { titulo: 'Postulaciones', columnas: ['Fecha', 'NNA', 'RUT', 'Comuna', 'Estado', 'Tutor'], filas: e.postulaciones.filter(p => enPeriodo(p.fecha, desde, hasta)).map(p => [fmtFecha(p.fecha), `${p.nna.nombres} ${p.nna.apellidos}`, p.nna.rut, p.nna.comuna, p.estado, p.tutor]) };
   switch (tipo) {
-    case 'INFORME_MENSUAL': return [der, ate, baj, ayu];
+    case 'INFORME_MENSUAL': return [pos, der, ate, baj, ayu];
     case 'REPORTE_BAJAS': return [baj];
     case 'AYUDAS_URGENCIAS': return [ayu, urg];
     case 'EXPORT_EXCEL_GENERAL': return [{ titulo: 'Beneficiarios', columnas: ['Beneficiario', 'RUT', 'Comuna', 'Estado', ...apCols], filas: B.map(b => [nombre(b), b.rut, b.comuna, b.bajas.length ? 'Baja' : 'Activo', ...ap(b)]) }];

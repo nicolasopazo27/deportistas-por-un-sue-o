@@ -1,11 +1,14 @@
 // Tipos del dominio. Siguen el modelo de datos (DDL PostgreSQL 16) y el diagrama de clases.
+// v2: incorpora las observaciones del mandante (Certamen 1): postulación (M8), perfil Tutor,
+// antecedentes del NNA, foto identificatoria, alertas de derivación y observación por atención.
 
-export type Rol = 'TRABAJO_SOCIAL' | 'COMUNICACION' | 'TENS' | 'PROFESIONAL' | 'CONSULTA';
+export type Rol = 'TRABAJO_SOCIAL' | 'COMUNICACION' | 'TENS' | 'PROFESIONAL' | 'TUTOR' | 'CONSULTA';
 export type Permiso =
   | 'DERIVACION_REGISTRAR' | 'FICHA_CONSULTAR' | 'FICHA_EDITAR' | 'SALUD_VER' | 'SALUD_EDITAR'
   | 'DATOS_SENSIBLES_VER' | 'DATOS_SENSIBLES_EDITAR' | 'OBSERVACION_REGISTRAR' | 'ATENCION_REGISTRAR'
   | 'CICLO_ACTUALIZAR' | 'ALERTA_CONSULTAR' | 'BAJA_REGISTRAR' | 'AYUDA_REGISTRAR' | 'URGENCIA_MARCAR'
-  | 'REPORTE_GENERAR' | 'EXPORTAR_FICHA' | 'PARAMETROS_EDITAR';
+  | 'REPORTE_GENERAR' | 'EXPORTAR_FICHA' | 'PARAMETROS_EDITAR'
+  | 'POSTULACION_REGISTRAR' | 'POSTULACION_EVALUAR' | 'FOTO_EDITAR';
 
 export interface Usuario { id: string; nombre: string; email: string; rol: Rol }
 
@@ -27,7 +30,7 @@ export interface Derivacion {
 export interface Atencion {
   id: string; fecha: string; profesional: string; prestacion: string; numeroSesion?: number;
   asistencia: Asistencia; resultado: Resultado; motivo?: string; detalleMotivo?: string;
-  referenciaDentalSoft?: string; autor: string;
+  observacion?: string; referenciaDentalSoft?: string; autor: string;
 }
 
 export interface CasoAtencion {
@@ -39,26 +42,40 @@ export interface CasoAtencion {
 export interface Baja { id: string; causal: CausalBaja; fecha: string; observacion?: string; autor: string }
 export interface AyudaEntregada { id: string; tipo: string; fecha: string; numeroGuia: string; autor: string }
 export interface Observacion { id: string; fechaHora: string; texto: string; autor: string }
-export interface Hospitalizacion { id: string; ingreso?: string; alta?: string; descripcion: string; autor: string }
+export interface Hospitalizacion { id: string; ingreso?: string; alta?: string; centro?: string; descripcion: string; autor: string }
+
+export interface CredencialDiscapacidad { tiene: boolean; numero?: string; porcentaje?: number; vigencia?: string }
 
 export interface EventoHistorial { fecha: string; tipo: string; detalle: string; autor: string }
 
 export interface Beneficiario {
-  id: string; rut: string; nombres: string; apellidos: string; comuna: string; apoderado: Apoderado;
+  id: string; rut: string; nombres: string; apellidos: string; fechaNacimiento?: string; comuna: string; apoderado: Apoderado;
   situacionDocumental: SituacionDocumental; electrodependiente: boolean;
   enfermedades: { nombre: string; descripcion?: string }[]; hospitalizaciones: Hospitalizacion[];
+  centrosSalud: string[]; credencial: CredencialDiscapacidad; foto?: string; tutor?: string; idPostulacion?: string;
   casos: CasoAtencion[]; bajas: Baja[]; ayudas: AyudaEntregada[]; observaciones: Observacion[];
   historial: EventoHistorial[]; fechaRegistro: string;
 }
 
+// M8 Postulación: etapa previa al ingreso del NNA al programa (observación del mandante, Certamen 1).
+export type EstadoPostulacion = 'ENVIADA' | 'EN_EVALUACION' | 'ACEPTADA' | 'RECHAZADA';
+export interface Postulacion {
+  id: string; fecha: string; estado: EstadoPostulacion;
+  nna: { nombres: string; apellidos: string; rut: string; fechaNacimiento?: string; comuna: string };
+  apoderado: Apoderado;
+  antecedentes: { patologias: string[]; centrosSalud: string[]; credencial: CredencialDiscapacidad; electrodependiente: boolean; descripcion?: string };
+  motivo: string; tutor: string; evaluador?: string; fechaResolucion?: string; resolucion?: string; idBeneficiario?: string;
+}
+
 export type EstadoAlerta = 'ACTIVA' | 'REVISADA' | 'RESUELTA';
+export type TipoAlerta = 'CASO_SIN_ACTUALIZACION' | 'DERIVACION_SIN_ATENCION';
 export interface Alerta {
-  id: string; idBeneficiario: string; idCaso: string; fechaGeneracion: string;
+  id: string; tipo: TipoAlerta; idBeneficiario: string; idCaso: string; idDerivacion?: string; fechaGeneracion: string;
   diasSinActualizacion: number; umbralDias: number; estado: EstadoAlerta; fechaResolucion?: string;
 }
 
 export interface Notificacion {
-  id: string; tipo: 'ATENCION_REALIZADA' | 'ALERTA_CASO'; canal: 'PLATAFORMA'; rolDestino: Rol;
+  id: string; tipo: 'ATENCION_REALIZADA' | 'ALERTA_CASO' | 'POSTULACION'; canal: 'PLATAFORMA'; rolDestino: Rol;
   mensaje: string; estado: 'PENDIENTE' | 'LEIDA'; fecha: string;
 }
 
@@ -71,8 +88,9 @@ export interface ReporteGenerado {
 export interface EstadoSistema {
   version: number;
   beneficiarios: Beneficiario[];
+  postulaciones: Postulacion[];
   alertas: Alerta[];
   notificaciones: Notificacion[];
   reportes: ReporteGenerado[];
-  parametros: { umbralDiasAlerta: number };
+  parametros: { umbralDiasAlerta: number; umbralDiasDerivacion: number };
 }

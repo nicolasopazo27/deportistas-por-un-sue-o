@@ -81,3 +81,56 @@ export function Modal({ titulo, children, acciones, onCerrar }: { titulo: string
 export function Etiqueta({ texto, tono }: { texto: string; tono: 'rojo' | 'verde' | 'gris' | 'amarillo' }) {
   return <span className={`etiqueta etiqueta-${tono}`}>{texto}</span>;
 }
+
+export function Avatar({ nombres, apellidos, foto, tam = 'md' }: { nombres: string; apellidos: string; foto?: string; tam?: 'sm' | 'md' | 'lg' }) {
+  const ini = `${nombres[0] ?? ''}${apellidos[0] ?? ''}`.toUpperCase();
+  return foto
+    ? <img className={`avatar avatar-${tam}`} src={foto} alt={`Foto de ${nombres} ${apellidos}`} />
+    : <span className={`avatar avatar-${tam} avatar-ini`} aria-label={`Sin foto de ${nombres} ${apellidos}`}>{ini}</span>;
+}
+
+export function Pestanas<T extends string>({ opciones, activa, onCambiar }: { opciones: { id: T; texto: string; cuenta?: number }[]; activa: T; onCambiar: (t: T) => void }) {
+  return (
+    <div className="pestanas" role="tablist">
+      {opciones.map(o => (
+        <button key={o.id} type="button" role="tab" aria-selected={activa === o.id} className={activa === o.id ? 'pestana activa' : 'pestana'} onClick={() => onCambiar(o.id)}>
+          {o.texto}{o.cuenta !== undefined && <span className="cuenta">{o.cuenta}</span>}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+export function Kpi({ titulo, valor, detalle, tono = 'neutro', onClick }: { titulo: string; valor: number | string; detalle?: string; tono?: 'neutro' | 'rojo' | 'amarillo' | 'verde'; onClick?: () => void }) {
+  return (
+    <button type="button" className={`kpi kpi-${tono}`} onClick={onClick} disabled={!onClick}>
+      <span className="kpi-titulo">{titulo}</span>
+      <span className="kpi-valor">{valor}</span>
+      {detalle && <span className="kpi-detalle">{detalle}</span>}
+    </button>
+  );
+}
+
+export function Pasos({ pasos, actual }: { pasos: string[]; actual: number }) {
+  return (
+    <ol className="pasos" aria-label="Etapas">
+      {pasos.map((p, i) => <li key={p} className={i < actual ? 'hecho' : i === actual ? 'actual' : ''}><span>{i + 1}</span>{p}</li>)}
+    </ol>
+  );
+}
+
+export function Multi({ label, opciones, valores, onChange, error }: { label: string; opciones: string[]; valores: string[]; onChange: (v: string[]) => void; error?: string }) {
+  return (
+    <fieldset className={`multi ${error ? 'con-error' : ''}`}>
+      <legend>{label}</legend>
+      <div className="multi-opciones">
+        {opciones.map(o => (
+          <label key={o} className={valores.includes(o) ? 'chip chip-on' : 'chip'}>
+            <input type="checkbox" checked={valores.includes(o)} onChange={e => onChange(e.target.checked ? [...valores, o] : valores.filter(x => x !== o))} />{o}
+          </label>
+        ))}
+      </div>
+      {error && <span className="error" role="alert">{error}</span>}
+    </fieldset>
+  );
+}

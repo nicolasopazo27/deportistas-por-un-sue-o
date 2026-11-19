@@ -1,16 +1,17 @@
 {
   "id": "CP-P12",
-  "requisito": "RF-18, RF-20",
+  "requisito": "RF-18, RF-20 (corrección de INC-02)",
   "prueba": "Con perfil TENS, intentar registrar una entrega y marcar urgencia.",
   "esperado": "TENS no puede registrar entregas (reservado al equipo social) pero sí marcar urgencia.",
-  "obtenido": "Guardar entrega deshabilitado: true; ayudas: 0; urgencias marcadas: 1.",
+  "obtenido": "Guardar entrega deshabilitado: true; ayudas: 0; urgencias: 1.",
   "aprobada": true,
   "estado": "Aprobada",
-  "fechaUTC": "2026-11-19T15:59:35.014Z",
+  "fechaUTC": "2026-11-19T18:45:13.463Z",
   "almacenamiento": {
-    "version": 1,
+    "version": 2,
     "parametros": {
-      "umbralDiasAlerta": 14
+      "umbralDiasAlerta": 14,
+      "umbralDiasDerivacion": 7
     },
     "beneficiarios": [
       {
@@ -18,6 +19,7 @@
         "rut": "12345678-5",
         "nombres": "Camila",
         "apellidos": "Rojas Soto",
+        "fechaNacimiento": "2015-03-14",
         "comuna": "Santiago",
         "apoderado": {
           "nombre": "María Soto Pérez",
@@ -32,17 +34,36 @@
             "descripcion": "Control nefrológico mensual (dato ficticio)."
           }
         ],
-        "hospitalizaciones": [],
+        "centrosSalud": [
+          "Hospital Dr. Luis Calvo Mackenna"
+        ],
+        "credencial": {
+          "tiene": true,
+          "numero": "CD-000123",
+          "porcentaje": 40
+        },
+        "tutor": "Francisca Herrera",
+        "idPostulacion": "P-00",
+        "hospitalizaciones": [
+          {
+            "id": "H-01",
+            "ingreso": "2026-05-03",
+            "alta": "2026-05-13",
+            "centro": "Hospital Dr. Luis Calvo Mackenna",
+            "descripcion": "Hospitalización por control renal (dato ficticio).",
+            "autor": "Trabajo social (demo)"
+          }
+        ],
         "bajas": [],
         "ayudas": [],
-        "fechaRegistro": "2026-10-10T15:59:34.918Z",
+        "fechaRegistro": "2026-10-05T18:45:13.348Z",
         "observaciones": [],
         "casos": [
           {
             "id": "K-01",
             "estado": "EN_ATENCION",
             "fechaInicio": "2026-10-10",
-            "ultimaActualizacion": "2026-11-19T15:59:35.010Z",
+            "ultimaActualizacion": "2026-11-19T18:45:13.456Z",
             "derivaciones": [
               {
                 "id": "D-01",
@@ -64,6 +85,7 @@
                 "numeroSesion": 1,
                 "asistencia": "ASISTIO",
                 "resultado": "REALIZADA",
+                "observacion": "Evaluación inicial; se aplicó flúor.",
                 "autor": "TENS (demo)"
               },
               {
@@ -74,13 +96,14 @@
                 "numeroSesion": 2,
                 "asistencia": "ASISTIO",
                 "resultado": "REALIZADA",
+                "observacion": "Buena tolerancia; continuar tratamiento.",
                 "autor": "TENS (demo)"
               }
             ],
             "urgencias": [
               {
-                "id": "U-w5sso43tu",
-                "fecha": "2026-11-19T15:59:35.010Z",
+                "id": "U-9do5664ds",
+                "fecha": "2026-11-19T18:45:13.456Z",
                 "autor": "Javiera Lagos"
               }
             ]
@@ -88,25 +111,31 @@
         ],
         "historial": [
           {
-            "fecha": "2026-10-10T15:59:34.918Z",
-            "tipo": "Derivación",
-            "detalle": "Ingreso · Dental · llamado semanal",
+            "fecha": "2026-10-05T18:45:13.348Z",
+            "tipo": "Ingreso al programa",
+            "detalle": "Postulación aceptada",
             "autor": "Trabajo social (demo)"
           },
           {
-            "fecha": "2026-10-24T15:59:34.918Z",
+            "fecha": "2026-10-10T18:45:13.348Z",
+            "tipo": "Derivación",
+            "detalle": "Primera derivación · Dental · llamado semanal",
+            "autor": "Trabajo social (demo)"
+          },
+          {
+            "fecha": "2026-10-24T18:45:13.348Z",
             "tipo": "Atención",
             "detalle": "Sesión 1 · Realizada · Atención dental",
             "autor": "TENS (demo)"
           },
           {
-            "fecha": "2026-10-31T15:59:34.918Z",
+            "fecha": "2026-10-31T18:45:13.348Z",
             "tipo": "Atención",
             "detalle": "Sesión 2 · Realizada · Atención dental",
             "autor": "TENS (demo)"
           },
           {
-            "fecha": "2026-11-19T15:59:35.010Z",
+            "fecha": "2026-11-19T18:45:13.456Z",
             "tipo": "Urgencia",
             "detalle": "Caso marcado como urgente",
             "autor": "Javiera Lagos"
@@ -118,6 +147,7 @@
         "rut": "21234567-9",
         "nombres": "Tomás",
         "apellidos": "Díaz Pérez",
+        "fechaNacimiento": "2012-08-02",
         "comuna": "Maipú",
         "apoderado": {
           "nombre": "Andrea Pérez Lagos",
@@ -131,17 +161,24 @@
             "nombre": "Oncológica"
           }
         ],
+        "centrosSalud": [
+          "Hospital Exequiel González Cortés"
+        ],
+        "credencial": {
+          "tiene": false
+        },
+        "tutor": "Francisca Herrera",
         "hospitalizaciones": [],
         "bajas": [],
         "ayudas": [],
-        "fechaRegistro": "2026-09-20T15:59:34.918Z",
+        "fechaRegistro": "2026-09-10T18:45:13.348Z",
         "observaciones": [],
         "casos": [
           {
             "id": "K-02",
             "estado": "EN_ATENCION",
             "fechaInicio": "2026-09-20",
-            "ultimaActualizacion": "2026-10-09T15:59:34.918Z",
+            "ultimaActualizacion": "2026-09-20T18:45:13.348Z",
             "derivaciones": [
               {
                 "id": "D-02",
@@ -159,53 +196,149 @@
         ],
         "historial": [
           {
-            "fecha": "2026-09-20T15:59:34.918Z",
+            "fecha": "2026-09-10T18:45:13.348Z",
+            "tipo": "Ingreso al programa",
+            "detalle": "Ingreso registrado antes del sistema",
+            "autor": "Trabajo social (demo)"
+          },
+          {
+            "fecha": "2026-09-20T18:45:13.348Z",
             "tipo": "Derivación",
-            "detalle": "Ingreso · Kinesiología · solicitud del apoderado",
+            "detalle": "Primera derivación · Kinesiología · solicitud del apoderado",
             "autor": "Trabajo social (demo)"
           }
         ]
       }
     ],
+    "postulaciones": [
+      {
+        "id": "P-01",
+        "fecha": "2026-11-16",
+        "estado": "ENVIADA",
+        "nna": {
+          "nombres": "Sofía",
+          "apellidos": "Muñoz Araya",
+          "rut": "22345678-2",
+          "fechaNacimiento": "2017-05-21",
+          "comuna": "Recoleta"
+        },
+        "apoderado": {
+          "nombre": "Inés Araya Núñez",
+          "telefono": "+56 9 2222 3333",
+          "prevision": "FONASA"
+        },
+        "antecedentes": {
+          "patologias": [
+            "Neurológica"
+          ],
+          "centrosSalud": [
+            "Teletón"
+          ],
+          "credencial": {
+            "tiene": true,
+            "numero": "CD-004567",
+            "porcentaje": 60
+          },
+          "electrodependiente": false,
+          "descripcion": "Parálisis cerebral; usa silla de ruedas (dato ficticio)."
+        },
+        "motivo": "Requiere apoyo kinesiológico y evaluación dental; familia sin cobertura de traslado.",
+        "tutor": "Francisca Herrera"
+      },
+      {
+        "id": "P-02",
+        "fecha": "2026-11-11",
+        "estado": "EN_EVALUACION",
+        "nna": {
+          "nombres": "Benjamín",
+          "apellidos": "Soto Lagos",
+          "rut": "23456789-6",
+          "fechaNacimiento": "2019-11-10",
+          "comuna": "Puente Alto"
+        },
+        "apoderado": {
+          "nombre": "Carla Lagos Vera",
+          "telefono": "+56 9 4444 5555",
+          "prevision": "FONASA"
+        },
+        "antecedentes": {
+          "patologias": [
+            "Respiratoria"
+          ],
+          "centrosSalud": [
+            "Hospital Sótero del Río"
+          ],
+          "credencial": {
+            "tiene": false
+          },
+          "electrodependiente": true,
+          "descripcion": "Oxígeno domiciliario nocturno (dato ficticio)."
+        },
+        "motivo": "Derivado por el hospital para seguimiento y apoyo social.",
+        "tutor": "Francisca Herrera",
+        "evaluador": "Valentina Muñoz"
+      }
+    ],
     "alertas": [
       {
-        "id": "AL-zortp83ra",
+        "id": "AL-gio0h24as",
+        "tipo": "CASO_SIN_ACTUALIZACION",
         "idBeneficiario": "B-01",
         "idCaso": "K-01",
-        "fechaGeneracion": "2026-11-19T15:59:34.918Z",
+        "fechaGeneracion": "2026-11-19T18:45:13.348Z",
         "diasSinActualizacion": 19,
         "umbralDias": 14,
         "estado": "RESUELTA",
-        "fechaResolucion": "2026-11-19T15:59:35.010Z"
+        "fechaResolucion": "2026-11-19T18:45:13.456Z"
       },
       {
-        "id": "AL-q57uf53ra",
+        "id": "AL-k96llc4as",
+        "tipo": "DERIVACION_SIN_ATENCION",
         "idBeneficiario": "B-02",
         "idCaso": "K-02",
-        "fechaGeneracion": "2026-11-19T15:59:34.918Z",
-        "diasSinActualizacion": 41,
-        "umbralDias": 14,
+        "idDerivacion": "D-02",
+        "fechaGeneracion": "2026-11-19T18:45:13.348Z",
+        "diasSinActualizacion": 61,
+        "umbralDias": 7,
         "estado": "ACTIVA"
       }
     ],
     "notificaciones": [
       {
-        "id": "N-b939du3ra",
+        "id": "N-4l5d5t4as",
         "tipo": "ALERTA_CASO",
         "canal": "PLATAFORMA",
         "rolDestino": "TRABAJO_SOCIAL",
         "mensaje": "Caso de Camila Rojas Soto lleva 19 días sin actualización (umbral 14).",
         "estado": "PENDIENTE",
-        "fecha": "2026-11-19T15:59:34.918Z"
+        "fecha": "2026-11-19T18:45:13.348Z"
       },
       {
-        "id": "N-sfe2y43ra",
+        "id": "N-2d1grd4as",
+        "tipo": "ALERTA_CASO",
+        "canal": "PLATAFORMA",
+        "rolDestino": "TENS",
+        "mensaje": "Caso de Camila Rojas Soto lleva 19 días sin actualización (umbral 14).",
+        "estado": "PENDIENTE",
+        "fecha": "2026-11-19T18:45:13.348Z"
+      },
+      {
+        "id": "N-h1btwx4as",
         "tipo": "ALERTA_CASO",
         "canal": "PLATAFORMA",
         "rolDestino": "TRABAJO_SOCIAL",
-        "mensaje": "Caso de Tomás Díaz Pérez lleva 41 días sin actualización (umbral 14).",
+        "mensaje": "Derivación de Tomás Díaz Pérez a Kinesiología lleva 61 días sin atención (umbral 7).",
         "estado": "PENDIENTE",
-        "fecha": "2026-11-19T15:59:34.918Z"
+        "fecha": "2026-11-19T18:45:13.348Z"
+      },
+      {
+        "id": "N-g8xqqn4as",
+        "tipo": "ALERTA_CASO",
+        "canal": "PLATAFORMA",
+        "rolDestino": "TENS",
+        "mensaje": "Derivación de Tomás Díaz Pérez a Kinesiología lleva 61 días sin atención (umbral 7).",
+        "estado": "PENDIENTE",
+        "fecha": "2026-11-19T18:45:13.348Z"
       }
     ],
     "reportes": []
