@@ -7,7 +7,7 @@ import { NOMBRE_ROL, puede } from '../domain/reglas';
 import { leerNotificaciones } from '../data/servicios';
 import type { Permiso } from '../domain/tipos';
 
-interface ItemMenu { ruta: string; texto: string; icono: LucideIcon; permiso?: Permiso; cuenta?: number }
+interface ItemMenu { ruta: string; texto: string; icono: LucideIcon; permiso?: Permiso | Permiso[]; cuenta?: number }
 
 export function Cabecera() {
   return (
@@ -34,16 +34,16 @@ export default function Layout() {
     { titulo: '1 · Ingreso al programa', items: [{ ruta: '/postulaciones', texto: 'Postulaciones', icono: ClipboardList, permiso: 'POSTULACION_REGISTRAR', cuenta: puede(usuario.rol, 'POSTULACION_EVALUAR') ? postPend : undefined }] },
     { titulo: '2 · Atención', items: [
       { ruta: '/derivaciones', texto: 'Derivaciones', icono: Send, permiso: 'DERIVACION_REGISTRAR' },
-      { ruta: '/atenciones', texto: 'Atenciones', icono: Stethoscope, permiso: 'FICHA_CONSULTAR' },
+      { ruta: '/atenciones', texto: 'Atenciones', icono: Stethoscope, permiso: ['ATENCION_REGISTRAR', 'ALERTA_CONSULTAR'] },
       { ruta: '/alertas', texto: 'Alertas', icono: TriangleAlert, permiso: 'ALERTA_CONSULTAR', cuenta: alertasActivas },
     ] },
     { titulo: '3 · Beneficiarios', items: [
       { ruta: '/beneficiarios', texto: 'Fichas', icono: Users, permiso: 'FICHA_CONSULTAR' },
-      { ruta: '/ayudas', texto: 'Ayudas y urgencias', icono: HandHeart, permiso: 'FICHA_CONSULTAR' },
-      { ruta: '/bajas', texto: 'Bajas', icono: UserMinus, permiso: 'FICHA_CONSULTAR' },
+      { ruta: '/ayudas', texto: 'Ayudas y urgencias', icono: HandHeart, permiso: ['AYUDA_REGISTRAR', 'URGENCIA_MARCAR'] },
+      { ruta: '/bajas', texto: 'Bajas', icono: UserMinus, permiso: 'BAJA_REGISTRAR' },
     ] },
     { titulo: '4 · Gestión', items: [
-      { ruta: '/reportes', texto: 'Reportes', icono: FileBarChart, permiso: 'FICHA_CONSULTAR' },
+      { ruta: '/reportes', texto: 'Reportes', icono: FileBarChart, permiso: 'REPORTE_GENERAR' },
       { ruta: '/perfiles', texto: 'Perfiles y permisos', icono: ShieldCheck },
     ] },
   ];
@@ -59,7 +59,7 @@ export default function Layout() {
           </div>
           <nav aria-label="Módulos">
             {grupos.map(g => {
-              const visibles = g.items.filter(m => !m.permiso || puede(usuario.rol, m.permiso));
+              const visibles = g.items.filter(m => !m.permiso || [m.permiso].flat().some(x => puede(usuario.rol, x)));
               if (!visibles.length) return null;
               return (
                 <div key={g.titulo || 'inicio'} className="grupo-menu">

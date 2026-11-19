@@ -6,7 +6,7 @@
   "obtenido": "Bajas: 1 (EGRESO); historial 4 → 5; listado muestra estado Baja.",
   "aprobada": true,
   "estado": "Aprobada",
-  "fechaUTC": "2026-11-19T18:45:13.046Z",
+  "fechaUTC": "2026-11-19T19:03:40.498Z",
   "almacenamiento": {
     "version": 2,
     "parametros": {
@@ -56,21 +56,21 @@
         ],
         "bajas": [
           {
-            "id": "BA-rw8ej440z",
+            "id": "BA-2kb0mqujc",
             "causal": "EGRESO",
             "fecha": "2026-11-19",
             "autor": "Valentina Muñoz"
           }
         ],
         "ayudas": [],
-        "fechaRegistro": "2026-10-05T18:45:12.849Z",
+        "fechaRegistro": "2026-10-05T19:03:40.294Z",
         "observaciones": [],
         "casos": [
           {
             "id": "K-01",
             "estado": "EN_ATENCION",
             "fechaInicio": "2026-10-10",
-            "ultimaActualizacion": "2026-10-31T18:45:12.849Z",
+            "ultimaActualizacion": "2026-10-31T19:03:40.294Z",
             "derivaciones": [
               {
                 "id": "D-01",
@@ -112,31 +112,31 @@
         ],
         "historial": [
           {
-            "fecha": "2026-10-05T18:45:12.849Z",
+            "fecha": "2026-10-05T19:03:40.294Z",
             "tipo": "Ingreso al programa",
             "detalle": "Postulación aceptada",
             "autor": "Trabajo social (demo)"
           },
           {
-            "fecha": "2026-10-10T18:45:12.849Z",
+            "fecha": "2026-10-10T19:03:40.294Z",
             "tipo": "Derivación",
             "detalle": "Primera derivación · Dental · llamado semanal",
             "autor": "Trabajo social (demo)"
           },
           {
-            "fecha": "2026-10-24T18:45:12.849Z",
+            "fecha": "2026-10-24T19:03:40.294Z",
             "tipo": "Atención",
             "detalle": "Sesión 1 · Realizada · Atención dental",
             "autor": "TENS (demo)"
           },
           {
-            "fecha": "2026-10-31T18:45:12.849Z",
+            "fecha": "2026-10-31T19:03:40.294Z",
             "tipo": "Atención",
             "detalle": "Sesión 2 · Realizada · Atención dental",
             "autor": "TENS (demo)"
           },
           {
-            "fecha": "2026-11-19T18:45:12.995Z",
+            "fecha": "2026-11-19T19:03:40.440Z",
             "tipo": "Baja",
             "detalle": "Causal: Egreso",
             "autor": "Valentina Muñoz"
@@ -172,14 +172,14 @@
         "hospitalizaciones": [],
         "bajas": [],
         "ayudas": [],
-        "fechaRegistro": "2026-09-10T18:45:12.849Z",
+        "fechaRegistro": "2026-09-10T19:03:40.294Z",
         "observaciones": [],
         "casos": [
           {
             "id": "K-02",
             "estado": "EN_ATENCION",
             "fechaInicio": "2026-09-20",
-            "ultimaActualizacion": "2026-09-20T18:45:12.849Z",
+            "ultimaActualizacion": "2026-09-20T19:03:40.294Z",
             "derivaciones": [
               {
                 "id": "D-02",
@@ -197,13 +197,13 @@
         ],
         "historial": [
           {
-            "fecha": "2026-09-10T18:45:12.849Z",
+            "fecha": "2026-09-10T19:03:40.294Z",
             "tipo": "Ingreso al programa",
             "detalle": "Ingreso registrado antes del sistema",
             "autor": "Trabajo social (demo)"
           },
           {
-            "fecha": "2026-09-20T18:45:12.849Z",
+            "fecha": "2026-09-20T19:03:40.294Z",
             "tipo": "Derivación",
             "detalle": "Primera derivación · Kinesiología · solicitud del apoderado",
             "autor": "Trabajo social (demo)"
@@ -282,22 +282,22 @@
     ],
     "alertas": [
       {
-        "id": "AL-xa55br3wx",
+        "id": "AL-9o15puufa",
         "tipo": "CASO_SIN_ACTUALIZACION",
         "idBeneficiario": "B-01",
         "idCaso": "K-01",
-        "fechaGeneracion": "2026-11-19T18:45:12.849Z",
+        "fechaGeneracion": "2026-11-19T19:03:40.294Z",
         "diasSinActualizacion": 19,
         "umbralDias": 14,
         "estado": "ACTIVA"
       },
       {
-        "id": "AL-3hp7tp3wx",
+        "id": "AL-fa6hevufb",
         "tipo": "DERIVACION_SIN_ATENCION",
         "idBeneficiario": "B-02",
         "idCaso": "K-02",
         "idDerivacion": "D-02",
-        "fechaGeneracion": "2026-11-19T18:45:12.849Z",
+        "fechaGeneracion": "2026-11-19T19:03:40.294Z",
         "diasSinActualizacion": 61,
         "umbralDias": 7,
         "estado": "ACTIVA"
@@ -305,40 +305,40 @@
     ],
     "notificaciones": [
       {
-        "id": "N-deptsn3wx",
+        "id": "N-miu09qufb",
         "tipo": "ALERTA_CASO",
         "canal": "PLATAFORMA",
         "rolDestino": "TRABAJO_SOCIAL",
         "mensaje": "Caso de Camila Rojas Soto lleva 19 días sin actualización (umbral 14).",
         "estado": "PENDIENTE",
-        "fecha": "2026-11-19T18:45:12.849Z"
+        "fecha": "2026-11-19T19:03:40.295Z"
       },
       {
-        "id": "N-63wd5g3wx",
+        "id": "N-72gyqhufb",
         "tipo": "ALERTA_CASO",
         "canal": "PLATAFORMA",
         "rolDestino": "TENS",
         "mensaje": "Caso de Camila Rojas Soto lleva 19 días sin actualización (umbral 14).",
         "estado": "PENDIENTE",
-        "fecha": "2026-11-19T18:45:12.849Z"
+        "fecha": "2026-11-19T19:03:40.295Z"
       },
       {
-        "id": "N-idtmcd3wx",
+        "id": "N-o2cj5oufb",
         "tipo": "ALERTA_CASO",
         "canal": "PLATAFORMA",
         "rolDestino": "TRABAJO_SOCIAL",
         "mensaje": "Derivación de Tomás Díaz Pérez a Kinesiología lleva 61 días sin atención (umbral 7).",
         "estado": "PENDIENTE",
-        "fecha": "2026-11-19T18:45:12.849Z"
+        "fecha": "2026-11-19T19:03:40.295Z"
       },
       {
-        "id": "N-7q32tj3wx",
+        "id": "N-is6numufb",
         "tipo": "ALERTA_CASO",
         "canal": "PLATAFORMA",
         "rolDestino": "TENS",
         "mensaje": "Derivación de Tomás Díaz Pérez a Kinesiología lleva 61 días sin atención (umbral 7).",
         "estado": "PENDIENTE",
-        "fecha": "2026-11-19T18:45:12.849Z"
+        "fecha": "2026-11-19T19:03:40.295Z"
       }
     ],
     "reportes": []

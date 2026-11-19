@@ -6,7 +6,7 @@
   "obtenido": "Beneficiarios: 2; casos: 1; derivaciones del caso: 2; advertencia_ignorada: true. Regla pendiente de validación (DP-02).",
   "aprobada": true,
   "estado": "Aprobada",
-  "fechaUTC": "2026-11-19T18:45:14.285Z",
+  "fechaUTC": "2026-11-19T19:03:41.855Z",
   "almacenamiento": {
     "version": 2,
     "parametros": {
@@ -56,14 +56,14 @@
         ],
         "bajas": [],
         "ayudas": [],
-        "fechaRegistro": "2026-10-05T18:45:14.117Z",
+        "fechaRegistro": "2026-10-05T19:03:41.649Z",
         "observaciones": [],
         "casos": [
           {
             "id": "K-01",
             "estado": "EN_ATENCION",
             "fechaInicio": "2026-10-10",
-            "ultimaActualizacion": "2026-11-19T18:45:14.279Z",
+            "ultimaActualizacion": "2026-11-19T19:03:41.840Z",
             "derivaciones": [
               {
                 "id": "D-01",
@@ -76,7 +76,7 @@
                 "autor": "Trabajo social (demo)"
               },
               {
-                "id": "D-vmu2vq50n",
+                "id": "D-9cessvvm8",
                 "fecha": "2026-11-19",
                 "tipoIngreso": "INGRESO",
                 "area": "KINESIOLOGIA",
@@ -114,31 +114,31 @@
         ],
         "historial": [
           {
-            "fecha": "2026-10-05T18:45:14.117Z",
+            "fecha": "2026-10-05T19:03:41.649Z",
             "tipo": "Ingreso al programa",
             "detalle": "Postulación aceptada",
             "autor": "Trabajo social (demo)"
           },
           {
-            "fecha": "2026-10-10T18:45:14.117Z",
+            "fecha": "2026-10-10T19:03:41.649Z",
             "tipo": "Derivación",
             "detalle": "Primera derivación · Dental · llamado semanal",
             "autor": "Trabajo social (demo)"
           },
           {
-            "fecha": "2026-10-24T18:45:14.117Z",
+            "fecha": "2026-10-24T19:03:41.649Z",
             "tipo": "Atención",
             "detalle": "Sesión 1 · Realizada · Atención dental",
             "autor": "TENS (demo)"
           },
           {
-            "fecha": "2026-10-31T18:45:14.117Z",
+            "fecha": "2026-10-31T19:03:41.649Z",
             "tipo": "Atención",
             "detalle": "Sesión 2 · Realizada · Atención dental",
             "autor": "TENS (demo)"
           },
           {
-            "fecha": "2026-11-19T18:45:14.279Z",
+            "fecha": "2026-11-19T19:03:41.840Z",
             "tipo": "Derivación",
             "detalle": "Primera derivación · Kinesiología · asociada al caso activo",
             "autor": "Carolina Pino"
@@ -174,14 +174,14 @@
         "hospitalizaciones": [],
         "bajas": [],
         "ayudas": [],
-        "fechaRegistro": "2026-09-10T18:45:14.117Z",
+        "fechaRegistro": "2026-09-10T19:03:41.649Z",
         "observaciones": [],
         "casos": [
           {
             "id": "K-02",
             "estado": "EN_ATENCION",
             "fechaInicio": "2026-09-20",
-            "ultimaActualizacion": "2026-09-20T18:45:14.117Z",
+            "ultimaActualizacion": "2026-09-20T19:03:41.649Z",
             "derivaciones": [
               {
                 "id": "D-02",
@@ -199,13 +199,13 @@
         ],
         "historial": [
           {
-            "fecha": "2026-09-10T18:45:14.117Z",
+            "fecha": "2026-09-10T19:03:41.649Z",
             "tipo": "Ingreso al programa",
             "detalle": "Ingreso registrado antes del sistema",
             "autor": "Trabajo social (demo)"
           },
           {
-            "fecha": "2026-09-20T18:45:14.117Z",
+            "fecha": "2026-09-20T19:03:41.649Z",
             "tipo": "Derivación",
             "detalle": "Primera derivación · Kinesiología · solicitud del apoderado",
             "autor": "Trabajo social (demo)"
@@ -284,23 +284,23 @@
     ],
     "alertas": [
       {
-        "id": "AL-nv1hj94w5",
+        "id": "AL-33ws1vvgx",
         "tipo": "CASO_SIN_ACTUALIZACION",
         "idBeneficiario": "B-01",
         "idCaso": "K-01",
-        "fechaGeneracion": "2026-11-19T18:45:14.117Z",
+        "fechaGeneracion": "2026-11-19T19:03:41.649Z",
         "diasSinActualizacion": 19,
         "umbralDias": 14,
         "estado": "RESUELTA",
-        "fechaResolucion": "2026-11-19T18:45:14.279Z"
+        "fechaResolucion": "2026-11-19T19:03:41.840Z"
       },
       {
-        "id": "AL-nmh55m4w5",
+        "id": "AL-7vtwgbvgx",
         "tipo": "DERIVACION_SIN_ATENCION",
         "idBeneficiario": "B-02",
         "idCaso": "K-02",
         "idDerivacion": "D-02",
-        "fechaGeneracion": "2026-11-19T18:45:14.117Z",
+        "fechaGeneracion": "2026-11-19T19:03:41.649Z",
         "diasSinActualizacion": 61,
         "umbralDias": 7,
         "estado": "ACTIVA"
@@ -308,40 +308,40 @@
     ],
     "notificaciones": [
       {
-        "id": "N-vmmt2s4w5",
+        "id": "N-ujbpnmvgx",
         "tipo": "ALERTA_CASO",
         "canal": "PLATAFORMA",
         "rolDestino": "TRABAJO_SOCIAL",
         "mensaje": "Caso de Camila Rojas Soto lleva 19 días sin actualización (umbral 14).",
         "estado": "PENDIENTE",
-        "fecha": "2026-11-19T18:45:14.117Z"
+        "fecha": "2026-11-19T19:03:41.649Z"
       },
       {
-        "id": "N-225eud4w5",
+        "id": "N-7xegz1vgx",
         "tipo": "ALERTA_CASO",
         "canal": "PLATAFORMA",
         "rolDestino": "TENS",
         "mensaje": "Caso de Camila Rojas Soto lleva 19 días sin actualización (umbral 14).",
         "estado": "PENDIENTE",
-        "fecha": "2026-11-19T18:45:14.117Z"
+        "fecha": "2026-11-19T19:03:41.649Z"
       },
       {
-        "id": "N-qjjb2a4w5",
+        "id": "N-0x5soevgx",
         "tipo": "ALERTA_CASO",
         "canal": "PLATAFORMA",
         "rolDestino": "TRABAJO_SOCIAL",
         "mensaje": "Derivación de Tomás Díaz Pérez a Kinesiología lleva 61 días sin atención (umbral 7).",
         "estado": "PENDIENTE",
-        "fecha": "2026-11-19T18:45:14.117Z"
+        "fecha": "2026-11-19T19:03:41.649Z"
       },
       {
-        "id": "N-gvrf9d4w5",
+        "id": "N-iakglfvgx",
         "tipo": "ALERTA_CASO",
         "canal": "PLATAFORMA",
         "rolDestino": "TENS",
         "mensaje": "Derivación de Tomás Díaz Pérez a Kinesiología lleva 61 días sin atención (umbral 7).",
         "estado": "PENDIENTE",
-        "fecha": "2026-11-19T18:45:14.117Z"
+        "fecha": "2026-11-19T19:03:41.649Z"
       }
     ],
     "reportes": []

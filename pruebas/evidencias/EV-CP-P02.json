@@ -3,10 +3,10 @@
   "requisito": "M8, RF-01, RF-04",
   "prueba": "Tutor registra postulación; Trabajo social la acepta; se remonta la aplicación y se abre la ficha.",
   "esperado": "La postulación queda aceptada, se crea la ficha (ingreso al programa) y se recupera tras remontar.",
-  "obtenido": "Postulación P-et6khu2sv registrada por Francisca Herrera; estado final ACEPTADA; beneficiarios: 3; primer evento: «Ingreso al programa»; ficha recuperada tras remontar. Persistencia local (no SQL).",
+  "obtenido": "Postulación P-wwaiqbt9e registrada por Francisca Herrera; estado final ACEPTADA; beneficiarios: 3; primer evento: «Ingreso al programa»; ficha recuperada tras remontar. Persistencia local (no SQL).",
   "aprobada": true,
   "estado": "Aprobada",
-  "fechaUTC": "2026-11-19T18:45:11.695Z",
+  "fechaUTC": "2026-11-19T19:03:39.105Z",
   "almacenamiento": {
     "version": 2,
     "parametros": {
@@ -56,14 +56,14 @@
         ],
         "bajas": [],
         "ayudas": [],
-        "fechaRegistro": "2026-10-05T18:45:10.721Z",
+        "fechaRegistro": "2026-10-05T19:03:37.996Z",
         "observaciones": [],
         "casos": [
           {
             "id": "K-01",
             "estado": "EN_ATENCION",
             "fechaInicio": "2026-10-10",
-            "ultimaActualizacion": "2026-10-31T18:45:10.721Z",
+            "ultimaActualizacion": "2026-10-31T19:03:37.996Z",
             "derivaciones": [
               {
                 "id": "D-01",
@@ -105,25 +105,25 @@
         ],
         "historial": [
           {
-            "fecha": "2026-10-05T18:45:10.721Z",
+            "fecha": "2026-10-05T19:03:37.996Z",
             "tipo": "Ingreso al programa",
             "detalle": "Postulación aceptada",
             "autor": "Trabajo social (demo)"
           },
           {
-            "fecha": "2026-10-10T18:45:10.721Z",
+            "fecha": "2026-10-10T19:03:37.996Z",
             "tipo": "Derivación",
             "detalle": "Primera derivación · Dental · llamado semanal",
             "autor": "Trabajo social (demo)"
           },
           {
-            "fecha": "2026-10-24T18:45:10.721Z",
+            "fecha": "2026-10-24T19:03:37.996Z",
             "tipo": "Atención",
             "detalle": "Sesión 1 · Realizada · Atención dental",
             "autor": "TENS (demo)"
           },
           {
-            "fecha": "2026-10-31T18:45:10.721Z",
+            "fecha": "2026-10-31T19:03:37.996Z",
             "tipo": "Atención",
             "detalle": "Sesión 2 · Realizada · Atención dental",
             "autor": "TENS (demo)"
@@ -159,14 +159,14 @@
         "hospitalizaciones": [],
         "bajas": [],
         "ayudas": [],
-        "fechaRegistro": "2026-09-10T18:45:10.721Z",
+        "fechaRegistro": "2026-09-10T19:03:37.996Z",
         "observaciones": [],
         "casos": [
           {
             "id": "K-02",
             "estado": "EN_ATENCION",
             "fechaInicio": "2026-09-20",
-            "ultimaActualizacion": "2026-09-20T18:45:10.721Z",
+            "ultimaActualizacion": "2026-09-20T19:03:37.996Z",
             "derivaciones": [
               {
                 "id": "D-02",
@@ -184,13 +184,13 @@
         ],
         "historial": [
           {
-            "fecha": "2026-09-10T18:45:10.721Z",
+            "fecha": "2026-09-10T19:03:37.996Z",
             "tipo": "Ingreso al programa",
             "detalle": "Ingreso registrado antes del sistema",
             "autor": "Trabajo social (demo)"
           },
           {
-            "fecha": "2026-09-20T18:45:10.721Z",
+            "fecha": "2026-09-20T19:03:37.996Z",
             "tipo": "Derivación",
             "detalle": "Primera derivación · Kinesiología · solicitud del apoderado",
             "autor": "Trabajo social (demo)"
@@ -198,7 +198,7 @@
         ]
       },
       {
-        "id": "B-ht5wg82xl",
+        "id": "B-8spvpetem",
         "rut": "9876543-3",
         "nombres": "Martina",
         "apellidos": "Núñez Peña",
@@ -219,7 +219,7 @@
           "tiene": false
         },
         "tutor": "Francisca Herrera",
-        "idPostulacion": "P-et6khu2sv",
+        "idPostulacion": "P-wwaiqbt9e",
         "hospitalizaciones": [],
         "casos": [],
         "bajas": [],
@@ -227,13 +227,13 @@
         "observaciones": [],
         "historial": [
           {
-            "fecha": "2026-11-19T18:45:11.577Z",
+            "fecha": "2026-11-19T19:03:38.974Z",
             "tipo": "Ingreso al programa",
             "detalle": "Postulación aceptada (tutor: Francisca Herrera)",
             "autor": "Valentina Muñoz"
           }
         ],
-        "fechaRegistro": "2026-11-19T18:45:11.577Z"
+        "fechaRegistro": "2026-11-19T19:03:38.974Z"
       }
     ],
     "postulaciones": [
@@ -305,7 +305,7 @@
         "evaluador": "Valentina Muñoz"
       },
       {
-        "id": "P-et6khu2sv",
+        "id": "P-wwaiqbt9e",
         "fecha": "2026-11-19",
         "estado": "ACEPTADA",
         "nna": {
@@ -332,27 +332,27 @@
         "tutor": "Francisca Herrera",
         "evaluador": "Valentina Muñoz",
         "fechaResolucion": "2026-11-19",
-        "idBeneficiario": "B-ht5wg82xl"
+        "idBeneficiario": "B-8spvpetem"
       }
     ],
     "alertas": [
       {
-        "id": "AL-pnzfjc29t",
+        "id": "AL-ks4cl8snh",
         "tipo": "CASO_SIN_ACTUALIZACION",
         "idBeneficiario": "B-01",
         "idCaso": "K-01",
-        "fechaGeneracion": "2026-11-19T18:45:10.721Z",
+        "fechaGeneracion": "2026-11-19T19:03:37.996Z",
         "diasSinActualizacion": 19,
         "umbralDias": 14,
         "estado": "ACTIVA"
       },
       {
-        "id": "AL-akk8pb29t",
+        "id": "AL-0qj7lmsnh",
         "tipo": "DERIVACION_SIN_ATENCION",
         "idBeneficiario": "B-02",
         "idCaso": "K-02",
         "idDerivacion": "D-02",
-        "fechaGeneracion": "2026-11-19T18:45:10.721Z",
+        "fechaGeneracion": "2026-11-19T19:03:37.996Z",
         "diasSinActualizacion": 61,
         "umbralDias": 7,
         "estado": "ACTIVA"
@@ -360,49 +360,49 @@
     ],
     "notificaciones": [
       {
-        "id": "N-ozz2h729t",
+        "id": "N-4ad5mpsnh",
         "tipo": "ALERTA_CASO",
         "canal": "PLATAFORMA",
         "rolDestino": "TRABAJO_SOCIAL",
         "mensaje": "Caso de Camila Rojas Soto lleva 19 días sin actualización (umbral 14).",
         "estado": "PENDIENTE",
-        "fecha": "2026-11-19T18:45:10.721Z"
+        "fecha": "2026-11-19T19:03:37.997Z"
       },
       {
-        "id": "N-w8dcbn29t",
+        "id": "N-24zw1tsnh",
         "tipo": "ALERTA_CASO",
         "canal": "PLATAFORMA",
         "rolDestino": "TENS",
         "mensaje": "Caso de Camila Rojas Soto lleva 19 días sin actualización (umbral 14).",
         "estado": "PENDIENTE",
-        "fecha": "2026-11-19T18:45:10.721Z"
+        "fecha": "2026-11-19T19:03:37.997Z"
       },
       {
-        "id": "N-u5hgdm29t",
+        "id": "N-3bjjynsnh",
         "tipo": "ALERTA_CASO",
         "canal": "PLATAFORMA",
         "rolDestino": "TRABAJO_SOCIAL",
         "mensaje": "Derivación de Tomás Díaz Pérez a Kinesiología lleva 61 días sin atención (umbral 7).",
         "estado": "PENDIENTE",
-        "fecha": "2026-11-19T18:45:10.721Z"
+        "fecha": "2026-11-19T19:03:37.997Z"
       },
       {
-        "id": "N-kbpcyp29t",
+        "id": "N-isluxmsnh",
         "tipo": "ALERTA_CASO",
         "canal": "PLATAFORMA",
         "rolDestino": "TENS",
         "mensaje": "Derivación de Tomás Díaz Pérez a Kinesiología lleva 61 días sin atención (umbral 7).",
         "estado": "PENDIENTE",
-        "fecha": "2026-11-19T18:45:10.721Z"
+        "fecha": "2026-11-19T19:03:37.997Z"
       },
       {
-        "id": "N-gh80lo2sv",
+        "id": "N-7yv4i2t9e",
         "tipo": "POSTULACION",
         "canal": "PLATAFORMA",
         "rolDestino": "TRABAJO_SOCIAL",
         "mensaje": "Nueva postulación de Martina Núñez Peña (registrada por Francisca Herrera).",
         "estado": "PENDIENTE",
-        "fecha": "2026-11-19T18:45:11.407Z"
+        "fecha": "2026-11-19T19:03:38.786Z"
       }
     ],
     "reportes": []
