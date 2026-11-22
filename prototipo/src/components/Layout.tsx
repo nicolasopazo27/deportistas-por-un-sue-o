@@ -24,8 +24,8 @@ export default function Layout() {
   const [verAvisos, setVerAvisos] = useState(false);
   // RNF-3: sin sesión no se muestra ningún dato; se redirige al inicio de sesión.
   if (!usuario) return <Navigate to="/ingreso" replace state={{ desde: loc.pathname + loc.search }} />;
-  const pendientes = estado.notificaciones.filter(n => n.rolDestino === usuario.rol && n.estado === 'PENDIENTE');
-  const mias = estado.notificaciones.filter(n => n.rolDestino === usuario.rol).slice(-10).reverse();
+  const pendientes = estado.notificaciones.filter(n => (n.rolDestino === usuario.rol || usuario.rol === 'ADMIN') && n.estado === 'PENDIENTE');
+  const mias = estado.notificaciones.filter(n => n.rolDestino === usuario.rol || usuario.rol === 'ADMIN').slice(-10).reverse();
   const alertasActivas = estado.alertas.filter(a => a.estado === 'ACTIVA').length;
   const postPend = estado.postulaciones.filter(p => p.estado === 'ENVIADA' || p.estado === 'EN_EVALUACION').length;
 

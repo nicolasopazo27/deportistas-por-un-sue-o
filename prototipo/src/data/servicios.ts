@@ -337,5 +337,5 @@ export function registrarReporte(e: EstadoSistema, u: Usuario, r: Omit<ReporteGe
   return rep;
 }
 export function leerNotificaciones(e: EstadoSistema, u: Usuario) {
-  e.notificaciones.filter(n => n.rolDestino === u.rol && n.estado === 'PENDIENTE').forEach(n => { n.estado = 'LEIDA'; });
+  e.notificaciones.filter(n => (n.rolDestino === u.rol || u.rol === 'ADMIN') && n.estado === 'PENDIENTE').forEach(n => { n.estado = 'LEIDA'; });
 }
