@@ -101,9 +101,10 @@ export function Pestanas<T extends string>({ opciones, activa, onCambiar }: { op
   );
 }
 
-export function Kpi({ titulo, valor, detalle, tono = 'neutro', onClick }: { titulo: string; valor: number | string; detalle?: string; tono?: 'neutro' | 'rojo' | 'amarillo' | 'verde'; onClick?: () => void }) {
+export function Kpi({ titulo, valor, detalle, tono = 'neutro', icono, onClick }: { titulo: string; valor: number | string; detalle?: string; tono?: 'neutro' | 'rojo' | 'amarillo' | 'verde' | 'azul' | 'morado'; icono?: ReactNode; onClick?: () => void }) {
   return (
     <button type="button" className={`kpi kpi-${tono}`} onClick={onClick} disabled={!onClick}>
+      {icono && <span className="kpi-icono" aria-hidden="true">{icono}</span>}
       <span className="kpi-titulo">{titulo}</span>
       <span className="kpi-valor">{valor}</span>
       {detalle && <span className="kpi-detalle">{detalle}</span>}

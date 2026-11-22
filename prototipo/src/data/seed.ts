@@ -8,13 +8,22 @@ const diasAtras = (n: number) => {
 };
 const fecha = (n: number) => diasAtras(n).slice(0, 10);
 
-export const VERSION_DATOS = 2;
+export const VERSION_DATOS = 3;
 
 export function crearDatosIniciales(): EstadoSistema {
   return {
     version: VERSION_DATOS,
     // Valores de ensayo: el umbral definitivo está pendiente de validación con la Fundación (DP-04).
     parametros: { umbralDiasAlerta: 14, umbralDiasDerivacion: 7 },
+    // Consolidado anual FICTICIO de las planillas Excel previas al sistema, para comparar años en el Inicio.
+    // El año en curso suma estos valores de enero a la puesta en marcha más lo registrado en el sistema.
+    historico: [
+      { anio: 2022, postulaciones: 96, ingresos: 74, bajas: { EGRESO: 18, DESVINCULACION: 9, FALLECIMIENTO: 2 }, derivaciones: { DENTAL: 120, KINESIOLOGIA: 85, OTRA: 30 }, atenciones: 1480 },
+      { anio: 2023, postulaciones: 112, ingresos: 88, bajas: { EGRESO: 22, DESVINCULACION: 11, FALLECIMIENTO: 3 }, derivaciones: { DENTAL: 140, KINESIOLOGIA: 101, OTRA: 36 }, atenciones: 1720 },
+      { anio: 2024, postulaciones: 131, ingresos: 97, bajas: { EGRESO: 27, DESVINCULACION: 12, FALLECIMIENTO: 2 }, derivaciones: { DENTAL: 158, KINESIOLOGIA: 118, OTRA: 41 }, atenciones: 1950 },
+      { anio: 2025, postulaciones: 148, ingresos: 109, bajas: { EGRESO: 31, DESVINCULACION: 14, FALLECIMIENTO: 4 }, derivaciones: { DENTAL: 176, KINESIOLOGIA: 134, OTRA: 47 }, atenciones: 2210 },
+      { anio: 2026, postulaciones: 121, ingresos: 90, bajas: { EGRESO: 20, DESVINCULACION: 9, FALLECIMIENTO: 2 }, derivaciones: { DENTAL: 150, KINESIOLOGIA: 112, OTRA: 39 }, atenciones: 1890 },
+    ],
     beneficiarios: [
       {
         id: 'B-01', rut: '12345678-5', nombres: 'Camila', apellidos: 'Rojas Soto', fechaNacimiento: '2015-03-14', comuna: 'Santiago',

@@ -73,7 +73,7 @@ h1{font-size:24px;margin:0}h2{font-size:18px;margin:22px 0 10px}h3{font-size:15p
 .ingreso{flex:1;display:flex;justify-content:center;align-items:flex-start;padding:50px 16px}
 .tarjeta-ingreso{background:#fff;border-radius:12px;padding:28px 30px;width:min(460px,100%);box-shadow:0 6px 24px #0001;border-top:4px solid var(--rojo)}
 .tarjeta-ingreso .campo{margin:12px 0}
-.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin:16px 0}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin:16px 0}
 .kpi{border:1px solid var(--borde);border-radius:10px;background:#fff;padding:14px 16px;text-align:left;display:flex;flex-direction:column;gap:2px;cursor:pointer;font:inherit;border-left:5px solid #9aa0a6}
 .kpi:disabled{cursor:default}.kpi:hover:not(:disabled){box-shadow:0 3px 10px #0001}
 .kpi-titulo{font-size:12px;color:var(--gris)}.kpi-valor{font-size:30px;font-weight:700}.kpi-detalle{font-size:12px;color:var(--gris)}
@@ -101,3 +101,30 @@ h1{font-size:24px;margin:0}h2{font-size:18px;margin:22px 0 10px}h3{font-size:15p
 @media (max-width:860px){.cuerpo{flex-direction:column}.lateral{width:100%;height:auto;position:static;padding:6px 0}
   .lateral nav{display:flex;overflow-x:auto}.grupo-menu{display:flex;margin:0}.grupo-titulo,.usuario-lateral,.salir{display:none}.lateral nav a{white-space:nowrap}
   .contenido{padding:10px}.contenido>section{padding:14px}.grilla,.grilla-3,.datos,.columnas{grid-template-columns:1fr}.titulo-sistema{display:none}}
+
+/* KPI con color (revisión final) */
+.kpi{position:relative;border-left-width:5px;padding-top:16px}
+.kpi-icono{position:absolute;top:12px;right:12px;width:32px;height:32px;border-radius:9px;display:grid;place-items:center}
+.kpi-azul{background:#f2f7fd;border-left-color:#2a78d6}.kpi-azul .kpi-valor{color:#1c5cab}.kpi-azul .kpi-icono{background:#dce9fa;color:#1c5cab}
+.kpi-verde{background:#effaf5;border-left-color:#1baf7a}.kpi-verde .kpi-valor{color:#0f7a52}.kpi-verde .kpi-icono{background:#d3f1e4;color:#0f7a52}
+.kpi-morado{background:#f4f2fd;border-left-color:#6250d6}.kpi-morado .kpi-valor{color:#4b3bb3}.kpi-morado .kpi-icono{background:#e3dffa;color:#4b3bb3}
+.kpi-rojo{background:#fdf1f2;border-left-color:var(--rojo)}.kpi-rojo .kpi-valor{color:var(--rojo-osc)}.kpi-rojo .kpi-icono{background:#fbd9dc;color:var(--rojo-osc)}
+.kpi-amarillo{background:#fff8eb;border-left-color:#eda100}.kpi-amarillo .kpi-valor{color:#9a5b00}.kpi-amarillo .kpi-icono{background:#ffeac2;color:#9a5b00}
+.kpi-neutro{background:#f7f7f8;border-left-color:#5f6368}.kpi-neutro .kpi-icono{background:#e8eaed;color:#3c4043}
+/* Gráficos del Inicio */
+.panel-graficos{margin:18px 0}
+.graficos{display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:16px;margin-bottom:6px}
+.grafico{margin:0;border:1px solid var(--borde);border-radius:10px;padding:12px 14px;background:#fff}
+.grafico figcaption{font-size:13.5px;margin-bottom:6px}
+.grafico-area{position:relative}.grafico svg{width:100%;height:auto;display:block;overflow:visible}
+.leyenda{display:flex;gap:14px;list-style:none;padding:0;margin:0 0 4px;font-size:12px;color:var(--gris)}
+.leyenda i,.tooltip i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.eje-grilla{stroke:#eceef1;stroke-width:1}.eje-base{stroke:#9aa0a6;stroke-width:1}
+.eje-texto{font-size:11px;fill:#5f6368}.eje-texto.fuerte{fill:#1f2328;font-size:12px}
+.etiqueta-dato{font-size:12px;font-weight:700;fill:#1f2328}
+.zona-hover{fill:transparent}.zona-hover.activa{fill:#f1f3f4}.cruz{stroke:#9aa0a6;stroke-dasharray:3 3}
+.pista{fill:#f3f4f6}
+.tooltip{position:absolute;top:6px;transform:translateX(-50%);background:#fff;border:1px solid var(--borde);border-radius:8px;box-shadow:0 4px 14px #0002;padding:7px 10px;font-size:12px;pointer-events:none;white-space:nowrap;z-index:5}
+.grafico-datos{font-size:12px;margin-top:4px}.grafico-datos summary{cursor:pointer;color:var(--gris)}.grafico-datos table{margin-top:6px}
+.tabla-permisos input[type=checkbox]{accent-color:var(--rojo-osc);width:16px;height:16px;cursor:pointer}
+.kpi .kpi-titulo{padding-right:38px;min-height:30px}.kpi:disabled{color:var(--negro);opacity:1}.kpi-neutro .kpi-valor{color:#3c4043}

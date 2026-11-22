@@ -3,6 +3,7 @@ import type { EstadoSistema, Usuario } from '../domain/tipos';
 import { SistemaContext } from './contexto';
 import { RepositorioLocalStorage, type IRepositorioEstado } from './repositorio';
 import { revisarAlertas } from './servicios';
+import { configurarPermisos } from '../domain/reglas';
 
 const CLAVE_SESION = 'dpus-sesion';
 
@@ -14,6 +15,7 @@ export function SistemaProvider({ children, repositorio }: { children: ReactNode
   const [repo] = useState<IRepositorioEstado>(() => repositorio ?? new RepositorioLocalStorage());
   const [inicial] = useState<EstadoSistema>(() => {
     const e = repo.cargar();
+    configurarPermisos(e.permisos);
     // Planificador de tareas: al abrir el sistema se ejecuta la revisión periódica de alertas (RF-08).
     if (revisarAlertas(e) > 0) repo.guardar(e);
     return e;
@@ -26,6 +28,7 @@ export function SistemaProvider({ children, repositorio }: { children: ReactNode
     const copia = structuredClone(actual.current);
     const r = op(copia);
     if (r.ok) { repo.guardar(copia); actual.current = copia; setEstado(copia); }
+    configurarPermisos(actual.current.permisos);
     return r;
   }, [repo]);
   const iniciarSesion = useCallback((u: Usuario) => {
@@ -38,6 +41,7 @@ export function SistemaProvider({ children, repositorio }: { children: ReactNode
   }, []);
   const reiniciarDatos = useCallback(() => {
     const e = repo.reiniciar();
+    configurarPermisos(e.permisos);
     revisarAlertas(e); repo.guardar(e); actual.current = e; setEstado(e);
   }, [repo]);
 

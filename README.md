@@ -39,7 +39,7 @@ Otros comandos (dentro de `prototipo/`):
 
 | Comando | Qué hace |
 |---|---|
-| `npm test` | Ejecuta los 27 casos de prueba automatizados y regenera las evidencias en `pruebas/evidencias/` |
+| `npm test` | Ejecuta los 30 casos de prueba automatizados y regenera las evidencias en `pruebas/evidencias/` |
 | `npm run build` | Compila la versión de producción en `prototipo/dist/` (se puede abrir con `npm run preview`) |
 | `npm run lint` | Revisa la calidad del código |
 
@@ -49,8 +49,9 @@ Contraseña de todos los usuarios de demostración: **`demo2026`**
 
 | Usuario | Perfil | Puede |
 |---|---|---|
-| `social@demo.cl` | Trabajo social | Todo: evaluar postulaciones, derivaciones, fichas, datos de salud, foto, bajas, ayudas, alertas, reportes y exportaciones |
+| `social@demo.cl` | Trabajo social | Gestión completa del NNA: evaluar postulaciones, derivaciones, fichas, datos de salud, foto, bajas, ayudas, alertas, reportes y exportaciones |
 | `comunicacion@demo.cl` | Encargada de comunicación | Registrar derivaciones y consultar fichas |
+| `admin@demo.cl` | Administrador | Todo: todos los permisos y además modificar los permisos de los demás perfiles en «Perfiles y permisos» |
 | `tutor@demo.cl` | Tutor/a | Postular a un NNA, consultar fichas, agregar observaciones y foto (no evalúa postulaciones) |
 | `tens@demo.cl` | TENS | Fichas, atenciones, ciclo, alertas, observaciones y marcar urgencias (no registra ayudas) |
 | `profesional@demo.cl` | Profesional dental/kine | Fichas, datos de salud y atenciones |
@@ -83,6 +84,12 @@ En la pantalla de ingreso está el enlace **«Restablecer datos de demostración
 6. **Alertas asociadas a derivaciones:** aviso cuando una derivación pasa más de N días sin atención (umbral configurable), además del caso sin actualización.
 7. **Panel de inicio** con el flujo del NNA, indicadores y pendientes; menú agrupado por etapa del proceso.
 
+### Ajustes de la revisión final (profesora)
+
+1. **Perfil Administrador** (`admin@demo.cl`): tiene todos los permisos y puede marcar o quitar permisos a los demás perfiles desde «Perfiles y permisos» (con opción de restablecer la matriz original).
+2. **KPI con color** en el Inicio: cada indicador tiene su color e ícono, e incluye ingresos y bajas del año comparados con el año anterior.
+3. **Gráficos comparativos** de los últimos 5 años en el Inicio: postulaciones, ingresos y bajas por año; beneficiarios activos al cierre de cada año; bajas por causal y derivaciones por prestación. Suman un consolidado anual ficticio de las planillas anteriores con lo registrado en el sistema. Cada gráfico tiene tooltip y una tabla «Ver datos».
+
 Todas las vistas tienen botón **Volver** (RNF-1). Fuera del alcance de esta versión: stock de bodega (RF-19), informes sociales (RF-24), rutas e integración con Dental Soft.
 
 ## 6. Estructura del repositorio
@@ -98,7 +105,7 @@ Todas las vistas tienen botón **Volver** (RNF-1). Fuera del alcance de esta ver
 │       └── test/           Casos de prueba automatizados (Matriz 03)
 ├── database/               Script DDL PostgreSQL 16 (28 tablas, 41 FK, 43 índices, 2 vistas),
 │                           pruebas de integridad y su resultado
-├── pruebas/evidencias/     EV-CP-P01 … EV-CP-P27 (.json y .html), resultados.json, ejecucion.txt
+├── pruebas/evidencias/     EV-CP-P01 … EV-CP-P30 (.json y .html), resultados.json, ejecucion.txt
 └── docs/                   BPMN AS-IS / TO-BE e informe final
 ```
 
@@ -116,7 +123,7 @@ Resultado verificado (`database/resultado_pruebas_integridad.txt`): 28 tablas, 4
 
 ## 8. Pruebas
 
-`npm test` ejecuta 27 casos (CP-P01 a CP-P27) mediante integración de componentes React con DOM emulado (jsdom). Cada caso parte del conjunto inicial ficticio y deja su evidencia en `pruebas/evidencias/`. Última ejecución: **27 aprobados, 0 fallidos**. Los HTML de evidencia son registros del DOM emulado, no capturas de navegador.
+`npm test` ejecuta 30 casos (CP-P01 a CP-P30) mediante integración de componentes React con DOM emulado (jsdom). Cada caso parte del conjunto inicial ficticio y deja su evidencia en `pruebas/evidencias/`. Última ejecución: **30 aprobados, 0 fallidos**. Los HTML de evidencia son registros del DOM emulado, no capturas de navegador.
 
 ## 9. Limitaciones conocidas y siguiente etapa
 

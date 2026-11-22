@@ -1,8 +1,9 @@
 // Servicios de aplicación por módulo (M1–M8). Cada operación de escritura:
 // 1) verifica el permiso con puede() (equivalente a IControlAcceso), 2) valida, 3) modifica el estado,
 // 4) deja autoría e historial. Devuelven { ok, errores } para que la vista muestre los mensajes por campo.
-import type { Alerta, Atencion, Beneficiario, CausalBaja, EstadoCaso, EstadoSistema, Postulacion, ReporteGenerado, Usuario } from '../domain/tipos';
+import type { Alerta, Atencion, Beneficiario, CausalBaja, EstadoCaso, EstadoSistema, Permiso, Postulacion, ReporteGenerado, Rol, Usuario } from '../domain/tipos';
 import {
+  PERMISOS_BASE, ROLES_EDITABLES, configurarPermisos,
   ahoraISO, buscarCoincidencia, casoActivo, diasEntre, estaDeBaja, hoyISO, normalizarRut, nuevoId, puede,
   sugerirTipoIngreso, validarAtencion, validarDerivacion, validarPostulacion, type DatosDerivacion, type DatosPostulacion, CAUSALES, AREAS,
 } from '../domain/reglas';
@@ -270,6 +271,23 @@ export function cambiarUmbral(e: EstadoSistema, u: Usuario, dias: number, tipo: 
   if (!puede(u.rol, 'PARAMETROS_EDITAR')) return denegado('modificar parámetros');
   if (!Number.isInteger(dias) || dias < 1 || dias > 365) return { ok: false, errores: { umbral: 'Ingrese un número de días entre 1 y 365.' } };
   if (tipo === 'CASO') e.parametros.umbralDiasAlerta = dias; else e.parametros.umbralDiasDerivacion = dias;
+  return { ok: true };
+}
+
+// ---------- M1 Perfiles: ajustes del Administrador ----------
+export function cambiarPermiso(e: EstadoSistema, u: Usuario, rol: Rol, permiso: Permiso, activo: boolean): Resultado {
+  if (!puede(u.rol, 'PERMISOS_EDITAR')) return denegado('modificar permisos');
+  if (!ROLES_EDITABLES.includes(rol)) return { ok: false, errores: { rol: 'Los permisos del Administrador no se pueden quitar.' } };
+  const actuales = new Set(e.permisos?.[rol] ?? PERMISOS_BASE[rol]);
+  if (activo) actuales.add(permiso); else actuales.delete(permiso);
+  e.permisos = { ...(e.permisos ?? {}), [rol]: [...actuales] };
+  configurarPermisos(e.permisos);
+  return { ok: true };
+}
+export function restablecerPermisos(e: EstadoSistema, u: Usuario): Resultado {
+  if (!puede(u.rol, 'PERMISOS_EDITAR')) return denegado('modificar permisos');
+  e.permisos = undefined;
+  configurarPermisos();
   return { ok: true };
 }
 

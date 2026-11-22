@@ -5,6 +5,7 @@ import { render, screen, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from '../App';
 import { CLAVE_ALMACENAMIENTO } from '../data/repositorio';
+import { configurarPermisos } from '../domain/reglas';
 
 const DIR = path.resolve(__dirname, '../../../pruebas/evidencias');
 export const resultados: Record<string, unknown>[] = [];
@@ -14,6 +15,7 @@ export function reiniciarEntorno() {
   window.localStorage.clear();
   window.sessionStorage.clear();
   window.location.hash = '#/ingreso';
+  configurarPermisos();
 }
 
 export function montar() {

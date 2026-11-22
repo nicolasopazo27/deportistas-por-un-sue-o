@@ -2,13 +2,13 @@
 // v2: incorpora las observaciones del mandante (Certamen 1): postulación (M8), perfil Tutor,
 // antecedentes del NNA, foto identificatoria, alertas de derivación y observación por atención.
 
-export type Rol = 'TRABAJO_SOCIAL' | 'COMUNICACION' | 'TENS' | 'PROFESIONAL' | 'TUTOR' | 'CONSULTA';
+export type Rol = 'TRABAJO_SOCIAL' | 'COMUNICACION' | 'TENS' | 'PROFESIONAL' | 'TUTOR' | 'CONSULTA' | 'ADMIN';
 export type Permiso =
   | 'DERIVACION_REGISTRAR' | 'FICHA_CONSULTAR' | 'FICHA_EDITAR' | 'SALUD_VER' | 'SALUD_EDITAR'
   | 'DATOS_SENSIBLES_VER' | 'DATOS_SENSIBLES_EDITAR' | 'OBSERVACION_REGISTRAR' | 'ATENCION_REGISTRAR'
   | 'CICLO_ACTUALIZAR' | 'ALERTA_CONSULTAR' | 'BAJA_REGISTRAR' | 'AYUDA_REGISTRAR' | 'URGENCIA_MARCAR'
   | 'REPORTE_GENERAR' | 'EXPORTAR_FICHA' | 'PARAMETROS_EDITAR'
-  | 'POSTULACION_REGISTRAR' | 'POSTULACION_EVALUAR' | 'FOTO_EDITAR';
+  | 'POSTULACION_REGISTRAR' | 'POSTULACION_EVALUAR' | 'FOTO_EDITAR' | 'PERMISOS_EDITAR';
 
 export interface Usuario { id: string; nombre: string; email: string; rol: Rol }
 
@@ -93,4 +93,12 @@ export interface EstadoSistema {
   notificaciones: Notificacion[];
   reportes: ReporteGenerado[];
   parametros: { umbralDiasAlerta: number; umbralDiasDerivacion: number };
+  /** Permisos ajustados por el Administrador; si falta un rol se usa la matriz base. */
+  permisos?: Partial<Record<Rol, Permiso[]>>;
+  /** Consolidado anual de las planillas anteriores al sistema (datos FICTICIOS de demostración). */
+  historico: RegistroHistorico[];
+}
+export interface RegistroHistorico {
+  anio: number; postulaciones: number; ingresos: number;
+  bajas: Record<CausalBaja, number>; derivaciones: Record<Area, number>; atenciones: number;
 }

@@ -1,0 +1,11 @@
+{
+  "id": "CP-P29",
+  "requisito": "RNF-3 · perfil Administrador (revisión de la profesora)",
+  "prueba": "Administrador postula, acepta, registra una atención y una baja; Trabajo social intenta editar permisos; el Administrador intenta quitarse un permiso.",
+  "esperado": "El Administrador completa todas las operaciones; solo él edita permisos y sus propios permisos no se pueden quitar.",
+  "obtenido": "Operaciones del Administrador: 4/4; edición por Trabajo social: denegada; quitar permiso al Administrador: rechazado; restablecer por Trabajo social: denegado.",
+  "aprobada": true,
+  "estado": "Aprobada",
+  "fechaUTC": "2026-11-22T16:40:51.162Z",
+  "almacenamiento": null
+}

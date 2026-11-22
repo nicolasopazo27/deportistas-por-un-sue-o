@@ -5,13 +5,15 @@ import { screen, within, waitFor, cleanup } from '@testing-library/react';
 import { act } from 'react';
 import { almacenamiento, evidencia, ingresar, ir, montar, reiniciarEntorno } from './ayudantes';
 import { crearDatosIniciales } from '../data/seed';
-import { actualizarFicha, actualizarFoto, evaluarPostulacion, marcarAlertaRevisada, registrarAtencion, registrarPostulacion, revisarAlertas } from '../data/servicios';
+import { calcularEstadisticas } from '../data/estadisticas';
+import { actualizarFicha, actualizarFoto, cambiarPermiso, evaluarPostulacion, registrarBaja, restablecerPermisos, marcarAlertaRevisada, registrarAtencion, registrarPostulacion, revisarAlertas } from '../data/servicios';
 import { consolidar, generarXlsx } from '../modules/reportes/exportar';
 import type { Usuario } from '../domain/tipos';
 import ExcelJS from 'exceljs';
 
-const SOCIAL = 'social@demo.cl', TENS = 'tens@demo.cl', CONSULTA = 'consulta@demo.cl', TUTOR = 'tutor@demo.cl', COMUNICACION = 'comunicacion@demo.cl';
+const ADMIN = 'admin@demo.cl', SOCIAL = 'social@demo.cl', TENS = 'tens@demo.cl', CONSULTA = 'consulta@demo.cl', TUTOR = 'tutor@demo.cl', COMUNICACION = 'comunicacion@demo.cl';
 const U_SOCIAL: Usuario = { id: 'U-01', nombre: 'Valentina Muñoz', email: SOCIAL, rol: 'TRABAJO_SOCIAL' };
+const U_ADMIN: Usuario = { id: 'U-07', nombre: 'Patricia Soto', email: ADMIN, rol: 'ADMIN' };
 const U_TUTOR: Usuario = { id: 'U-06', nombre: 'Francisca Herrera', email: TUTOR, rol: 'TUTOR' };
 const nBenef = () => almacenamiento().beneficiarios.length;
 const camila = () => almacenamiento().beneficiarios.find((b: { id: string }) => b.id === 'B-01');
@@ -371,6 +373,62 @@ describe('Matriz 03 · prototipo v2', () => {
     const r3 = actualizarFoto(e, U_SOCIAL, 'B-01', png);
     const ok = !r1.ok && !r2.ok && r3.ok && e.beneficiarios[0].foto === png && e.beneficiarios[0].historial.at(-1)!.tipo === 'Foto identificatoria';
     evidencia('CP-P27', { requisito: 'Imagen identificatoria del NNA (mandante), RNF-3', prueba: 'Cargar foto con perfil Consulta, luego un PDF y luego un PNG con Trabajo social.', esperado: 'Consulta no puede; el formato no admitido se rechaza; la imagen válida queda en la ficha y en el historial.', obtenido: `Consulta: ${r1.ok ? 'permitido' : 'denegado'}; PDF: ${r2.ok ? 'aceptado' : 'rechazado'}; PNG: ${r3.ok ? 'guardado' : 'rechazado'}; historial: «${e.beneficiarios[0].historial.at(-1)!.tipo}».`, aprobada: ok });
+    expect(ok).toBe(true);
+  });
+
+  it('CP-P28 · RNF-3 · el Administrador quita y restablece un permiso desde Perfiles', async () => {
+    const r1 = montar(); await ingresar(r1.user, ADMIN); await act(() => ir('/perfiles'));
+    const casilla = screen.getByLabelText('TENS: Registrar atenciones') as HTMLInputElement;
+    const antes = casilla.checked;
+    await r1.user.click(casilla);
+    const guardado = almacenamiento().permisos?.TENS?.includes('ATENCION_REGISTRAR') === false;
+    r1.unmount(); cleanup(); window.sessionStorage.clear(); window.location.hash = '#/ingreso';
+    const r2 = montar(); await ingresar(r2.user, TENS); await act(() => ir('/atenciones?b=B-01'));
+    const bloqueado = (screen.getByRole('button', { name: 'Guardar atención' }) as HTMLButtonElement).disabled;
+    await act(() => ir('/perfiles'));
+    const tensSinCasillas = screen.queryAllByRole('checkbox').length === 0;
+    r2.unmount(); cleanup(); window.sessionStorage.clear(); window.location.hash = '#/ingreso';
+    const r3 = montar(); await ingresar(r3.user, ADMIN); await act(() => ir('/perfiles'));
+    await r3.user.click(screen.getByRole('button', { name: 'Restablecer permisos originales' }));
+    const restablecido = (screen.getByLabelText('TENS: Registrar atenciones') as HTMLInputElement).checked && !almacenamiento().permisos;
+    const ok = antes && guardado && bloqueado && tensSinCasillas && restablecido;
+    evidencia('CP-P28', { requisito: 'RNF-3 · perfil Administrador (revisión de la profesora)', prueba: 'Administrador quita a TENS «Registrar atenciones»; la TENS intenta registrar; luego el Administrador restablece la matriz.', esperado: 'El cambio se guarda y aplica de inmediato; la TENS no puede guardar atenciones ni editar permisos; al restablecer vuelve la matriz original.', obtenido: `Permiso inicial: ${antes ? 'sí' : 'no'}; quitado y guardado: ${guardado ? 'sí' : 'no'}; Guardar atención deshabilitado para TENS: ${bloqueado ? 'sí' : 'no'}; TENS sin casillas editables: ${tensSinCasillas ? 'sí' : 'no'}; matriz restablecida: ${restablecido ? 'sí' : 'no'}.`, aprobada: ok });
+    expect(ok).toBe(true);
+  });
+
+  it('CP-P29 · RNF-3 · el Administrador puede todo; nadie más edita permisos', () => {
+    const e = crearDatosIniciales();
+    const pasos = [
+      registrarPostulacion(e, U_ADMIN, POST_OK).ok,
+      evaluarPostulacion(e, U_ADMIN, e.postulaciones.at(-1)!.id, 'ACEPTADA', 'ok').ok,
+      registrarAtencion(e, U_ADMIN, 'B-01', { fecha: new Date().toISOString().slice(0, 10), profesional: 'Diego Fuentes · Dental', prestacion: 'Atención dental', asistencia: 'ASISTIO', resultado: 'REALIZADA' }).ok,
+      registrarBaja(e, U_ADMIN, 'B-02', 'EGRESO', new Date().toISOString().slice(0, 10), '').ok,
+    ];
+    const social = cambiarPermiso(e, U_SOCIAL, 'TENS', 'ATENCION_REGISTRAR', false);
+    const propio = cambiarPermiso(e, U_ADMIN, 'ADMIN', 'FICHA_CONSULTAR', false);
+    const restab = restablecerPermisos(e, U_SOCIAL);
+    const ok = pasos.every(Boolean) && !social.ok && !propio.ok && !restab.ok && !e.permisos;
+    evidencia('CP-P29', { requisito: 'RNF-3 · perfil Administrador (revisión de la profesora)', prueba: 'Administrador postula, acepta, registra una atención y una baja; Trabajo social intenta editar permisos; el Administrador intenta quitarse un permiso.', esperado: 'El Administrador completa todas las operaciones; solo él edita permisos y sus propios permisos no se pueden quitar.', obtenido: `Operaciones del Administrador: ${pasos.filter(Boolean).length}/4; edición por Trabajo social: ${social.ok ? 'permitida' : 'denegada'}; quitar permiso al Administrador: ${propio.ok ? 'permitido' : 'rechazado'}; restablecer por Trabajo social: ${restab.ok ? 'permitido' : 'denegado'}.`, aprobada: ok });
+    expect(ok).toBe(true);
+  });
+
+  it('CP-P30 · RF-10 · gráficos comparativos del Inicio suman histórico y registros del sistema', async () => {
+    const e = crearDatosIniciales();
+    const anio = new Date().getFullYear();
+    const fila = (x: ReturnType<typeof calcularEstadisticas>) => x.anios.find(a => a.anio === anio)!;
+    const e0 = calcularEstadisticas(e);
+    const h = e.historico.find(x => x.anio === anio);
+    const esperadoIngresos = (h?.ingresos ?? 0) + e.beneficiarios.filter(b => b.fechaRegistro.startsWith(String(anio))).length;
+    evaluarPostulacion(e, U_SOCIAL, 'P-02', 'ACEPTADA', 'ok');
+    registrarBaja(e, U_SOCIAL, 'B-02', 'DESVINCULACION', new Date().toISOString().slice(0, 10), '');
+    const e1 = calcularEstadisticas(e);
+    const egCausal = (x: typeof e0) => x.bajasPorCausal.find(c => c.codigo === 'DESVINCULACION')!.total;
+    const calc = e0.anios.length === 5 && fila(e0).ingresos === esperadoIngresos && fila(e1).ingresos === fila(e0).ingresos + 1 && fila(e1).bajas === fila(e0).bajas + 1 && egCausal(e1) === egCausal(e0) + 1 && fila(e1).activosCierre === fila(e0).activosCierre;
+    const { user } = montar(); await ingresar(user, SOCIAL); await act(() => ir('/inicio'));
+    const figuras = ['Postulaciones, ingresos y bajas por año', 'Beneficiarios activos al cierre de cada año', 'Bajas por causal', 'Derivaciones por prestación'].every(t => screen.getAllByRole('figure', { name: t }).length === 1);
+    const tabla = within(screen.getByRole('figure', { name: 'Postulaciones, ingresos y bajas por año' })).getByRole('table', { hidden: true }).textContent ?? '';
+    const ok = calc && figuras && tabla.includes(String(anio)) && tabla.includes(String(fila(e0).ingresos));
+    evidencia('CP-P30', { requisito: 'RF-10 · gráficos comparativos (revisión de la profesora)', prueba: 'Calcular los indicadores, aceptar una postulación y registrar una baja; abrir el Inicio con Trabajo social.', esperado: 'Cinco años de datos; el ingreso y la baja nuevos suman 1 al año en curso y a su causal; el Inicio muestra los cuatro gráficos con su tabla de datos.', obtenido: `Años: ${e0.anios.map(a => a.anio).join(', ')}; ingresos ${anio}: ${fila(e0).ingresos} → ${fila(e1).ingresos}; bajas ${anio}: ${fila(e0).bajas} → ${fila(e1).bajas}; desvinculaciones: ${egCausal(e0)} → ${egCausal(e1)}; activos al cierre: ${fila(e0).activosCierre} → ${fila(e1).activosCierre}; cuatro gráficos visibles: ${figuras ? 'sí' : 'no'}.`, aprobada: ok });
     expect(ok).toBe(true);
   });
 });

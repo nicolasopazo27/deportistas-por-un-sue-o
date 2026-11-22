@@ -28,7 +28,7 @@ export const ESTADOS_CASO = [
 ] as const;
 
 // ---------- Control de acceso (equivalente a IControlAcceso, M1). Perfiles provisionales DP-07 ----------
-export const PERMISOS: Record<Rol, Permiso[]> = {
+export const PERMISOS_BASE: Record<Rol, Permiso[]> = {
   TRABAJO_SOCIAL: ['DERIVACION_REGISTRAR', 'FICHA_CONSULTAR', 'FICHA_EDITAR', 'SALUD_VER', 'SALUD_EDITAR',
     'DATOS_SENSIBLES_VER', 'DATOS_SENSIBLES_EDITAR', 'OBSERVACION_REGISTRAR', 'ALERTA_CONSULTAR', 'BAJA_REGISTRAR',
     'AYUDA_REGISTRAR', 'URGENCIA_MARCAR', 'REPORTE_GENERAR', 'EXPORTAR_FICHA', 'PARAMETROS_EDITAR',
@@ -39,10 +39,12 @@ export const PERMISOS: Record<Rol, Permiso[]> = {
   // Tutor: propuesto por el mandante para realizar la postulación, porque conoce al NNA (Certamen 1).
   TUTOR: ['POSTULACION_REGISTRAR', 'FICHA_CONSULTAR', 'OBSERVACION_REGISTRAR', 'FOTO_EDITAR'],
   CONSULTA: ['FICHA_CONSULTAR'],
+  // Administrador: solicitado por la profesora en la revisión final; puede hacer todo y ajustar los permisos.
+  ADMIN: [],
 };
 export const NOMBRE_ROL: Record<Rol, string> = {
   TRABAJO_SOCIAL: 'Trabajo social', COMUNICACION: 'Encargada de comunicación', TENS: 'TENS',
-  PROFESIONAL: 'Profesional dental/kine', TUTOR: 'Tutor', CONSULTA: 'Consulta',
+  PROFESIONAL: 'Profesional dental/kine', TUTOR: 'Tutor', CONSULTA: 'Consulta', ADMIN: 'Administrador',
 };
 export const DESCRIPCION_PERMISO: Record<Permiso, string> = {
   POSTULACION_REGISTRAR: 'Registrar postulaciones de NNA', POSTULACION_EVALUAR: 'Evaluar postulaciones (ingreso al programa)',
@@ -53,10 +55,21 @@ export const DESCRIPCION_PERMISO: Record<Permiso, string> = {
   ATENCION_REGISTRAR: 'Registrar atenciones', CICLO_ACTUALIZAR: 'Actualizar estado y cerrar ciclo',
   ALERTA_CONSULTAR: 'Consultar y revisar alertas', BAJA_REGISTRAR: 'Registrar bajas', AYUDA_REGISTRAR: 'Registrar ayudas entregadas',
   URGENCIA_MARCAR: 'Marcar urgencias', REPORTE_GENERAR: 'Generar reportes', EXPORTAR_FICHA: 'Exportar con datos del apoderado',
-  PARAMETROS_EDITAR: 'Configurar umbrales de alerta',
+  PARAMETROS_EDITAR: 'Configurar umbrales de alerta', PERMISOS_EDITAR: 'Modificar permisos de los perfiles',
 };
+export const TODOS_LOS_PERMISOS = Object.keys(DESCRIPCION_PERMISO) as Permiso[];
+PERMISOS_BASE.ADMIN = [...TODOS_LOS_PERMISOS];
+/** Roles cuyos permisos puede ajustar el Administrador (el propio Administrador conserva siempre todos). */
+export const ROLES_EDITABLES: Rol[] = ['TRABAJO_SOCIAL', 'COMUNICACION', 'TENS', 'PROFESIONAL', 'TUTOR', 'CONSULTA'];
+
+let vigentes: Record<Rol, Permiso[]> = PERMISOS_BASE;
+/** Aplica los ajustes guardados por el Administrador (o la matriz base si no hay). */
+export function configurarPermisos(ajustes?: Partial<Record<Rol, Permiso[]>>): void {
+  vigentes = { ...PERMISOS_BASE, ...(ajustes ?? {}), ADMIN: PERMISOS_BASE.ADMIN };
+}
+export function permisosDe(rol: Rol): Permiso[] { return vigentes[rol]; }
 export function puede(rol: Rol | undefined, permiso: Permiso): boolean {
-  return !!rol && PERMISOS[rol].includes(permiso);
+  return !!rol && vigentes[rol].includes(permiso);
 }
 
 // ---------- RUT chileno ----------

@@ -2,6 +2,7 @@
 import type { Usuario } from '../../domain/tipos';
 
 export const USUARIOS_DEMO: Usuario[] = [
+  { id: 'U-07', nombre: 'Patricia Soto', email: 'admin@demo.cl', rol: 'ADMIN' },
   { id: 'U-01', nombre: 'Valentina Muñoz', email: 'social@demo.cl', rol: 'TRABAJO_SOCIAL' },
   { id: 'U-02', nombre: 'Carolina Pino', email: 'comunicacion@demo.cl', rol: 'COMUNICACION' },
   { id: 'U-03', nombre: 'Javiera Lagos', email: 'tens@demo.cl', rol: 'TENS' },
