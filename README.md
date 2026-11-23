@@ -1,15 +1,15 @@
 # Sistema de Registro, Gestión y Trazabilidad de la Atención del Beneficiario
 
 **Fundación Deportistas por un Sueño** · Ingeniería de Software · Universidad del Desarrollo
-Integrantes: **Nicolás Opazo** y **Martín Lorca** · Grupo 2 · Entrega final 23/11/2026
+Integrantes: **Nicolás Opazo** y **Martín Lorca** · Grupo 2 · Entrega final 
 
 Aplicación web interna para registrar derivaciones, centralizar la ficha de gestión de cada beneficiario y dar trazabilidad al ciclo de atención dental, kinesiológica y de otras prestaciones, desde la derivación hasta el cierre del ciclo o la baja. Reemplaza las planillas Excel separadas y el seguimiento «de memoria» que se identificaron en el levantamiento (diagnóstico D1–D8).
 
-> ⚠️ **Solo datos ficticios.** Todas las personas, RUT y teléfonos del repositorio son inventados. No se publican contraseñas reales, claves ni archivos `.env`.
+>  **Solo datos ficticios.** Todas las personas, RUT y teléfonos del repositorio son inventados. No se publican contraseñas reales, claves ni archivos `.env`.
 
 ---
 
-## 1. Modalidad de demostración (entrega del 23/11)
+## 1. Modalidad de demostración 
 
 **Demostración en línea:** https://nicolasopazo27.github.io/deportistas-por-un-sue-o/ (GitHub Pages, rama `gh-pages`).
 
