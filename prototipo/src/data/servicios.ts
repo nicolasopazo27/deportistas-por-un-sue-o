@@ -28,8 +28,8 @@ function notificar(e: EstadoSistema, rol: Usuario['rol'], tipo: 'ATENCION_REALIZ
 }
 
 // ---------- M8 Postulación: etapa previa al ingreso del NNA ----------
-export function registrarPostulacion(e: EstadoSistema, u: Usuario, d: DatosPostulacion): Resultado<{ id: string }> {
-  if (!puede(u.rol, 'POSTULACION_REGISTRAR')) return denegado('registrar postulaciones');
+/** Postulación pública (sin sesión): la envía el apoderado/a o tutor/a desde la web; la evalúa el área social. */
+export function registrarPostulacionPublica(e: EstadoSistema, d: DatosPostulacion): Resultado<{ id: string }> {
   const errores = validarPostulacion(d);
   if (Object.keys(errores).length) return { ok: false, errores };
   const rut = normalizarRut(d.rut);
@@ -45,10 +45,10 @@ export function registrarPostulacion(e: EstadoSistema, u: Usuario, d: DatosPostu
       patologias: d.patologias, centrosSalud: d.centrosSalud, electrodependiente: d.electrodependiente, descripcion: d.descripcion.trim() || undefined,
       credencial: d.credencial ? { tiene: true, numero: d.numeroCredencial.trim(), porcentaje: d.porcentaje ? Number(d.porcentaje) : undefined } : { tiene: false },
     },
-    motivo: d.motivo.trim(), tutor: autor(u),
+    motivo: d.motivo.trim(), tutor: d.apoderado.trim(), origen: 'WEB',
   };
   e.postulaciones.push(p);
-  notificar(e, 'TRABAJO_SOCIAL', 'POSTULACION', `Nueva postulación de ${p.nna.nombres} ${p.nna.apellidos} (registrada por ${autor(u)}).`);
+  notificar(e, 'TRABAJO_SOCIAL', 'POSTULACION', `Nueva postulación en línea de ${p.nna.nombres} ${p.nna.apellidos} (apoderado/a: ${p.tutor}).`);
   return { ok: true, dato: { id: p.id } };
 }
 

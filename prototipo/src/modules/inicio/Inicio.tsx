@@ -38,7 +38,7 @@ export default function Inicio() {
       <p className="nota">Así avanza un NNA en la Fundación: primero <b>postula</b> e <b>ingresa</b> al programa; después se <b>deriva</b> a una prestación (dental, kine u otra) y se <b>atiende</b> hasta cerrar el ciclo.</p>
 
       <div className="kpis">
-        {puede(rol, 'POSTULACION_REGISTRAR') && <Kpi titulo="Postulaciones en curso" valor={postulaciones.length} detalle="por evaluar" tono="azul" icono={<ClipboardList size={18} />} onClick={() => nav('/postulaciones')} />}
+        {puede(rol, 'POSTULACION_EVALUAR') && <Kpi titulo="Postulaciones en curso" valor={postulaciones.length} detalle="por evaluar" tono="azul" icono={<ClipboardList size={18} />} onClick={() => nav('/postulaciones')} />}
         {verFichas && <Kpi titulo="Fichas activas en el sistema" valor={activos.length} detalle={`${sinDerivar.length} sin derivación`} tono="verde" icono={<Users size={18} />} onClick={() => nav('/beneficiarios')} />}
         {verFichas && <Kpi titulo="Casos en atención" valor={enAtencion.length} detalle={`${urgentes.length} urgente(s)`} tono="morado" icono={<Stethoscope size={18} />} onClick={puede(rol, 'ATENCION_REGISTRAR') || puede(rol, 'ALERTA_CONSULTAR') ? () => nav('/atenciones') : undefined} />}
         {puede(rol, 'ALERTA_CONSULTAR') && <Kpi titulo="Alertas activas" valor={alertas.length} detalle={alertas.length ? "casos sobre el umbral de días" : "todo al día"} tono={alertas.length ? 'rojo' : 'verde'} icono={<TriangleAlert size={18} />} onClick={() => nav('/alertas')} />}
@@ -74,7 +74,7 @@ export default function Inicio() {
               <button type="button" className="enlace" onClick={() => nav(`/atenciones?b=${a.idBeneficiario}`)}>Atender</button>
             </div>
           ))}
-          {puede(rol, 'POSTULACION_REGISTRAR') && postulaciones.map(p => (
+          {puede(rol, 'POSTULACION_EVALUAR') && postulaciones.map(p => (
             <div key={p.id} className="pendiente">
               <Etiqueta texto={p.estado === 'ENVIADA' ? 'Postulación enviada' : 'En evaluación'} tono="amarillo" />
               <span>{p.nna.nombres} {p.nna.apellidos} · {fmtFecha(p.fecha)}</span>
@@ -105,7 +105,6 @@ export default function Inicio() {
       </div>
 
       <div className="acciones">
-        {puede(rol, 'POSTULACION_REGISTRAR') && <Boton onClick={() => nav('/postulaciones?nueva=1')}>Nueva postulación</Boton>}
         {puede(rol, 'DERIVACION_REGISTRAR') && <Boton tipo="acento" onClick={() => nav('/derivaciones')}>Nueva derivación</Boton>}
         {puede(rol, 'ATENCION_REGISTRAR') && <Boton tipo="secundario" onClick={() => nav('/atenciones')}>Registrar atención</Boton>}
       </div>

@@ -1,11 +1,11 @@
 {
   "id": "CP-P25",
   "requisito": "M8 · perfil Tutor (mandante), RNF-3",
-  "prueba": "Tutor registra y trata de aceptar; Trabajo social rechaza sin comentario; se repite el RUT y se postula a un NNA ya ingresado.",
+  "prueba": "Se registra una postulación pública y el Tutor trata de aceptarla; Trabajo social rechaza sin comentario; se repite el RUT y se postula a un NNA ya ingresado.",
   "esperado": "El tutor no puede evaluar; el rechazo exige motivo; no se duplican postulaciones en curso ni se postula a quien ya ingresó.",
-  "obtenido": "Registro tutor: true; tutor acepta: denegado; rechazo sin comentario: rechazado; RUT repetido: rechazado; NNA ya ingresado: rechazado.",
+  "obtenido": "Postulación pública: registrada; tutor acepta: denegado; rechazo sin comentario: rechazado; RUT repetido: rechazado; NNA ya ingresado: rechazado.",
   "aprobada": true,
   "estado": "Aprobada",
-  "fechaUTC": "2026-11-22T17:25:23.016Z",
+  "fechaUTC": "2026-11-26T00:01:26.188Z",
   "almacenamiento": null
 }

@@ -2,6 +2,7 @@ import { HashRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { SistemaProvider } from './data/SistemaContext';
 import type { IRepositorioEstado } from './data/repositorio';
 import Layout from './components/Layout';
+import PostulacionPublica from './modules/publico/PostulacionPublica';
 import Ingreso from './modules/seguridad/Ingreso';
 import NuevaDerivacion from './modules/derivaciones/NuevaDerivacion';
 import Beneficiarios from './modules/beneficiarios/Beneficiarios';
@@ -20,6 +21,7 @@ export default function App({ repositorio }: { repositorio?: IRepositorioEstado 
       <HashRouter>
         <Routes>
           <Route path="/ingreso" element={<Ingreso />} />
+          <Route path="/postular" element={<PostulacionPublica />} />
           <Route element={<Layout />}>
             <Route path="/inicio" element={<Inicio />} />
             <Route path="/postulaciones" element={<Postulaciones />} />

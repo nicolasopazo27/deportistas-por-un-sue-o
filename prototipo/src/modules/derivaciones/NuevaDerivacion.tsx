@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useSistema } from '../../data/useSistema';
 import { buscarBeneficiario, registrarDerivacion, revisarCasoActivo } from '../../data/servicios';
-import { AREAS, estaDeBaja, fmtFecha, hoyISO, nombreCompleto, puede, sugerirTipoIngreso, validarDerivacion, type DatosDerivacion } from '../../domain/reglas';
+import { AREAS, estaDeBaja, fmtFecha, hoyISO, nombreCompleto, sugerirTipoIngreso, validarDerivacion, type DatosDerivacion } from '../../domain/reglas';
 import { Aviso, Avatar, Boton, Encabezado, Modal, Pasos, Selector, Texto, Volver } from '../../components/ui';
 
 export default function NuevaDerivacion() {
@@ -54,7 +54,7 @@ export default function NuevaDerivacion() {
         <Texto label="Buscar beneficiario ingresado (nombre o RUT) *" value={q} onChange={v => { setQ(v); setErrores(e => ({ ...e, idBeneficiario: '' })); }} placeholder="Ej.: Camila o 12345678-5" error={!b ? errores.idBeneficiario : undefined} />
         {q.trim().length >= 2 && (
           <ul className="resultados" role="listbox" aria-label="Resultados de búsqueda">
-            {resultados.length === 0 && <li className="sin-res">No hay beneficiarios ingresados con ese dato. {puede(usuario?.rol, 'POSTULACION_REGISTRAR') && <button type="button" className="enlace" onClick={() => nav('/postulaciones?nueva=1')}>Registrar una postulación</button>}</li>}
+            {resultados.length === 0 && <li className="sin-res">No hay beneficiarios ingresados con ese dato. Si aún no ingresa, primero debe postular en el <button type="button" className="enlace" onClick={() => window.open('#/postular', '_blank')}>formulario público</button> y ser aceptado.</li>}
             {resultados.map(r => (
               <li key={r.id}><button type="button" role="option" aria-selected={r.id === idB} onClick={() => elegir(r.id)} disabled={estaDeBaja(r)}>
                 <Avatar nombres={r.nombres} apellidos={r.apellidos} foto={r.foto} tam="sm" /> <b>{nombreCompleto(r)}</b> · {r.rut} · {r.comuna}{estaDeBaja(r) ? ' · con baja' : ''}

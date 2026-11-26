@@ -11,7 +11,7 @@ import { Aviso, Boton, Encabezado, Volver } from '../../components/ui';
 
 const ROLES: Rol[] = ['ADMIN', ...ROLES_EDITABLES];
 const GRUPOS: { titulo: string; permisos: Permiso[] }[] = [
-  { titulo: 'Ingreso al programa', permisos: ['POSTULACION_REGISTRAR', 'POSTULACION_EVALUAR'] },
+  { titulo: 'Ingreso al programa', permisos: ['POSTULACION_EVALUAR'] },
   { titulo: 'Ficha del NNA', permisos: ['FICHA_CONSULTAR', 'FICHA_EDITAR', 'FOTO_EDITAR', 'SALUD_VER', 'SALUD_EDITAR', 'DATOS_SENSIBLES_VER', 'DATOS_SENSIBLES_EDITAR', 'OBSERVACION_REGISTRAR'] },
   { titulo: 'Atención y seguimiento', permisos: ['DERIVACION_REGISTRAR', 'ATENCION_REGISTRAR', 'CICLO_ACTUALIZAR', 'ALERTA_CONSULTAR', 'URGENCIA_MARCAR'] },
   { titulo: 'Gestión', permisos: ['BAJA_REGISTRAR', 'AYUDA_REGISTRAR', 'REPORTE_GENERAR', 'EXPORTAR_FICHA', 'PARAMETROS_EDITAR', 'PERMISOS_EDITAR'] },

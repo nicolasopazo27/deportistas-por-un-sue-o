@@ -32,12 +32,13 @@ export const PERMISOS_BASE: Record<Rol, Permiso[]> = {
   TRABAJO_SOCIAL: ['DERIVACION_REGISTRAR', 'FICHA_CONSULTAR', 'FICHA_EDITAR', 'SALUD_VER', 'SALUD_EDITAR',
     'DATOS_SENSIBLES_VER', 'DATOS_SENSIBLES_EDITAR', 'OBSERVACION_REGISTRAR', 'ALERTA_CONSULTAR', 'BAJA_REGISTRAR',
     'AYUDA_REGISTRAR', 'URGENCIA_MARCAR', 'REPORTE_GENERAR', 'EXPORTAR_FICHA', 'PARAMETROS_EDITAR',
-    'POSTULACION_REGISTRAR', 'POSTULACION_EVALUAR', 'FOTO_EDITAR'],
+    'POSTULACION_EVALUAR', 'FOTO_EDITAR'],
   COMUNICACION: ['DERIVACION_REGISTRAR', 'FICHA_CONSULTAR'],
   TENS: ['FICHA_CONSULTAR', 'OBSERVACION_REGISTRAR', 'ATENCION_REGISTRAR', 'CICLO_ACTUALIZAR', 'ALERTA_CONSULTAR', 'URGENCIA_MARCAR'],
   PROFESIONAL: ['FICHA_CONSULTAR', 'SALUD_VER', 'SALUD_EDITAR', 'ATENCION_REGISTRAR'],
   // Tutor: propuesto por el mandante para realizar la postulación, porque conoce al NNA (Certamen 1).
-  TUTOR: ['POSTULACION_REGISTRAR', 'FICHA_CONSULTAR', 'OBSERVACION_REGISTRAR', 'FOTO_EDITAR'],
+  // El tutor ya no postula desde la gestión interna (la postulación es pública); consulta la ficha y deja observaciones.
+  TUTOR: ['FICHA_CONSULTAR', 'OBSERVACION_REGISTRAR', 'FOTO_EDITAR'],
   CONSULTA: ['FICHA_CONSULTAR'],
   // Administrador: solicitado por la profesora en la revisión final; puede hacer todo y ajustar los permisos.
   ADMIN: [],
@@ -47,7 +48,7 @@ export const NOMBRE_ROL: Record<Rol, string> = {
   PROFESIONAL: 'Profesional dental/kine', TUTOR: 'Tutor', CONSULTA: 'Consulta', ADMIN: 'Administrador',
 };
 export const DESCRIPCION_PERMISO: Record<Permiso, string> = {
-  POSTULACION_REGISTRAR: 'Registrar postulaciones de NNA', POSTULACION_EVALUAR: 'Evaluar postulaciones (ingreso al programa)',
+  POSTULACION_EVALUAR: 'Evaluar postulaciones (ingreso al programa)',
   DERIVACION_REGISTRAR: 'Registrar derivaciones a prestaciones', FICHA_CONSULTAR: 'Consultar fichas',
   FICHA_EDITAR: 'Editar datos de la ficha', FOTO_EDITAR: 'Cargar foto identificatoria', SALUD_VER: 'Ver antecedentes de salud',
   SALUD_EDITAR: 'Editar antecedentes de salud', DATOS_SENSIBLES_VER: 'Ver datos sensibles (documental, previsión)',

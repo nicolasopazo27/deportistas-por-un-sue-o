@@ -128,3 +128,31 @@ h1{font-size:24px;margin:0}h2{font-size:18px;margin:22px 0 10px}h3{font-size:15p
 .grafico-datos{font-size:12px;margin-top:4px}.grafico-datos summary{cursor:pointer;color:var(--gris)}.grafico-datos table{margin-top:6px}
 .tabla-permisos input[type=checkbox]{accent-color:var(--rojo-osc);width:16px;height:16px;cursor:pointer}
 .kpi .kpi-titulo{padding-right:38px;min-height:30px}.kpi:disabled{color:var(--negro);opacity:1}.kpi-neutro .kpi-valor{color:#3c4043}
+
+/* Pantalla de ingreso con bienvenida (revisión final) */
+.ingreso-v2{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(320px,1fr);gap:28px;max-width:1180px;margin:28px auto;padding:0 24px;align-items:start;width:100%}
+.ingreso-v2 .tarjeta-ingreso{margin:0;max-width:none;border-top:4px solid var(--rojo);border-radius:14px;box-shadow:0 6px 24px #0000000f;padding:28px 30px}
+.ingreso-v2 .tarjeta-ingreso h2{font-size:26px;margin:0 0 6px}
+.bienvenida{position:relative;background:linear-gradient(120deg,#fff 0%,#fff 48%,#fdf1f1 100%);border-radius:14px;box-shadow:0 6px 24px #0000000f;padding:30px 30px 22px;overflow:hidden;min-height:430px;display:flex;flex-direction:column}
+.bienvenida-texto{position:relative;z-index:1;max-width:60%}
+.bienvenida h1{font-size:31px;white-space:nowrap;line-height:1.12;font-weight:800;letter-spacing:-.01em}
+.subrayado{display:block;width:44px;height:4px;background:var(--rojo);border-radius:3px;margin:14px 0 14px}
+.bienvenida p{color:#3c4043;font-size:14px;margin:0 0 18px;max-width:440px}
+.ilustracion{position:absolute;right:-6px;top:18px;width:50%;max-width:390px;height:auto}
+.beneficios{list-style:none;padding:0;margin:0 0 20px;display:flex;flex-direction:column;gap:14px}
+.beneficios li{display:flex;gap:14px;align-items:flex-start}
+.beneficios b{display:block;font-size:14.5px}.beneficios span{font-size:13px;color:var(--gris)}
+.icono-beneficio{flex:0 0 40px;height:40px;border-radius:10px;background:var(--rojo-suave);color:var(--rojo-osc);display:grid;place-items:center}
+.cta-postula{position:relative;z-index:1;margin-top:auto;background:var(--rojo-suave);border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:16px}
+.cta-postula>div{flex:1;border-left:2px solid #f3b2b7;padding-left:14px}.cta-postula b{display:block;font-size:15px}.cta-postula span{font-size:13px;color:#3c4043}
+.cta-icono{color:var(--rojo-osc);transform:rotate(-12deg)}
+.cta-boton{display:inline-flex;align-items:center;gap:8px;text-decoration:none;white-space:nowrap}
+@media (max-width:900px){.ingreso-v2{grid-template-columns:1fr}.bienvenida-texto{max-width:none}.ilustracion{opacity:.25}.cta-postula{flex-wrap:wrap}}
+/* Postulación pública */
+.publica{max-width:980px;margin:22px auto 40px;padding:0 24px;width:100%}
+.volver-publico{display:inline-flex;align-items:center;gap:6px;color:var(--rojo-osc);text-decoration:none;font-weight:600;font-size:13.5px}
+.publica-intro{margin:14px 0 18px}.publica-intro h1{font-size:28px;font-weight:800}.publica-intro p{color:#3c4043;max-width:760px}
+.tarjeta-publica{background:#fff;border-radius:14px;box-shadow:0 6px 24px #0000000f;border-top:4px solid var(--rojo);padding:22px 28px}
+.tarjeta-publica h2{color:var(--rojo-osc);font-size:16px}
+.exito-publico{text-align:center;color:#1f2328}.exito-publico svg{color:var(--verde)}
+a.boton{text-decoration:none;display:inline-flex;align-items:center;justify-content:center}

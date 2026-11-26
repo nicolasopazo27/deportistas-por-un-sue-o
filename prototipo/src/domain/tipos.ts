@@ -8,7 +8,7 @@ export type Permiso =
   | 'DATOS_SENSIBLES_VER' | 'DATOS_SENSIBLES_EDITAR' | 'OBSERVACION_REGISTRAR' | 'ATENCION_REGISTRAR'
   | 'CICLO_ACTUALIZAR' | 'ALERTA_CONSULTAR' | 'BAJA_REGISTRAR' | 'AYUDA_REGISTRAR' | 'URGENCIA_MARCAR'
   | 'REPORTE_GENERAR' | 'EXPORTAR_FICHA' | 'PARAMETROS_EDITAR'
-  | 'POSTULACION_REGISTRAR' | 'POSTULACION_EVALUAR' | 'FOTO_EDITAR' | 'PERMISOS_EDITAR';
+  | 'POSTULACION_EVALUAR' | 'FOTO_EDITAR' | 'PERMISOS_EDITAR';
 
 export interface Usuario { id: string; nombre: string; email: string; rol: Rol }
 
@@ -64,7 +64,8 @@ export interface Postulacion {
   nna: { nombres: string; apellidos: string; rut: string; fechaNacimiento?: string; comuna: string };
   apoderado: Apoderado;
   antecedentes: { patologias: string[]; centrosSalud: string[]; credencial: CredencialDiscapacidad; electrodependiente: boolean; descripcion?: string };
-  motivo: string; tutor: string; evaluador?: string; fechaResolucion?: string; resolucion?: string; idBeneficiario?: string;
+  /** Quién postuló (apoderado/a o tutor/a); origen WEB = formulario público. */
+  motivo: string; tutor: string; origen?: 'WEB'; evaluador?: string; fechaResolucion?: string; resolucion?: string; idBeneficiario?: string;
 }
 
 export type EstadoAlerta = 'ACTIVA' | 'REVISADA' | 'RESUELTA';

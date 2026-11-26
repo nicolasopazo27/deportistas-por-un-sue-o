@@ -6,7 +6,7 @@ import { act } from 'react';
 import { almacenamiento, evidencia, ingresar, ir, montar, reiniciarEntorno } from './ayudantes';
 import { crearDatosIniciales } from '../data/seed';
 import { calcularEstadisticas } from '../data/estadisticas';
-import { actualizarFicha, actualizarFoto, cambiarPermiso, evaluarPostulacion, registrarBaja, restablecerPermisos, marcarAlertaRevisada, registrarAtencion, registrarPostulacion, revisarAlertas } from '../data/servicios';
+import { actualizarFicha, actualizarFoto, cambiarPermiso, evaluarPostulacion, registrarBaja, restablecerPermisos, marcarAlertaRevisada, registrarAtencion, registrarPostulacionPublica, revisarAlertas } from '../data/servicios';
 import { consolidar, generarXlsx } from '../modules/reportes/exportar';
 import type { Usuario } from '../domain/tipos';
 import ExcelJS from 'exceljs';
@@ -38,20 +38,22 @@ async function elegirBeneficiario(user: ReturnType<typeof montar>['user'], texto
 beforeEach(() => reiniciarEntorno());
 
 describe('Matriz 03 · prototipo v2', () => {
-  it('CP-P01 · M8 · postulación vacía rechazada', async () => {
-    const { user } = montar(); await ingresar(user, TUTOR); await act(() => ir('/postulaciones?nueva=1'));
+  it('CP-P01 · M8 · postulación pública vacía rechazada; la gestión interna no registra postulaciones', async () => {
+    const { user } = montar(); await act(() => ir('/postular'));
     await user.click(screen.getByRole('button', { name: 'Enviar postulación' }));
     const errores = screen.getAllByRole('alert').map(e => e.textContent);
-    const ok = almacenamiento().postulaciones.length === 2 && errores.length >= 7;
-    evidencia('CP-P01', { requisito: 'M8 (observación mandante), RF-01', prueba: 'Tutor envía el formulario de postulación vacío.', esperado: 'Se rechaza sin crear postulación y se indican los campos obligatorios.', obtenido: `Postulaciones: ${almacenamiento().postulaciones.length}. Errores (${errores.length}): ${errores.join(' | ')}`, aprobada: ok });
+    await act(() => ir('/ingreso')); await ingresar(user, ADMIN); await act(() => ir('/postulaciones'));
+    const sinBotonInterno = screen.queryByRole('button', { name: 'Nueva postulación' }) === null && screen.queryByLabelText('Nombres *') === null;
+    const ok = almacenamiento().postulaciones.length === 2 && errores.length >= 7 && sinBotonInterno;
+    evidencia('CP-P01', { requisito: 'M8 (observación mandante), RF-01 · postulación pública (revisión final)', prueba: 'Enviar vacío el formulario público de postulación (sin sesión); luego abrir Postulaciones en la gestión interna como Administrador.', esperado: 'Se rechaza sin crear postulación indicando los campos obligatorios; la gestión interna no ofrece registrar postulaciones.', obtenido: `Postulaciones: ${almacenamiento().postulaciones.length}. Errores (${errores.length}): ${errores.join(' | ')}. Formulario o botón interno de postulación: ${sinBotonInterno ? 'no existe' : 'presente'}.`, aprobada: ok });
     expect(ok).toBe(true);
   });
 
-  it('CP-P02 · M8, RF-04 · postulación del tutor, aceptación e ingreso con recuperación tras remontar', async () => {
-    const r1 = montar(); await ingresar(r1.user, TUTOR); await act(() => ir('/postulaciones?nueva=1'));
+  it('CP-P02 · M8, RF-04 · postulación pública, aceptación e ingreso con recuperación tras remontar', async () => {
+    const r1 = montar(); await act(() => ir('/postular'));
     await llenarPostulacion(r1.user, { nombres: 'Martina', apellidos: 'Núñez Peña', rut: '9876543-3', telefono: '+56 9 7777 8888' });
     await r1.user.click(screen.getByRole('button', { name: 'Enviar postulación' }));
-    await screen.findByText(/enviada al área social/);
+    await screen.findByText('¡Postulación enviada!');
     const p = almacenamiento().postulaciones.at(-1);
     r1.unmount(); cleanup(); window.sessionStorage.clear(); window.location.hash = '#/ingreso';
     const r2 = montar(); await ingresar(r2.user, SOCIAL); await act(() => ir(`/postulaciones?p=${p.id}`));
@@ -63,8 +65,8 @@ describe('Matriz 03 · prototipo v2', () => {
     await r3.user.click(await screen.findByRole('button', { name: 'Martina Núñez Peña' }));
     const ficha = screen.getByLabelText(/Ficha de Martina/);
     const b = almacenamiento().beneficiarios.at(-1);
-    const ok = nBenef() === 3 && p.tutor === 'Francisca Herrera' && almacenamiento().postulaciones.find((x: { id: string }) => x.id === p.id).estado === 'ACEPTADA' && b.historial[0].tipo === 'Ingreso al programa' && within(ficha).getByText(/9876543-3/) !== null;
-    evidencia('CP-P02', { requisito: 'M8, RF-01, RF-04', prueba: 'Tutor registra postulación; Trabajo social la acepta; se remonta la aplicación y se abre la ficha.', esperado: 'La postulación queda aceptada, se crea la ficha (ingreso al programa) y se recupera tras remontar.', obtenido: `Postulación ${p.id} registrada por ${p.tutor}; estado final ACEPTADA; beneficiarios: ${nBenef()}; primer evento: «${b.historial[0].tipo}»; ficha recuperada tras remontar. Persistencia local (no SQL).`, aprobada: ok });
+    const ok = nBenef() === 3 && p.tutor === 'Inés Araya Núñez' && p.origen === 'WEB' && almacenamiento().postulaciones.find((x: { id: string }) => x.id === p.id).estado === 'ACEPTADA' && b.historial[0].tipo === 'Ingreso al programa' && within(ficha).getByText(/9876543-3/) !== null;
+    evidencia('CP-P02', { requisito: 'M8, RF-01, RF-04', prueba: 'Un apoderado envía la postulación desde el formulario público (sin sesión); Trabajo social la acepta; se remonta la aplicación y se abre la ficha.', esperado: 'La postulación queda aceptada, se crea la ficha (ingreso al programa) y se recupera tras remontar.', obtenido: `Postulación ${p.id} enviada en línea por ${p.tutor} (origen ${p.origen}); estado final ACEPTADA; beneficiarios: ${nBenef()}; primer evento: «${b.historial[0].tipo}»; ficha recuperada tras remontar. Persistencia local (no SQL).`, aprobada: ok });
     expect(ok).toBe(true);
   });
 
@@ -195,12 +197,12 @@ describe('Matriz 03 · prototipo v2', () => {
   });
 
   it('CP-P13 · M8, RF-01 · RUT y teléfono demasiado largos en la postulación', async () => {
-    const { user } = montar(); await ingresar(user, TUTOR); await act(() => ir('/postulaciones?nueva=1'));
+    const { user } = montar(); await act(() => ir('/postular'));
     await llenarPostulacion(user, { nombres: 'Prueba', apellidos: 'Larga Uno', rut: '1234567890123-5', telefono: '+56 9 1234 5678 9999 0000' });
     await user.click(screen.getByRole('button', { name: 'Enviar postulación' }));
     const rut = screen.queryByText(/El RUT es demasiado largo/) !== null, tel = screen.queryByText('El teléfono es demasiado largo.') !== null;
     const ok = rut && tel && almacenamiento().postulaciones.length === 2;
-    evidencia('CP-P13', { requisito: 'M8, RF-01', prueba: 'Ingresar RUT y teléfono con largo excesivo en la postulación.', esperado: 'El formulario rechaza ambos datos y no guarda.', obtenido: `Error RUT: ${rut}; error teléfono: ${tel}; postulaciones: ${almacenamiento().postulaciones.length}.`, aprobada: ok });
+    evidencia('CP-P13', { requisito: 'M8, RF-01', prueba: 'Ingresar RUT y teléfono con largo excesivo en el formulario público de postulación.', esperado: 'El formulario rechaza ambos datos y no guarda.', obtenido: `Error RUT: ${rut}; error teléfono: ${tel}; postulaciones: ${almacenamiento().postulaciones.length}.`, aprobada: ok });
     expect(ok).toBe(true);
   });
 
@@ -243,7 +245,7 @@ describe('Matriz 03 · prototipo v2', () => {
   it('CP-P17 · RF-11, RNF-4 · informe mensual XLSX íntegro con tildes y ñ', async () => {
     const e = crearDatosIniciales();
     const hoy = new Date().toISOString().slice(0, 10);
-    registrarPostulacion(e, U_TUTOR, { ...POST_OK, nombres: 'Sofía', apellidos: 'Ñúñez Peña', rut: '9876543-3' });
+    registrarPostulacionPublica(e, { ...POST_OK, nombres: 'Sofía', apellidos: 'Ñúñez Peña', rut: '9876543-3' });
     const tablas = consolidar(e, 'INFORME_MENSUAL', '2000-01-01', hoy, false);
     const origen = tablas.reduce((s, t) => s + t.filas.length, 0);
     const { buffer, filasVerificadas } = await generarXlsx(tablas);
@@ -340,16 +342,16 @@ describe('Matriz 03 · prototipo v2', () => {
     expect(ok).toBeTruthy();
   });
 
-  it('CP-P25 · M8 · el tutor postula pero no evalúa; el rechazo exige comentario', () => {
+  it('CP-P25 · M8 · la postulación pública no la evalúa el tutor; el rechazo exige comentario', () => {
     const e = crearDatosIniciales();
-    const r1 = registrarPostulacion(e, U_TUTOR, POST_OK);
+    const r1 = registrarPostulacionPublica(e, POST_OK);
     const id = r1.ok ? r1.dato!.id : '';
     const r2 = evaluarPostulacion(e, U_TUTOR, id, 'ACEPTADA', '');
     const r3 = evaluarPostulacion(e, U_SOCIAL, id, 'RECHAZADA', '');
-    const r4 = registrarPostulacion(e, U_TUTOR, POST_OK);
-    const r5 = registrarPostulacion(e, U_TUTOR, { ...POST_OK, rut: '12345678-5' });
+    const r4 = registrarPostulacionPublica(e, POST_OK);
+    const r5 = registrarPostulacionPublica(e, { ...POST_OK, rut: '12345678-5' });
     const ok = r1.ok && !r2.ok && 'permiso' in (r2.ok ? {} : r2.errores) && !r3.ok && !r4.ok && !r5.ok && e.beneficiarios.length === 2;
-    evidencia('CP-P25', { requisito: 'M8 · perfil Tutor (mandante), RNF-3', prueba: 'Tutor registra y trata de aceptar; Trabajo social rechaza sin comentario; se repite el RUT y se postula a un NNA ya ingresado.', esperado: 'El tutor no puede evaluar; el rechazo exige motivo; no se duplican postulaciones en curso ni se postula a quien ya ingresó.', obtenido: `Registro tutor: ${r1.ok}; tutor acepta: ${r2.ok ? 'permitido' : 'denegado'}; rechazo sin comentario: ${r3.ok ? 'aceptado' : 'rechazado'}; RUT repetido: ${r4.ok ? 'aceptado' : 'rechazado'}; NNA ya ingresado: ${r5.ok ? 'aceptado' : 'rechazado'}.`, aprobada: !!ok });
+    evidencia('CP-P25', { requisito: 'M8 · perfil Tutor (mandante), RNF-3', prueba: 'Se registra una postulación pública y el Tutor trata de aceptarla; Trabajo social rechaza sin comentario; se repite el RUT y se postula a un NNA ya ingresado.', esperado: 'El tutor no puede evaluar; el rechazo exige motivo; no se duplican postulaciones en curso ni se postula a quien ya ingresó.', obtenido: `Postulación pública: ${r1.ok ? 'registrada' : 'rechazada'}; tutor acepta: ${r2.ok ? 'permitido' : 'denegado'}; rechazo sin comentario: ${r3.ok ? 'aceptado' : 'rechazado'}; RUT repetido: ${r4.ok ? 'aceptado' : 'rechazado'}; NNA ya ingresado: ${r5.ok ? 'aceptado' : 'rechazado'}.`, aprobada: !!ok });
     expect(ok).toBeTruthy();
   });
 
@@ -399,7 +401,7 @@ describe('Matriz 03 · prototipo v2', () => {
   it('CP-P29 · RNF-3 · el Administrador puede todo; nadie más edita permisos', () => {
     const e = crearDatosIniciales();
     const pasos = [
-      registrarPostulacion(e, U_ADMIN, POST_OK).ok,
+      registrarPostulacionPublica(e, POST_OK).ok,
       evaluarPostulacion(e, U_ADMIN, e.postulaciones.at(-1)!.id, 'ACEPTADA', 'ok').ok,
       registrarAtencion(e, U_ADMIN, 'B-01', { fecha: new Date().toISOString().slice(0, 10), profesional: 'Diego Fuentes · Dental', prestacion: 'Atención dental', asistencia: 'ASISTIO', resultado: 'REALIZADA' }).ok,
       registrarBaja(e, U_ADMIN, 'B-02', 'EGRESO', new Date().toISOString().slice(0, 10), '').ok,
@@ -408,7 +410,7 @@ describe('Matriz 03 · prototipo v2', () => {
     const propio = cambiarPermiso(e, U_ADMIN, 'ADMIN', 'FICHA_CONSULTAR', false);
     const restab = restablecerPermisos(e, U_SOCIAL);
     const ok = pasos.every(Boolean) && !social.ok && !propio.ok && !restab.ok && !e.permisos;
-    evidencia('CP-P29', { requisito: 'RNF-3 · perfil Administrador (revisión de la profesora)', prueba: 'Administrador postula, acepta, registra una atención y una baja; Trabajo social intenta editar permisos; el Administrador intenta quitarse un permiso.', esperado: 'El Administrador completa todas las operaciones; solo él edita permisos y sus propios permisos no se pueden quitar.', obtenido: `Operaciones del Administrador: ${pasos.filter(Boolean).length}/4; edición por Trabajo social: ${social.ok ? 'permitida' : 'denegada'}; quitar permiso al Administrador: ${propio.ok ? 'permitido' : 'rechazado'}; restablecer por Trabajo social: ${restab.ok ? 'permitido' : 'denegado'}.`, aprobada: ok });
+    evidencia('CP-P29', { requisito: 'RNF-3 · perfil Administrador (revisión de la profesora)', prueba: 'Llega una postulación pública; el Administrador la acepta y registra una atención y una baja; Trabajo social intenta editar permisos; el Administrador intenta quitarse un permiso.', esperado: 'El Administrador completa todas las operaciones; solo él edita permisos y sus propios permisos no se pueden quitar.', obtenido: `Operaciones del Administrador: ${pasos.filter(Boolean).length}/4; edición por Trabajo social: ${social.ok ? 'permitida' : 'denegada'}; quitar permiso al Administrador: ${propio.ok ? 'permitido' : 'rechazado'}; restablecer por Trabajo social: ${restab.ok ? 'permitido' : 'denegado'}.`, aprobada: ok });
     expect(ok).toBe(true);
   });
 

@@ -52,7 +52,7 @@ Contraseña de todos los usuarios de demostración: **`demo2026`**
 | `social@demo.cl` | Trabajo social | Gestión completa del NNA: evaluar postulaciones, derivaciones, fichas, datos de salud, foto, bajas, ayudas, alertas, reportes y exportaciones |
 | `comunicacion@demo.cl` | Encargada de comunicación | Registrar derivaciones y consultar fichas |
 | `admin@demo.cl` | Administrador | Todo: todos los permisos y además modificar los permisos de los demás perfiles en «Perfiles y permisos» |
-| `tutor@demo.cl` | Tutor/a | Postular a un NNA, consultar fichas, agregar observaciones y foto (no evalúa postulaciones) |
+| `tutor@demo.cl` | Tutor/a | Consultar fichas, agregar observaciones y foto (las postulaciones se envían desde el formulario público) |
 | `tens@demo.cl` | TENS | Fichas, atenciones, ciclo, alertas, observaciones y marcar urgencias (no registra ayudas) |
 | `profesional@demo.cl` | Profesional dental/kine | Fichas, datos de salud y atenciones |
 | `consulta@demo.cl` | Consulta | Solo consultar fichas (sin datos sensibles ni exportaciones) |
@@ -76,7 +76,7 @@ En la pantalla de ingreso está el enlace **«Restablecer datos de demostración
 
 ### Mejoras incorporadas a partir de las observaciones del mandante (Certamen 1)
 
-1. **Postulación separada de la derivación:** el NNA entra por una postulación (la puede registrar un tutor), el área social la evalúa y, al aceptarla, se crea la ficha. Solo se deriva a beneficiarios ya ingresados.
+1. **Postulación separada de la derivación:** el NNA entra por una postulación que el apoderado o tutor envía desde el **formulario público** (`#/postular`, sin iniciar sesión); el área social la evalúa en la gestión interna y, al aceptarla, se crea la ficha. Solo se deriva a beneficiarios ya ingresados.
 2. **Perfil Tutor** con permisos acotados y vista **Perfiles y permisos** con la matriz por rol.
 3. **Antecedentes del NNA:** credencial de discapacidad, centros de salud y hospitalizaciones.
 4. **Foto identificatoria** del NNA en la ficha.
@@ -89,6 +89,8 @@ En la pantalla de ingreso está el enlace **«Restablecer datos de demostración
 1. **Perfil Administrador** (`admin@demo.cl`): tiene todos los permisos y puede marcar o quitar permisos a los demás perfiles desde «Perfiles y permisos» (con opción de restablecer la matriz original).
 2. **KPI con color** en el Inicio: cada indicador tiene su color e ícono, e incluye ingresos y bajas del año comparados con el año anterior.
 3. **Gráficos comparativos** de los últimos 5 años en el Inicio: postulaciones, ingresos y bajas por año; beneficiarios activos al cierre de cada año; bajas por causal y derivaciones por prestación. Suman un consolidado anual ficticio de las planillas anteriores con lo registrado en el sistema. Cada gráfico tiene tooltip y una tabla «Ver datos».
+4. **Pantalla de ingreso con bienvenida** de la Fundación (presentación, beneficios y botón «Ir a postulación pública»).
+5. **Postulación pública:** la postulación se hace desde una página abierta (`#/postular`); la gestión interna ya no registra postulaciones, solo las evalúa.
 
 Todas las vistas tienen botón **Volver** (RNF-1). Fuera del alcance de esta versión: stock de bodega (RF-19), informes sociales (RF-24), rutas e integración con Dental Soft.
 

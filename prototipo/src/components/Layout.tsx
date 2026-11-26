@@ -9,11 +9,11 @@ import type { Permiso } from '../domain/tipos';
 
 interface ItemMenu { ruta: string; texto: string; icono: LucideIcon; permiso?: Permiso | Permiso[]; cuenta?: number }
 
-export function Cabecera() {
+export function Cabecera({ titulo = 'Gestión interna · Atención de beneficiarios' }: { titulo?: string }) {
   return (
     <header className="cabecera">
       <img src={`${import.meta.env.BASE_URL}logo-fundacion.png`} alt="Fundación Deportistas por un Sueño" className="logo" />
-      <span className="titulo-sistema">Gestión interna · Atención de beneficiarios</span>
+      <span className="titulo-sistema">{titulo}</span>
     </header>
   );
 }
@@ -31,7 +31,7 @@ export default function Layout() {
 
   const grupos: { titulo: string; items: ItemMenu[] }[] = [
     { titulo: '', items: [{ ruta: '/inicio', texto: 'Inicio', icono: Home }] },
-    { titulo: '1 · Ingreso al programa', items: [{ ruta: '/postulaciones', texto: 'Postulaciones', icono: ClipboardList, permiso: 'POSTULACION_REGISTRAR', cuenta: puede(usuario.rol, 'POSTULACION_EVALUAR') ? postPend : undefined }] },
+    { titulo: '1 · Ingreso al programa', items: [{ ruta: '/postulaciones', texto: 'Postulaciones', icono: ClipboardList, permiso: 'POSTULACION_EVALUAR', cuenta: puede(usuario.rol, 'POSTULACION_EVALUAR') ? postPend : undefined }] },
     { titulo: '2 · Atención', items: [
       { ruta: '/derivaciones', texto: 'Derivaciones', icono: Send, permiso: 'DERIVACION_REGISTRAR' },
       { ruta: '/atenciones', texto: 'Atenciones', icono: Stethoscope, permiso: ['ATENCION_REGISTRAR', 'ALERTA_CONSULTAR'] },
