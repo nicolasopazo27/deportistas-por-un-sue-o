@@ -505,7 +505,10 @@ describe('Matriz 03 · prototipo v2', () => {
     const fugaInforme = personales.filter((x: string) => x && textoInforme.includes(x)) .concat(e.postulaciones.map((p: { nna: { rut: string } }) => p.nna.rut).filter((r: string) => textoInforme.includes(r)));
     const ids = idsAnalisis(e);
     const camilaId = ids.get('B-01');
-    const filaCompleta = completo[0].filas.find(f => f[2] === e.beneficiarios.find((b: { id: string }) => b.id === 'B-01').rut);
+    const colRut = completo[0].columnas.indexOf('RUT');
+    const filaCompleta = completo[0].filas.find(f => f[colRut] === e.beneficiarios.find((b: { id: string }) => b.id === 'B-01').rut);
+    const camposPostulacion = ['Nombres', 'Apellidos', 'RUT', 'Fecha de nacimiento', 'Comuna', 'Apoderado/a', 'Teléfono apoderado', 'Previsión de salud', 'Patologías', 'Centros hospitalarios', 'Credencial de discapacidad', 'N.º credencial', '% discapacidad', 'Electrodependiente', 'Descripción de antecedentes', 'Motivo de la postulación'];
+    const todosLosCampos = camposPostulacion.every(c => completo[0].columnas.includes(c));
     const idEnTodas = consolidar(e, 'INFORME_MENSUAL', '2000-01-01', hoy, false).every(t => t.columnas[0] === 'ID análisis');
     const enlaza = idEnTodas && filaCompleta?.[0] === camilaId && anon[0].filas.some(f => f[0] === camilaId);
     const diccionario = wb.getWorksheet('Diccionario') !== undefined;
@@ -518,8 +521,8 @@ describe('Matriz 03 · prototipo v2', () => {
     await user.click(screen.getByRole('button', { name: 'Descargar Excel' }));
     await screen.findByText(/Excel anonimizado generado/);
     const reg = almacenamiento().reportes.at(-1);
-    const ok = fuga.length === 0 && fugaInforme.length === 0 && filasVerificadas > 0 && enlaza && diccionario && habilitadaSocial && reg?.anonimizado === true && reg?.incluyeApoderado === false;
-    evidencia('CP-P34', { requisito: 'RF-34, RNF-7 (protección de datos personales)', prueba: 'Generar el Excel general y el informe mensual en versión anonimizada, buscar en el archivo nombres, RUT y contactos reales del sistema, y comparar con el Excel completo.', esperado: 'El anonimizado no contiene ningún dato personal, identifica a cada beneficiario con un ID de análisis que solo el Excel completo vincula al RUT, incluye un diccionario y la descarga queda registrada como anonimizada.', obtenido: `Datos personales encontrados: ${fuga.length + fugaInforme.length}; filas verificadas: ${filasVerificadas}; ID de Camila en el completo: ${filaCompleta?.[0]} (enlaza: ${enlaza}; ID en la primera columna de todas las hojas del informe completo: ${idEnTodas}); hoja Diccionario: ${diccionario}; registro: ${reg?.anonimizado ? 'anonimizada' : 'completa'}.`, aprobada: ok });
+    const ok = todosLosCampos && fuga.length === 0 && fugaInforme.length === 0 && filasVerificadas > 0 && enlaza && diccionario && habilitadaSocial && reg?.anonimizado === true && reg?.incluyeApoderado === false;
+    evidencia('CP-P34', { requisito: 'RF-34, RNF-7 (protección de datos personales)', prueba: 'Generar el Excel general completo y verificar que trae todos los campos del formulario de postulación; generar el Excel general y el informe mensual en versión anonimizada, buscar en el archivo nombres, RUT y contactos reales del sistema, y comparar con el Excel completo.', esperado: 'El anonimizado no contiene ningún dato personal, identifica a cada beneficiario con un ID de análisis que solo el Excel completo vincula al RUT, incluye un diccionario y la descarga queda registrada como anonimizada.', obtenido: `Excel completo con los ${camposPostulacion.length} campos del formulario de postulación: ${todosLosCampos}; datos personales en el anonimizado: ${fuga.length + fugaInforme.length}; filas verificadas: ${filasVerificadas}; ID de Camila en el completo: ${filaCompleta?.[0]} (enlaza: ${enlaza}; ID en la primera columna de todas las hojas del informe completo: ${idEnTodas}); hoja Diccionario: ${diccionario}; registro: ${reg?.anonimizado ? 'anonimizada' : 'completa'}.`, aprobada: ok });
     expect(ok).toBe(true);
   });
 });

@@ -240,3 +240,5 @@ a.boton{text-decoration:none;display:inline-flex;align-items:center;justify-cont
 .opcion-version small { color: var(--gris); line-height: 1.35; }
 .opcion-version input { margin-top: 4px; }
 @media (max-width: 860px) { .version-excel { grid-template-columns: 1fr; } }
+.tabla-desplazable { overflow-x: auto; max-width: 100%; }
+.tabla-desplazable .tabla th, .tabla-desplazable .tabla td { white-space: nowrap; }

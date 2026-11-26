@@ -20,7 +20,6 @@ export default function Reportes() {
   const [tipo, setTipo] = useState<TipoSalida | ''>('');
   const [desde, setDesde] = useState(primerDiaMes());
   const [hasta, setHasta] = useState(hoyISO());
-  const [apoderado, setApoderado] = useState(false);
   const [version, setVersion] = useState<'COMPLETA' | 'ANONIMIZADA' | ''>('');
   const [vista, setVista] = useState<Tabla[] | null>(null);
   const [err, setErr] = useState('');
@@ -30,7 +29,7 @@ export default function Reportes() {
   // Por defecto: completa para perfiles autorizados; anonimizada para el resto.
   const ver = version || (puedeExportar ? 'COMPLETA' : 'ANONIMIZADA');
   const anonima = ver === 'ANONIMIZADA';
-  const tablasDe = () => anonima ? consolidarAnonimo(estado, tipo as TipoSalida, desde, hasta) : consolidar(estado, tipo as TipoSalida, desde, hasta, apoderado);
+  const tablasDe = () => anonima ? consolidarAnonimo(estado, tipo as TipoSalida, desde, hasta) : consolidar(estado, tipo as TipoSalida, desde, hasta, true, usuario?.rol);
 
   const validar = (): boolean => {
     setMsg('');
@@ -38,7 +37,6 @@ export default function Reportes() {
     if (!tipo) { setErr('Seleccione el tipo de salida.'); return false; }
     if (!desde || !hasta || desde > hasta) { setErr('Período inválido: la fecha de inicio debe ser anterior o igual a la de término.'); setVista(null); return false; }
     if (!anonima && !puedeExportar) { setErr('Su perfil no puede descargar la versión completa con datos personales. Use la versión anonimizada.'); return false; }
-    if (!anonima && apoderado && !puedeExportar) { setErr('Su perfil no puede exportar datos del apoderado.'); return false; }
     setErr(''); return true;
   };
   const previa = () => { if (validar()) setVista(tablasDe()); };
@@ -46,7 +44,7 @@ export default function Reportes() {
     if (!validar()) return;
     const tablas = tablasDe();
     const total = tablas.filter(t => t.titulo !== 'Diccionario').reduce((s, t) => s + t.filas.length, 0);
-    const conAp = !anonima && apoderado;
+    const conAp = !anonima && (tipo === 'EXPORT_EXCEL_GENERAL' || tipo === 'INFORME_MENSUAL');
     try {
       const { buffer, filasVerificadas } = await generarXlsx(tablas);
       ejecutar(e => { registrarReporte(e, usuario!, { tipo, formato: 'XLSX', desde, hasta, incluyeApoderado: conAp, anonimizado: anonima, totalRegistros: filasVerificadas, resultado: total ? 'GENERADO' : 'VACIO' }); return { ok: true }; });
@@ -71,16 +69,13 @@ export default function Reportes() {
         <legend>Versión del archivo</legend>
         <label className={`opcion-version${!anonima ? ' activa' : ''}`}>
           <input type="radio" name="version" checked={!anonima} onChange={() => { setVersion('COMPLETA'); setVista(null); }} disabled={!puedeExportar} />
-          <span><strong>Completa (datos personales)</strong><small>Nombres, RUT y demás datos para uso interno, con el «ID análisis» en la primera columna para saber a quién corresponde cada código. Solo perfiles autorizados.{!puedeExportar && ' Su perfil no tiene este permiso.'}</small></span>
+          <span><strong>Completa (datos personales)</strong><small>Todos los datos del formulario de postulación (NNA, apoderado, salud y motivo) para uso interno, con el «ID análisis» en la primera columna. Solo perfiles autorizados.{!puedeExportar && ' Su perfil no tiene este permiso.'}</small></span>
         </label>
         <label className={`opcion-version${anonima ? ' activa' : ''}`}>
-          <input type="radio" name="version" checked={anonima} onChange={() => { setVersion('ANONIMIZADA'); setApoderado(false); setVista(null); }} />
+          <input type="radio" name="version" checked={anonima} onChange={() => { setVersion('ANONIMIZADA'); setVista(null); }} />
           <span><strong>Anonimizada (para terceros)</strong><small>Cada beneficiario se identifica con un ID de análisis (BEN-0001…). Sin nombres, RUT, contacto, salud ni texto libre; fechas por mes. Incluye hoja «Diccionario».</small></span>
         </label>
       </fieldset>
-      {tipo === 'EXPORT_EXCEL_GENERAL' && !anonima && (
-        <label className="casilla"><input type="checkbox" checked={apoderado} onChange={e => setApoderado(e.target.checked)} disabled={!puedeExportar} /> Incluir datos de identificación del apoderado (solo perfiles autorizados)</label>
-      )}
       <h3>Condicionados a formato oficial</h3>
       <table className="tabla"><tbody><tr><td>Reporte ministerial definitivo de bajas</td><td>Pendiente de plantilla oficial (DP-05)</td></tr></tbody></table>
       {err && <Aviso tipo="error">{err}</Aviso>}
@@ -94,10 +89,12 @@ export default function Reportes() {
       {vista && vista.map(t => (
         <div key={t.titulo}>
           <h3>{t.titulo} ({t.filas.length})</h3>
+          <div className="tabla-desplazable">
           <table className="tabla" aria-label={`Vista previa ${t.titulo}`}>
             <thead><tr>{t.columnas.map(c => <th key={c}>{c}</th>)}</tr></thead>
             <tbody>{t.filas.length === 0 ? <tr><td colSpan={t.columnas.length} className="vacio">Sin registros en el período.</td></tr> : t.filas.map((f, i) => <tr key={i}>{f.map((v, j) => <td key={j}>{v}</td>)}</tr>)}</tbody>
           </table>
+          </div>
         </div>
       ))}
       {estado.reportes.length > 0 && <>

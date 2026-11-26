@@ -1,6 +1,6 @@
 // M7 Reportes y exportaciones: ConsolidadorInformacion + GeneradorArchivo (XLSX).
 // RNF-4: después de generar, se vuelve a leer el archivo y se comprueba que las filas coincidan con el origen.
-import type { Beneficiario, EstadoSistema, Usuario } from '../../domain/tipos';
+import type { Beneficiario, EstadoSistema, Postulacion, Rol, Usuario } from '../../domain/tipos';
 import { CAUSALES, fmtFecha, hoyISO, puede } from '../../domain/reglas';
 import { registrarReporte } from '../../data/servicios';
 
@@ -10,21 +10,55 @@ export interface Tabla { titulo: string; columnas: string[]; filas: (string | nu
 const enPeriodo = (iso: string, desde: string, hasta: string) => iso.slice(0, 10) >= desde && iso.slice(0, 10) <= hasta;
 const nombre = (b: Beneficiario) => `${b.nombres} ${b.apellidos}`;
 
-export function consolidar(e: EstadoSistema, tipo: TipoSalida, desde: string, hasta: string, incluirApoderado: boolean): Tabla[] {
+const SI_NO = (v?: boolean) => (v ? 'Sí' : 'No');
+const lista = (xs?: string[]) => (xs ?? []).join('; ');
+const DOC: Record<string, string> = { DOCUMENTADO: 'Documentado', INDOCUMENTADO: 'Indocumentado', POR_VERIFICAR: 'Por verificar' };
+
+/** Columnas con todos los datos del formulario de postulación (identificación, apoderado, salud y motivo).
+ *  Salud y situación documental solo se incluyen si el perfil puede verlas (RNF-3). */
+function columnasPostulacion(rol?: Rol) {
+  const salud = !rol || puede(rol, 'SALUD_VER'), sensibles = !rol || puede(rol, 'DATOS_SENSIBLES_VER');
+  const cols = ['Nombres', 'Apellidos', 'RUT', 'Fecha de nacimiento', 'Comuna', 'Apoderado/a', 'Teléfono apoderado'];
+  if (sensibles) cols.push('Previsión de salud', 'Situación documental');
+  if (salud) cols.push('Patologías', 'Centros hospitalarios', 'Credencial de discapacidad', 'N.º credencial', '% discapacidad', 'Electrodependiente', 'Descripción de antecedentes');
+  cols.push('Motivo de la postulación', 'Fecha de postulación', 'Canal');
+  return { cols, salud, sensibles };
+}
+function filaPostulacion(o: { nombres: string; apellidos: string; rut: string; fechaNacimiento?: string; comuna: string; apoderado: Beneficiario['apoderado'];
+  documental?: string; patologias: string[]; centros: string[]; credencial: Beneficiario['credencial']; electro: boolean; descripcion?: string; post?: Postulacion }, salud: boolean, sensibles: boolean) {
+  const f: (string | number)[] = [o.nombres, o.apellidos, o.rut, o.fechaNacimiento ? fmtFecha(o.fechaNacimiento) : '', o.comuna, o.apoderado.nombre, o.apoderado.telefono];
+  if (sensibles) f.push(o.apoderado.prevision ?? '', o.documental ?? '');
+  if (salud) f.push(lista(o.patologias), lista(o.centros), SI_NO(o.credencial.tiene), o.credencial.numero ?? '', o.credencial.porcentaje ?? '', SI_NO(o.electro), o.descripcion ?? '');
+  f.push(o.post?.motivo ?? '', o.post ? fmtFecha(o.post.fecha) : '', o.post ? (o.post.origen === 'WEB' ? 'Formulario web' : 'Interno') : 'Registro interno');
+  return f;
+}
+
+export function consolidar(e: EstadoSistema, tipo: TipoSalida, desde: string, hasta: string, incluirApoderado: boolean, rol?: Rol): Tabla[] {
   const B = e.beneficiarios, ids = idsAnalisis(e), id = (b: Beneficiario) => ids.get(b.id)!;
-  const ap = (b: Beneficiario) => incluirApoderado ? [b.apoderado.nombre, b.apoderado.rut ?? '', b.apoderado.telefono] : [];
-  const apCols = incluirApoderado ? ['Apoderado', 'RUT apoderado', 'Contacto apoderado'] : [];
   const der = { titulo: 'Derivaciones', columnas: ['ID análisis', 'Beneficiario', 'Fecha', 'RUT', 'Comuna', 'Tipo', 'Área'], filas: B.flatMap(b => b.casos.flatMap(c => c.derivaciones.filter(d => enPeriodo(d.fecha, desde, hasta)).map(d => [id(b), nombre(b), fmtFecha(d.fecha), b.rut, b.comuna, d.tipoIngreso === 'INGRESO' ? 'Ingreso' : 'Reingreso', d.area]))) };
   const ate = { titulo: 'Atenciones', columnas: ['ID análisis', 'Beneficiario', 'Fecha', 'Prestación', 'Profesional', 'Sesión', 'Resultado', 'Motivo'], filas: B.flatMap(b => b.casos.flatMap(c => c.atenciones.filter(a => enPeriodo(a.fecha, desde, hasta)).map(a => [id(b), nombre(b), fmtFecha(a.fecha), a.prestacion, a.profesional, a.numeroSesion ?? '', a.resultado === 'REALIZADA' ? 'Realizada' : 'No realizada', a.motivo ?? '']))) };
   const baj = { titulo: 'Bajas', columnas: ['ID análisis', 'Beneficiario', 'Fecha', 'RUT', 'Comuna', 'Causal', 'Observación'], filas: B.flatMap(b => b.bajas.filter(x => enPeriodo(x.fecha, desde, hasta)).map(x => [id(b), nombre(b), fmtFecha(x.fecha), b.rut, b.comuna, CAUSALES.find(c => c.codigo === x.causal)?.nombre ?? x.causal, x.observacion ?? ''])) };
   const ayu = { titulo: 'Ayudas entregadas', columnas: ['ID análisis', 'Beneficiario', 'Fecha', 'Tipo', 'N.º guía'], filas: B.flatMap(b => b.ayudas.filter(x => enPeriodo(x.fecha, desde, hasta)).map(x => [id(b), nombre(b), fmtFecha(x.fecha), x.tipo, x.numeroGuia])) };
   const urg = { titulo: 'Urgencias', columnas: ['ID análisis', 'Beneficiario', 'Fecha', 'Motivo'], filas: B.flatMap(b => b.casos.flatMap(c => c.urgencias.filter(u => enPeriodo(u.fecha, desde, hasta)).map(u => [id(b), nombre(b), fmtFecha(u.fecha), u.motivo ?? '']))) };
-  const pos = { titulo: 'Postulaciones', columnas: ['ID análisis', 'NNA', 'Fecha', 'RUT', 'Comuna', 'Estado', 'Tutor'], filas: e.postulaciones.filter(p => enPeriodo(p.fecha, desde, hasta)).map(p => [p.idBeneficiario ? ids.get(p.idBeneficiario) ?? '—' : '—', `${p.nna.nombres} ${p.nna.apellidos}`, fmtFecha(p.fecha), p.nna.rut, p.nna.comuna, p.estado, p.tutor]) };
+  const cp = columnasPostulacion(rol);
+  const datosPost = (p: Postulacion) => filaPostulacion({ ...p.nna, apoderado: p.apoderado, patologias: p.antecedentes.patologias, centros: p.antecedentes.centrosSalud, credencial: p.antecedentes.credencial, electro: p.antecedentes.electrodependiente, descripcion: p.antecedentes.descripcion, post: p }, cp.salud, cp.sensibles);
+  const pos = incluirApoderado
+    ? { titulo: 'Postulaciones', columnas: ['ID análisis', 'NNA', 'Estado', ...cp.cols], filas: e.postulaciones.filter(p => enPeriodo(p.fecha, desde, hasta)).map(p => [p.idBeneficiario ? ids.get(p.idBeneficiario) ?? '—' : '—', `${p.nna.nombres} ${p.nna.apellidos}`, p.estado, ...datosPost(p)]) }
+    : { titulo: 'Postulaciones', columnas: ['ID análisis', 'NNA', 'Fecha', 'RUT', 'Comuna', 'Estado', 'Tutor'], filas: e.postulaciones.filter(p => enPeriodo(p.fecha, desde, hasta)).map(p => [p.idBeneficiario ? ids.get(p.idBeneficiario) ?? '—' : '—', `${p.nna.nombres} ${p.nna.apellidos}`, fmtFecha(p.fecha), p.nna.rut, p.nna.comuna, p.estado, p.tutor]) };
   switch (tipo) {
     case 'INFORME_MENSUAL': return [pos, der, ate, baj, ayu];
     case 'REPORTE_BAJAS': return [baj];
     case 'AYUDAS_URGENCIAS': return [ayu, urg];
-    case 'EXPORT_EXCEL_GENERAL': return [{ titulo: 'Beneficiarios', columnas: ['ID análisis', 'Beneficiario', 'RUT', 'Comuna', 'Estado', ...apCols], filas: [...B].sort((a, b) => id(a).localeCompare(id(b))).map(b => [id(b), nombre(b), b.rut, b.comuna, b.bajas.length ? 'Baja' : 'Activo', ...ap(b)]) }];
+    case 'EXPORT_EXCEL_GENERAL': {
+      if (!incluirApoderado) return [{ titulo: 'Beneficiarios', columnas: ['ID análisis', 'Beneficiario', 'RUT', 'Comuna', 'Estado'], filas: [...B].sort((a, b) => id(a).localeCompare(id(b))).map(b => [id(b), nombre(b), b.rut, b.comuna, b.bajas.length ? 'Baja' : 'Activo']) }];
+      // Versión completa: todos los datos que se piden al postular, más el estado actual.
+      const post = (b: Beneficiario) => e.postulaciones.find(p => p.id === b.idPostulacion || p.idBeneficiario === b.id);
+      return [{ titulo: 'Beneficiarios', columnas: ['ID análisis', 'Beneficiario', 'Estado', ...cp.cols], filas: [...B].sort((a, b) => id(a).localeCompare(id(b))).map(b => {
+        const p = post(b), desc = b.enfermedades.map(x => x.descripcion).find(Boolean) ?? p?.antecedentes.descripcion;
+        return [id(b), nombre(b), b.bajas.length ? 'Baja' : 'Activo', ...filaPostulacion({ nombres: b.nombres, apellidos: b.apellidos, rut: b.rut, fechaNacimiento: b.fechaNacimiento, comuna: b.comuna, apoderado: b.apoderado,
+          documental: DOC[b.situacionDocumental] ?? b.situacionDocumental, patologias: b.enfermedades.map(x => x.nombre), centros: b.centrosSalud, credencial: b.credencial, electro: b.electrodependiente, descripcion: desc, post: p }, cp.salud, cp.sensibles)];
+      }) }];
+    }
   }
 }
 

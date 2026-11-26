@@ -6,7 +6,7 @@
   "obtenido": "Postulaciones: 2. Errores (9): Revisa los campos marcados en rojo. | Ingrese los nombres del NNA. | Ingrese los apellidos del NNA. | Ingrese el RUT del NNA. | Seleccione la comuna. | Ingrese el nombre del apoderado. | Ingrese un teléfono de contacto. | Indique al menos una patología o «Por completar». | Describa el motivo de la postulación.. Formulario o botón interno de postulación: no existe.",
   "aprobada": true,
   "estado": "Aprobada",
-  "fechaUTC": "2026-11-26T14:49:28.882Z",
+  "fechaUTC": "2026-11-26T14:54:44.163Z",
   "almacenamiento": {
     "version": 4,
     "parametros": {
@@ -138,14 +138,14 @@
         ],
         "bajas": [],
         "ayudas": [],
-        "fechaRegistro": "2026-10-12T14:49:28.457Z",
+        "fechaRegistro": "2026-10-12T14:54:43.705Z",
         "observaciones": [],
         "casos": [
           {
             "id": "K-01",
             "estado": "EN_ATENCION",
             "fechaInicio": "2026-10-17",
-            "ultimaActualizacion": "2026-11-07T14:49:28.457Z",
+            "ultimaActualizacion": "2026-11-07T14:54:43.705Z",
             "derivaciones": [
               {
                 "id": "D-01",
@@ -187,25 +187,25 @@
         ],
         "historial": [
           {
-            "fecha": "2026-10-12T14:49:28.457Z",
+            "fecha": "2026-10-12T14:54:43.705Z",
             "tipo": "Ingreso al programa",
             "detalle": "Postulación aceptada",
             "autor": "Trabajo social (demo)"
           },
           {
-            "fecha": "2026-10-17T14:49:28.457Z",
+            "fecha": "2026-10-17T14:54:43.705Z",
             "tipo": "Derivación",
             "detalle": "Primera derivación · Dental · llamado semanal",
             "autor": "Trabajo social (demo)"
           },
           {
-            "fecha": "2026-10-31T14:49:28.457Z",
+            "fecha": "2026-10-31T14:54:43.705Z",
             "tipo": "Atención",
             "detalle": "Sesión 1 · Realizada · Atención dental",
             "autor": "TENS (demo)"
           },
           {
-            "fecha": "2026-11-07T14:49:28.457Z",
+            "fecha": "2026-11-07T14:54:43.705Z",
             "tipo": "Atención",
             "detalle": "Sesión 2 · Realizada · Atención dental",
             "autor": "TENS (demo)"
@@ -241,14 +241,14 @@
         "hospitalizaciones": [],
         "bajas": [],
         "ayudas": [],
-        "fechaRegistro": "2026-09-17T14:49:28.457Z",
+        "fechaRegistro": "2026-09-17T14:54:43.705Z",
         "observaciones": [],
         "casos": [
           {
             "id": "K-02",
             "estado": "EN_ATENCION",
             "fechaInicio": "2026-09-27",
-            "ultimaActualizacion": "2026-09-27T14:49:28.457Z",
+            "ultimaActualizacion": "2026-09-27T14:54:43.705Z",
             "derivaciones": [
               {
                 "id": "D-02",
@@ -266,13 +266,13 @@
         ],
         "historial": [
           {
-            "fecha": "2026-09-17T14:49:28.457Z",
+            "fecha": "2026-09-17T14:54:43.705Z",
             "tipo": "Ingreso al programa",
             "detalle": "Ingreso registrado antes del sistema",
             "autor": "Trabajo social (demo)"
           },
           {
-            "fecha": "2026-09-27T14:49:28.457Z",
+            "fecha": "2026-09-27T14:54:43.705Z",
             "tipo": "Derivación",
             "detalle": "Primera derivación · Kinesiología · solicitud del apoderado",
             "autor": "Trabajo social (demo)"
@@ -307,7 +307,7 @@
           "porcentaje": 30
         },
         "hospitalizaciones": [],
-        "fechaRegistro": "2026-10-19T14:49:28.457Z",
+        "fechaRegistro": "2026-10-19T14:54:43.705Z",
         "bajas": [],
         "ayudas": [],
         "observaciones": [],
@@ -316,7 +316,7 @@
             "id": "K-B-03",
             "estado": "EN_ATENCION",
             "fechaInicio": "2026-10-25",
-            "ultimaActualizacion": "2026-11-22T14:49:28.457Z",
+            "ultimaActualizacion": "2026-11-22T14:54:43.705Z",
             "derivaciones": [
               {
                 "id": "D-B-03",
@@ -367,31 +367,31 @@
         ],
         "historial": [
           {
-            "fecha": "2026-10-19T14:49:28.457Z",
+            "fecha": "2026-10-19T14:54:43.705Z",
             "tipo": "Ingreso al programa",
             "detalle": "Postulación aceptada",
             "autor": "Trabajo social (demo)"
           },
           {
-            "fecha": "2026-10-25T14:49:28.457Z",
+            "fecha": "2026-10-25T14:54:43.705Z",
             "tipo": "Derivación",
             "detalle": "Primera derivación · Dental · llamado semanal",
             "autor": "Trabajo social (demo)"
           },
           {
-            "fecha": "2026-11-01T14:49:28.457Z",
+            "fecha": "2026-11-01T14:54:43.705Z",
             "tipo": "Atención",
             "detalle": "Sesión 1 · Realizada · Atención dental",
             "autor": "TENS (demo)"
           },
           {
-            "fecha": "2026-11-12T14:49:28.457Z",
+            "fecha": "2026-11-12T14:54:43.705Z",
             "tipo": "Atención",
             "detalle": "Sesión 2 · Realizada · Atención dental",
             "autor": "TENS (demo)"
           },
           {
-            "fecha": "2026-11-22T14:49:28.457Z",
+            "fecha": "2026-11-22T14:54:43.705Z",
             "tipo": "Atención",
             "detalle": "Sesión 3 · Realizada · Atención dental",
             "autor": "TENS (demo)"
@@ -424,13 +424,13 @@
           "tiene": false
         },
         "hospitalizaciones": [],
-        "fechaRegistro": "2026-10-30T14:49:28.457Z",
+        "fechaRegistro": "2026-10-30T14:54:43.705Z",
         "bajas": [],
         "ayudas": [],
         "observaciones": [
           {
             "id": "O-B-04",
-            "fechaHora": "2026-11-20T14:49:28.457Z",
+            "fechaHora": "2026-11-20T14:54:43.705Z",
             "texto": "Apoderado pide horario de tarde (dato ficticio).",
             "autor": "Valentina Muñoz"
           }
@@ -440,7 +440,7 @@
             "id": "K-B-04",
             "estado": "EN_ATENCION",
             "fechaInicio": "2026-11-05",
-            "ultimaActualizacion": "2026-11-20T14:49:28.457Z",
+            "ultimaActualizacion": "2026-11-20T14:54:43.705Z",
             "derivaciones": [
               {
                 "id": "D-B-04",
@@ -480,25 +480,25 @@
         ],
         "historial": [
           {
-            "fecha": "2026-10-30T14:49:28.457Z",
+            "fecha": "2026-10-30T14:54:43.705Z",
             "tipo": "Ingreso al programa",
             "detalle": "Postulación aceptada",
             "autor": "Trabajo social (demo)"
           },
           {
-            "fecha": "2026-11-05T14:49:28.457Z",
+            "fecha": "2026-11-05T14:54:43.705Z",
             "tipo": "Derivación",
             "detalle": "Primera derivación · Kinesiología · llamado semanal",
             "autor": "Trabajo social (demo)"
           },
           {
-            "fecha": "2026-11-13T14:49:28.457Z",
+            "fecha": "2026-11-13T14:54:43.705Z",
             "tipo": "Atención",
             "detalle": "Sesión 1 · Realizada · Kinesiología",
             "autor": "TENS (demo)"
           },
           {
-            "fecha": "2026-11-20T14:49:28.457Z",
+            "fecha": "2026-11-20T14:54:43.705Z",
             "tipo": "Atención",
             "detalle": "Sesión 2 · Realizada · Kinesiología",
             "autor": "TENS (demo)"
@@ -531,7 +531,7 @@
           "tiene": false
         },
         "hospitalizaciones": [],
-        "fechaRegistro": "2026-11-17T14:49:28.457Z",
+        "fechaRegistro": "2026-11-17T14:54:43.705Z",
         "bajas": [],
         "ayudas": [],
         "observaciones": [],
@@ -540,7 +540,7 @@
             "id": "K-B-05",
             "estado": "EN_ATENCION",
             "fechaInicio": "2026-11-23",
-            "ultimaActualizacion": "2026-11-23T14:49:28.457Z",
+            "ultimaActualizacion": "2026-11-23T14:54:43.705Z",
             "derivaciones": [
               {
                 "id": "D-B-05",
@@ -558,13 +558,13 @@
         ],
         "historial": [
           {
-            "fecha": "2026-11-17T14:49:28.457Z",
+            "fecha": "2026-11-17T14:54:43.705Z",
             "tipo": "Ingreso al programa",
             "detalle": "Postulación aceptada",
             "autor": "Trabajo social (demo)"
           },
           {
-            "fecha": "2026-11-23T14:49:28.457Z",
+            "fecha": "2026-11-23T14:54:43.705Z",
             "tipo": "Derivación",
             "detalle": "Primera derivación · Dental · llamado semanal",
             "autor": "Trabajo social (demo)"
@@ -597,7 +597,7 @@
           "tiene": false
         },
         "hospitalizaciones": [],
-        "fechaRegistro": "2026-07-29T15:49:28.458Z",
+        "fechaRegistro": "2026-07-29T15:54:43.705Z",
         "bajas": [],
         "ayudas": [],
         "observaciones": [],
@@ -606,7 +606,7 @@
             "id": "K-B-06",
             "estado": "ATENDIDO",
             "fechaInicio": "2026-08-08",
-            "ultimaActualizacion": "2026-11-14T14:49:28.457Z",
+            "ultimaActualizacion": "2026-11-14T14:54:43.705Z",
             "fechaCierreCiclo": "2026-11-14",
             "derivaciones": [
               {
@@ -667,43 +667,43 @@
         ],
         "historial": [
           {
-            "fecha": "2026-07-29T15:49:28.457Z",
+            "fecha": "2026-07-29T15:54:43.705Z",
             "tipo": "Ingreso al programa",
             "detalle": "Postulación aceptada",
             "autor": "Trabajo social (demo)"
           },
           {
-            "fecha": "2026-08-08T15:49:28.457Z",
+            "fecha": "2026-08-08T15:54:43.705Z",
             "tipo": "Derivación",
             "detalle": "Primera derivación · Kinesiología · llamado semanal",
             "autor": "Trabajo social (demo)"
           },
           {
-            "fecha": "2026-08-23T15:49:28.457Z",
+            "fecha": "2026-08-23T15:54:43.705Z",
             "tipo": "Atención",
             "detalle": "Sesión 1 · Realizada · Kinesiología",
             "autor": "TENS (demo)"
           },
           {
-            "fecha": "2026-09-17T14:49:28.457Z",
+            "fecha": "2026-09-17T14:54:43.705Z",
             "tipo": "Atención",
             "detalle": "Sesión 2 · Realizada · Kinesiología",
             "autor": "TENS (demo)"
           },
           {
-            "fecha": "2026-10-17T14:49:28.457Z",
+            "fecha": "2026-10-17T14:54:43.705Z",
             "tipo": "Atención",
             "detalle": "Sesión 3 · Realizada · Kinesiología",
             "autor": "TENS (demo)"
           },
           {
-            "fecha": "2026-11-14T14:49:28.457Z",
+            "fecha": "2026-11-14T14:54:43.705Z",
             "tipo": "Atención",
             "detalle": "Sesión 4 · Realizada · Kinesiología",
             "autor": "TENS (demo)"
           },
           {
-            "fecha": "2026-11-14T14:49:28.458Z",
+            "fecha": "2026-11-14T14:54:43.705Z",
             "tipo": "Ciclo terminado",
             "detalle": "Ciclo de Kinesiología completado",
             "autor": "TENS (demo)"
@@ -738,14 +738,14 @@
           "porcentaje": 50
         },
         "hospitalizaciones": [],
-        "fechaRegistro": "2026-11-24T14:49:28.458Z",
+        "fechaRegistro": "2026-11-24T14:54:43.705Z",
         "bajas": [],
         "ayudas": [],
         "observaciones": [],
         "casos": [],
         "historial": [
           {
-            "fecha": "2026-11-24T14:49:28.458Z",
+            "fecha": "2026-11-24T14:54:43.705Z",
             "tipo": "Ingreso al programa",
             "detalle": "Postulación aceptada",
             "autor": "Trabajo social (demo)"
@@ -778,7 +778,7 @@
           "tiene": false
         },
         "hospitalizaciones": [],
-        "fechaRegistro": "2026-04-30T15:49:28.458Z",
+        "fechaRegistro": "2026-04-30T15:54:43.705Z",
         "bajas": [
           {
             "id": "BJ-B-08",
@@ -795,7 +795,7 @@
             "id": "K-B-08",
             "estado": "ATENDIDO",
             "fechaInicio": "2026-05-10",
-            "ultimaActualizacion": "2026-10-27T14:49:28.458Z",
+            "ultimaActualizacion": "2026-10-27T14:54:43.705Z",
             "fechaCierreCiclo": "2026-11-11",
             "derivaciones": [
               {
@@ -845,37 +845,37 @@
         ],
         "historial": [
           {
-            "fecha": "2026-04-30T15:49:28.458Z",
+            "fecha": "2026-04-30T15:54:43.705Z",
             "tipo": "Ingreso al programa",
             "detalle": "Postulación aceptada",
             "autor": "Trabajo social (demo)"
           },
           {
-            "fecha": "2026-05-10T15:49:28.458Z",
+            "fecha": "2026-05-10T15:54:43.705Z",
             "tipo": "Derivación",
             "detalle": "Primera derivación · Dental · llamado semanal",
             "autor": "Trabajo social (demo)"
           },
           {
-            "fecha": "2026-05-30T15:49:28.458Z",
+            "fecha": "2026-05-30T15:54:43.705Z",
             "tipo": "Atención",
             "detalle": "Sesión 1 · Realizada · Atención dental",
             "autor": "TENS (demo)"
           },
           {
-            "fecha": "2026-06-29T15:49:28.458Z",
+            "fecha": "2026-06-29T15:54:43.705Z",
             "tipo": "Atención",
             "detalle": "Sesión 2 · Realizada · Atención dental",
             "autor": "TENS (demo)"
           },
           {
-            "fecha": "2026-10-27T14:49:28.458Z",
+            "fecha": "2026-10-27T14:54:43.705Z",
             "tipo": "Atención",
             "detalle": "Sesión 3 · Realizada · Atención dental",
             "autor": "TENS (demo)"
           },
           {
-            "fecha": "2026-11-11T14:49:28.458Z",
+            "fecha": "2026-11-11T14:54:43.705Z",
             "tipo": "Baja",
             "detalle": "Egreso · Cumplió 18 años y completó su tratamiento",
             "autor": "Trabajo social (demo)"
@@ -908,7 +908,7 @@
           "tiene": false
         },
         "hospitalizaciones": [],
-        "fechaRegistro": "2026-11-08T14:49:28.458Z",
+        "fechaRegistro": "2026-11-08T14:54:43.705Z",
         "bajas": [],
         "ayudas": [
           {
@@ -925,7 +925,7 @@
             "id": "K-B-09",
             "estado": "EN_ATENCION",
             "fechaInicio": "2026-11-14",
-            "ultimaActualizacion": "2026-11-21T14:49:28.458Z",
+            "ultimaActualizacion": "2026-11-21T14:54:43.705Z",
             "derivaciones": [
               {
                 "id": "D-B-09",
@@ -955,25 +955,25 @@
         ],
         "historial": [
           {
-            "fecha": "2026-11-08T14:49:28.458Z",
+            "fecha": "2026-11-08T14:54:43.705Z",
             "tipo": "Ingreso al programa",
             "detalle": "Postulación aceptada",
             "autor": "Trabajo social (demo)"
           },
           {
-            "fecha": "2026-11-14T14:49:28.458Z",
+            "fecha": "2026-11-14T14:54:43.705Z",
             "tipo": "Derivación",
             "detalle": "Primera derivación · Kinesiología · llamado semanal",
             "autor": "Trabajo social (demo)"
           },
           {
-            "fecha": "2026-11-21T14:49:28.458Z",
+            "fecha": "2026-11-21T14:54:43.705Z",
             "tipo": "Atención",
             "detalle": "Sesión 1 · Realizada · Kinesiología",
             "autor": "TENS (demo)"
           },
           {
-            "fecha": "2026-11-21T14:49:28.458Z",
+            "fecha": "2026-11-21T14:54:43.705Z",
             "tipo": "Ayuda entregada",
             "detalle": "Traslado · guía GT-2041",
             "autor": "Trabajo social (demo)"
@@ -1006,7 +1006,7 @@
           "tiene": false
         },
         "hospitalizaciones": [],
-        "fechaRegistro": "2026-06-19T15:49:28.458Z",
+        "fechaRegistro": "2026-06-19T15:54:43.705Z",
         "bajas": [
           {
             "id": "BJ-B-10",
@@ -1023,7 +1023,7 @@
             "id": "K-B-10",
             "estado": "ATENDIDO",
             "fechaInicio": "2026-06-29",
-            "ultimaActualizacion": "2026-07-29T15:49:28.458Z",
+            "ultimaActualizacion": "2026-07-29T15:54:43.705Z",
             "fechaCierreCiclo": "2026-10-27",
             "derivaciones": [
               {
@@ -1063,31 +1063,31 @@
         ],
         "historial": [
           {
-            "fecha": "2026-06-19T15:49:28.458Z",
+            "fecha": "2026-06-19T15:54:43.705Z",
             "tipo": "Ingreso al programa",
             "detalle": "Postulación aceptada",
             "autor": "Trabajo social (demo)"
           },
           {
-            "fecha": "2026-06-29T15:49:28.458Z",
+            "fecha": "2026-06-29T15:54:43.705Z",
             "tipo": "Derivación",
             "detalle": "Primera derivación · Dental · llamado semanal",
             "autor": "Trabajo social (demo)"
           },
           {
-            "fecha": "2026-07-09T15:49:28.458Z",
+            "fecha": "2026-07-09T15:54:43.705Z",
             "tipo": "Atención",
             "detalle": "Sesión 1 · Realizada · Atención dental",
             "autor": "TENS (demo)"
           },
           {
-            "fecha": "2026-07-29T15:49:28.458Z",
+            "fecha": "2026-07-29T15:54:43.705Z",
             "tipo": "Atención",
             "detalle": "No realizada · Atención dental · Falta de adherencia al programa",
             "autor": "TENS (demo)"
           },
           {
-            "fecha": "2026-10-27T14:49:28.458Z",
+            "fecha": "2026-10-27T14:54:43.705Z",
             "tipo": "Baja",
             "detalle": "Desvinculación · Familia se trasladó a otra región",
             "autor": "Trabajo social (demo)"
@@ -1122,7 +1122,7 @@
           "porcentaje": 70
         },
         "hospitalizaciones": [],
-        "fechaRegistro": "2026-11-02T14:49:28.458Z",
+        "fechaRegistro": "2026-11-02T14:54:43.705Z",
         "bajas": [],
         "ayudas": [],
         "observaciones": [],
@@ -1131,7 +1131,7 @@
             "id": "K-B-11",
             "estado": "EN_ATENCION",
             "fechaInicio": "2026-11-08",
-            "ultimaActualizacion": "2026-11-24T14:49:28.458Z",
+            "ultimaActualizacion": "2026-11-24T14:54:43.705Z",
             "derivaciones": [
               {
                 "id": "D-B-11",
@@ -1171,25 +1171,25 @@
         ],
         "historial": [
           {
-            "fecha": "2026-11-02T14:49:28.458Z",
+            "fecha": "2026-11-02T14:54:43.705Z",
             "tipo": "Ingreso al programa",
             "detalle": "Postulación aceptada",
             "autor": "Trabajo social (demo)"
           },
           {
-            "fecha": "2026-11-08T14:49:28.458Z",
+            "fecha": "2026-11-08T14:54:43.705Z",
             "tipo": "Derivación",
             "detalle": "Primera derivación · Dental · llamado semanal",
             "autor": "Trabajo social (demo)"
           },
           {
-            "fecha": "2026-11-18T14:49:28.458Z",
+            "fecha": "2026-11-18T14:54:43.705Z",
             "tipo": "Atención",
             "detalle": "No realizada · Atención dental · Contraindicación médica",
             "autor": "TENS (demo)"
           },
           {
-            "fecha": "2026-11-24T14:49:28.458Z",
+            "fecha": "2026-11-24T14:54:43.705Z",
             "tipo": "Atención",
             "detalle": "Sesión 1 · Realizada · Atención dental",
             "autor": "TENS (demo)"
@@ -1222,14 +1222,14 @@
           "tiene": false
         },
         "hospitalizaciones": [],
-        "fechaRegistro": "2026-11-20T14:49:28.458Z",
+        "fechaRegistro": "2026-11-20T14:54:43.705Z",
         "bajas": [],
         "ayudas": [],
         "observaciones": [],
         "casos": [],
         "historial": [
           {
-            "fecha": "2026-11-20T14:49:28.458Z",
+            "fecha": "2026-11-20T14:54:43.705Z",
             "tipo": "Ingreso al programa",
             "detalle": "Postulación aceptada",
             "autor": "Trabajo social (demo)"
@@ -1308,22 +1308,22 @@
     ],
     "alertas": [
       {
-        "id": "AL-g85sctwp6",
+        "id": "AL-1lpbliny1",
         "tipo": "CASO_SIN_ACTUALIZACION",
         "idBeneficiario": "B-01",
         "idCaso": "K-01",
-        "fechaGeneracion": "2026-11-26T14:49:28.458Z",
+        "fechaGeneracion": "2026-11-26T14:54:43.705Z",
         "diasSinActualizacion": 19,
         "umbralDias": 14,
         "estado": "ACTIVA"
       },
       {
-        "id": "AL-pd7ozgwp6",
+        "id": "AL-6sxm55ny1",
         "tipo": "DERIVACION_SIN_ATENCION",
         "idBeneficiario": "B-02",
         "idCaso": "K-02",
         "idDerivacion": "D-02",
-        "fechaGeneracion": "2026-11-26T14:49:28.458Z",
+        "fechaGeneracion": "2026-11-26T14:54:43.705Z",
         "diasSinActualizacion": 61,
         "umbralDias": 7,
         "estado": "ACTIVA"
@@ -1331,40 +1331,40 @@
     ],
     "notificaciones": [
       {
-        "id": "N-q468fcwp6",
+        "id": "N-orvlspny1",
         "tipo": "ALERTA_CASO",
         "canal": "PLATAFORMA",
         "rolDestino": "TRABAJO_SOCIAL",
         "mensaje": "Caso de Camila Rojas Soto lleva 19 días sin actualización (umbral 14).",
         "estado": "PENDIENTE",
-        "fecha": "2026-11-26T14:49:28.458Z"
+        "fecha": "2026-11-26T14:54:43.705Z"
       },
       {
-        "id": "N-meiss7wp6",
+        "id": "N-3278f4ny1",
         "tipo": "ALERTA_CASO",
         "canal": "PLATAFORMA",
         "rolDestino": "TENS",
         "mensaje": "Caso de Camila Rojas Soto lleva 19 días sin actualización (umbral 14).",
         "estado": "PENDIENTE",
-        "fecha": "2026-11-26T14:49:28.458Z"
+        "fecha": "2026-11-26T14:54:43.705Z"
       },
       {
-        "id": "N-g05quywp6",
+        "id": "N-malaptny1",
         "tipo": "ALERTA_CASO",
         "canal": "PLATAFORMA",
         "rolDestino": "TRABAJO_SOCIAL",
         "mensaje": "Derivación de Tomás Díaz Pérez a Kinesiología lleva 61 días sin atención (umbral 7).",
         "estado": "PENDIENTE",
-        "fecha": "2026-11-26T14:49:28.458Z"
+        "fecha": "2026-11-26T14:54:43.705Z"
       },
       {
-        "id": "N-a0m5f9wp6",
+        "id": "N-6y2duqny1",
         "tipo": "ALERTA_CASO",
         "canal": "PLATAFORMA",
         "rolDestino": "TENS",
         "mensaje": "Derivación de Tomás Díaz Pérez a Kinesiología lleva 61 días sin atención (umbral 7).",
         "estado": "PENDIENTE",
-        "fecha": "2026-11-26T14:49:28.458Z"
+        "fecha": "2026-11-26T14:54:43.705Z"
       }
     ],
     "reportes": []
