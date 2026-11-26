@@ -11,27 +11,27 @@ const enPeriodo = (iso: string, desde: string, hasta: string) => iso.slice(0, 10
 const nombre = (b: Beneficiario) => `${b.nombres} ${b.apellidos}`;
 
 export function consolidar(e: EstadoSistema, tipo: TipoSalida, desde: string, hasta: string, incluirApoderado: boolean): Tabla[] {
-  const B = e.beneficiarios;
+  const B = e.beneficiarios, ids = idsAnalisis(e), id = (b: Beneficiario) => ids.get(b.id)!;
   const ap = (b: Beneficiario) => incluirApoderado ? [b.apoderado.nombre, b.apoderado.rut ?? '', b.apoderado.telefono] : [];
   const apCols = incluirApoderado ? ['Apoderado', 'RUT apoderado', 'Contacto apoderado'] : [];
-  const der = { titulo: 'Derivaciones', columnas: ['Fecha', 'Beneficiario', 'RUT', 'Comuna', 'Tipo', 'Área'], filas: B.flatMap(b => b.casos.flatMap(c => c.derivaciones.filter(d => enPeriodo(d.fecha, desde, hasta)).map(d => [fmtFecha(d.fecha), nombre(b), b.rut, b.comuna, d.tipoIngreso === 'INGRESO' ? 'Ingreso' : 'Reingreso', d.area]))) };
-  const ate = { titulo: 'Atenciones', columnas: ['Fecha', 'Beneficiario', 'Prestación', 'Profesional', 'Sesión', 'Resultado', 'Motivo'], filas: B.flatMap(b => b.casos.flatMap(c => c.atenciones.filter(a => enPeriodo(a.fecha, desde, hasta)).map(a => [fmtFecha(a.fecha), nombre(b), a.prestacion, a.profesional, a.numeroSesion ?? '', a.resultado === 'REALIZADA' ? 'Realizada' : 'No realizada', a.motivo ?? '']))) };
-  const baj = { titulo: 'Bajas', columnas: ['Fecha', 'Beneficiario', 'RUT', 'Comuna', 'Causal', 'Observación'], filas: B.flatMap(b => b.bajas.filter(x => enPeriodo(x.fecha, desde, hasta)).map(x => [fmtFecha(x.fecha), nombre(b), b.rut, b.comuna, CAUSALES.find(c => c.codigo === x.causal)?.nombre ?? x.causal, x.observacion ?? ''])) };
-  const ayu = { titulo: 'Ayudas entregadas', columnas: ['Fecha', 'Beneficiario', 'Tipo', 'N.º guía'], filas: B.flatMap(b => b.ayudas.filter(x => enPeriodo(x.fecha, desde, hasta)).map(x => [fmtFecha(x.fecha), nombre(b), x.tipo, x.numeroGuia])) };
-  const urg = { titulo: 'Urgencias', columnas: ['Fecha', 'Beneficiario', 'Motivo'], filas: B.flatMap(b => b.casos.flatMap(c => c.urgencias.filter(u => enPeriodo(u.fecha, desde, hasta)).map(u => [fmtFecha(u.fecha), nombre(b), u.motivo ?? '']))) };
-  const pos = { titulo: 'Postulaciones', columnas: ['Fecha', 'NNA', 'RUT', 'Comuna', 'Estado', 'Tutor'], filas: e.postulaciones.filter(p => enPeriodo(p.fecha, desde, hasta)).map(p => [fmtFecha(p.fecha), `${p.nna.nombres} ${p.nna.apellidos}`, p.nna.rut, p.nna.comuna, p.estado, p.tutor]) };
+  const der = { titulo: 'Derivaciones', columnas: ['ID análisis', 'Beneficiario', 'Fecha', 'RUT', 'Comuna', 'Tipo', 'Área'], filas: B.flatMap(b => b.casos.flatMap(c => c.derivaciones.filter(d => enPeriodo(d.fecha, desde, hasta)).map(d => [id(b), nombre(b), fmtFecha(d.fecha), b.rut, b.comuna, d.tipoIngreso === 'INGRESO' ? 'Ingreso' : 'Reingreso', d.area]))) };
+  const ate = { titulo: 'Atenciones', columnas: ['ID análisis', 'Beneficiario', 'Fecha', 'Prestación', 'Profesional', 'Sesión', 'Resultado', 'Motivo'], filas: B.flatMap(b => b.casos.flatMap(c => c.atenciones.filter(a => enPeriodo(a.fecha, desde, hasta)).map(a => [id(b), nombre(b), fmtFecha(a.fecha), a.prestacion, a.profesional, a.numeroSesion ?? '', a.resultado === 'REALIZADA' ? 'Realizada' : 'No realizada', a.motivo ?? '']))) };
+  const baj = { titulo: 'Bajas', columnas: ['ID análisis', 'Beneficiario', 'Fecha', 'RUT', 'Comuna', 'Causal', 'Observación'], filas: B.flatMap(b => b.bajas.filter(x => enPeriodo(x.fecha, desde, hasta)).map(x => [id(b), nombre(b), fmtFecha(x.fecha), b.rut, b.comuna, CAUSALES.find(c => c.codigo === x.causal)?.nombre ?? x.causal, x.observacion ?? ''])) };
+  const ayu = { titulo: 'Ayudas entregadas', columnas: ['ID análisis', 'Beneficiario', 'Fecha', 'Tipo', 'N.º guía'], filas: B.flatMap(b => b.ayudas.filter(x => enPeriodo(x.fecha, desde, hasta)).map(x => [id(b), nombre(b), fmtFecha(x.fecha), x.tipo, x.numeroGuia])) };
+  const urg = { titulo: 'Urgencias', columnas: ['ID análisis', 'Beneficiario', 'Fecha', 'Motivo'], filas: B.flatMap(b => b.casos.flatMap(c => c.urgencias.filter(u => enPeriodo(u.fecha, desde, hasta)).map(u => [id(b), nombre(b), fmtFecha(u.fecha), u.motivo ?? '']))) };
+  const pos = { titulo: 'Postulaciones', columnas: ['ID análisis', 'NNA', 'Fecha', 'RUT', 'Comuna', 'Estado', 'Tutor'], filas: e.postulaciones.filter(p => enPeriodo(p.fecha, desde, hasta)).map(p => [p.idBeneficiario ? ids.get(p.idBeneficiario) ?? '—' : '—', `${p.nna.nombres} ${p.nna.apellidos}`, fmtFecha(p.fecha), p.nna.rut, p.nna.comuna, p.estado, p.tutor]) };
   switch (tipo) {
     case 'INFORME_MENSUAL': return [pos, der, ate, baj, ayu];
     case 'REPORTE_BAJAS': return [baj];
     case 'AYUDAS_URGENCIAS': return [ayu, urg];
-    case 'EXPORT_EXCEL_GENERAL': { const ids = idsAnalisis(e); return [{ titulo: 'Beneficiarios', columnas: ['Beneficiario', 'RUT', 'Comuna', 'Estado', 'ID análisis', ...apCols], filas: B.map(b => [nombre(b), b.rut, b.comuna, b.bajas.length ? 'Baja' : 'Activo', ids.get(b.id)!, ...ap(b)]) }]; }
+    case 'EXPORT_EXCEL_GENERAL': return [{ titulo: 'Beneficiarios', columnas: ['ID análisis', 'Beneficiario', 'RUT', 'Comuna', 'Estado', ...apCols], filas: [...B].sort((a, b) => id(a).localeCompare(id(b))).map(b => [id(b), nombre(b), b.rut, b.comuna, b.bajas.length ? 'Baja' : 'Activo', ...ap(b)]) }];
   }
 }
 
 // ---------- Versión anonimizada (para compartir con terceros: análisis, universidades, financistas) ----------
 // Reemplaza nombre y RUT por un ID de análisis, generaliza fechas a mes y edad a tramo, y quita texto libre,
 // nombres de profesionales, números de guía, datos del apoderado y antecedentes de salud.
-// La correspondencia ID ↔ beneficiario solo aparece en el Excel completo (perfiles autorizados).
+// La correspondencia ID ↔ beneficiario aparece en la primera columna de cada Excel completo (perfiles autorizados).
 
 /** ID de análisis estable: orden de registro del beneficiario (no deriva del RUT ni del nombre). */
 export function idsAnalisis(e: EstadoSistema): Map<string, string> {

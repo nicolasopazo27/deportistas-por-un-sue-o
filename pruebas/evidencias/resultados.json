@@ -5,15 +5,15 @@
     "esperado": "Se rechaza sin crear postulación indicando los campos obligatorios; la gestión interna no ofrece registrar postulaciones.",
     "obtenido": "Postulaciones: 2. Errores (9): Revisa los campos marcados en rojo. | Ingrese los nombres del NNA. | Ingrese los apellidos del NNA. | Ingrese el RUT del NNA. | Seleccione la comuna. | Ingrese el nombre del apoderado. | Ingrese un teléfono de contacto. | Indique al menos una patología o «Por completar». | Describa el motivo de la postulación.. Formulario o botón interno de postulación: no existe.",
     "estado": "Aprobada",
-    "fechaUTC": "2026-11-26T14:44:56.178Z"
+    "fechaUTC": "2026-11-26T14:49:28.882Z"
   },
   {
     "id": "CP-P02",
     "requisito": "M8, RF-01, RF-04",
     "esperado": "La postulación queda aceptada, se crea la ficha (ingreso al programa) y se recupera tras remontar.",
-    "obtenido": "Postulación P-67777c336 enviada en línea por Inés Araya Núñez (origen WEB); estado final ACEPTADA; beneficiarios: 13; primer evento: «Ingreso al programa»; ficha recuperada tras remontar. Persistencia local (no SQL).",
+    "obtenido": "Postulación P-h4gmjwxih enviada en línea por Inés Araya Núñez (origen WEB); estado final ACEPTADA; beneficiarios: 13; primer evento: «Ingreso al programa»; ficha recuperada tras remontar. Persistencia local (no SQL).",
     "estado": "Aprobada",
-    "fechaUTC": "2026-11-26T14:44:57.140Z"
+    "fechaUTC": "2026-11-26T14:49:29.861Z"
   },
   {
     "id": "CP-P03",
@@ -21,7 +21,7 @@
     "esperado": "Se muestra el caso activo y cancelar no crea caso ni derivación.",
     "obtenido": "Advertencia con el caso de Camila Rojas Soto. Beneficiarios: 12; casos: 1; derivaciones del caso: 1.",
     "estado": "Aprobada",
-    "fechaUTC": "2026-11-26T14:44:57.433Z"
+    "fechaUTC": "2026-11-26T14:49:30.151Z"
   },
   {
     "id": "CP-P04",
@@ -29,7 +29,7 @@
     "esperado": "Santiago devuelve solo a Camila; Puente Alto queda sin resultados.",
     "obtenido": "Santiago: 1 fila(s). Puente Alto: sin resultados. Fichas sin modificar.",
     "estado": "Aprobada",
-    "fechaUTC": "2026-11-26T14:44:57.610Z"
+    "fechaUTC": "2026-11-26T14:49:30.360Z"
   },
   {
     "id": "CP-P05",
@@ -37,7 +37,7 @@
     "esperado": "Solo aparece Tomás Díaz Pérez.",
     "obtenido": "1 fila(s): Tomás Díaz Pérez.",
     "estado": "Aprobada",
-    "fechaUTC": "2026-11-26T14:44:57.764Z"
+    "fechaUTC": "2026-11-26T14:49:30.523Z"
   },
   {
     "id": "CP-P06",
@@ -45,7 +45,7 @@
     "esperado": "Se guarda la atención con su observación, suma una sesión, queda en el historial y se avisa al área social.",
     "obtenido": "Atenciones 2 → 3; sesión 3; observación «Buena tolerancia»; historial: «Sesión 3 · Realizada · Atención dental · Obs.: Buena tolerancia»; aviso al área social: sí.",
     "estado": "Aprobada",
-    "fechaUTC": "2026-11-26T14:44:58.052Z"
+    "fechaUTC": "2026-11-26T14:49:30.826Z"
   },
   {
     "id": "CP-P07",
@@ -53,7 +53,7 @@
     "esperado": "Se rechaza el guardado y se exige el motivo.",
     "obtenido": "Mensaje de motivo obligatorio: visible; atenciones sin cambios (2).",
     "estado": "Aprobada",
-    "fechaUTC": "2026-11-26T14:44:58.257Z"
+    "fechaUTC": "2026-11-26T14:49:31.039Z"
   },
   {
     "id": "CP-P08",
@@ -61,7 +61,7 @@
     "esperado": "Se genera alerta de derivación sin atención (Tomás) y de caso sin actualización (Camila); solo la elegida pasa a Revisada.",
     "obtenido": "Alertas al abrir: 2. Tomás: DERIVACION_SIN_ATENCION → REVISADA; Camila: CASO_SIN_ACTUALIZACION → ACTIVA; historial: «Revisión de alerta».",
     "estado": "Aprobada",
-    "fechaUTC": "2026-11-26T14:44:58.399Z"
+    "fechaUTC": "2026-11-26T14:49:31.182Z"
   },
   {
     "id": "CP-P09",
@@ -69,7 +69,7 @@
     "esperado": "La baja queda con causal; el estado muestra Baja y el historial previo se conserva.",
     "obtenido": "Bajas: 1 (EGRESO); historial 4 → 5; listado muestra estado Baja.",
     "estado": "Aprobada",
-    "fechaUTC": "2026-11-26T14:44:58.605Z"
+    "fechaUTC": "2026-11-26T14:49:31.390Z"
   },
   {
     "id": "CP-P10",
@@ -77,7 +77,7 @@
     "esperado": "Se pide la guía y no se crea una entrega incompleta.",
     "obtenido": "Mensaje de guía: visible; ayudas registradas: 0.",
     "estado": "Aprobada",
-    "fechaUTC": "2026-11-26T14:44:58.757Z"
+    "fechaUTC": "2026-11-26T14:49:31.552Z"
   },
   {
     "id": "CP-P11",
@@ -85,7 +85,7 @@
     "esperado": "Guardar atención deshabilitado; datos sensibles y antecedentes de salud ocultos.",
     "obtenido": "Guardar atención deshabilitado: true; datos restringidos en resumen: true; antecedentes restringidos: true. Control en el navegador; la autorización en servidor corresponde a la etapa con backend.",
     "estado": "Aprobada",
-    "fechaUTC": "2026-11-26T14:44:58.952Z"
+    "fechaUTC": "2026-11-26T14:49:31.756Z"
   },
   {
     "id": "CP-P12",
@@ -93,7 +93,7 @@
     "esperado": "TENS no puede registrar entregas (reservado al equipo social) pero sí marcar urgencia.",
     "obtenido": "Guardar entrega deshabilitado: true; ayudas: 0; urgencias: 1.",
     "estado": "Aprobada",
-    "fechaUTC": "2026-11-26T14:44:59.107Z"
+    "fechaUTC": "2026-11-26T14:49:31.910Z"
   },
   {
     "id": "CP-P13",
@@ -101,7 +101,7 @@
     "esperado": "El formulario rechaza ambos datos y no guarda.",
     "obtenido": "Error RUT: true; error teléfono: true; postulaciones: 2.",
     "estado": "Aprobada",
-    "fechaUTC": "2026-11-26T14:44:59.665Z"
+    "fechaUTC": "2026-11-26T14:49:32.534Z"
   },
   {
     "id": "CP-P14",
@@ -109,7 +109,7 @@
     "esperado": "Se redirige al inicio de sesión sin mostrar datos.",
     "obtenido": "Ruta final: #/ingreso; datos de la ficha visibles: false. Autenticación simulada en el navegador.",
     "estado": "Aprobada",
-    "fechaUTC": "2026-11-26T14:44:59.677Z"
+    "fechaUTC": "2026-11-26T14:49:32.552Z"
   },
   {
     "id": "CP-P15",
@@ -117,7 +117,7 @@
     "esperado": "Solo T+1 genera alerta; la segunda revisión no duplica; al actualizar el caso la alerta se resuelve.",
     "obtenido": "Primera revisión: 1 alerta (caso KT-2); segunda: 0; estado tras actualizar: RESUELTA.",
     "estado": "Aprobada",
-    "fechaUTC": "2026-11-26T14:44:59.681Z"
+    "fechaUTC": "2026-11-26T14:49:32.555Z"
   },
   {
     "id": "CP-P16",
@@ -125,7 +125,7 @@
     "esperado": "Con el supuesto DP-02, la derivación se asocia al caso activo sin crear otro caso ni otra ficha.",
     "obtenido": "Beneficiarios: 12; casos: 1; derivaciones del caso: 2; advertencia_ignorada: true. Regla pendiente de validación (DP-02).",
     "estado": "Aprobada",
-    "fechaUTC": "2026-11-26T14:44:59.863Z"
+    "fechaUTC": "2026-11-26T14:49:32.758Z"
   },
   {
     "id": "CP-P17",
@@ -133,7 +133,7 @@
     "esperado": "Filas del archivo = registros de origen y caracteres preservados.",
     "obtenido": "Registros de origen: 35; filas verificadas: 35; «Sofía Ñúñez Peña» y «Peñalolén» preservados: true.",
     "estado": "Aprobada",
-    "fechaUTC": "2026-11-26T14:44:59.961Z"
+    "fechaUTC": "2026-11-26T14:49:32.848Z"
   },
   {
     "id": "CP-P18",
@@ -141,7 +141,7 @@
     "esperado": "Se pide corregir el período y no se genera descarga.",
     "obtenido": "Mensaje de período inválido: true; descargas registradas: 0.",
     "estado": "Aprobada",
-    "fechaUTC": "2026-11-26T14:45:00.203Z"
+    "fechaUTC": "2026-11-26T14:49:33.098Z"
   },
   {
     "id": "CP-P19",
@@ -149,7 +149,7 @@
     "esperado": "Se deniega la salida protegida.",
     "obtenido": "Descargar deshabilitado: true; exportar ficha oculto: true; descargas: 0.",
     "estado": "Aprobada",
-    "fechaUTC": "2026-11-26T14:45:00.445Z"
+    "fechaUTC": "2026-11-26T14:49:33.292Z"
   },
   {
     "id": "CP-P20",
@@ -157,7 +157,7 @@
     "esperado": "La observación queda en B-01 con autoría y no se asocia a B-02.",
     "obtenido": "Texto: «Seguimiento de prueba»; autor: Javiera Lagos; observaciones de Tomás: 0.",
     "estado": "Aprobada",
-    "fechaUTC": "2026-11-26T14:45:00.847Z"
+    "fechaUTC": "2026-11-26T14:49:33.595Z"
   },
   {
     "id": "CP-P21",
@@ -165,7 +165,7 @@
     "esperado": "El ciclo queda terminado, el estado pasa a Atendido y se registra en el historial.",
     "obtenido": "Fecha de cierre: 2026-11-26; estado: ATENDIDO; historial: «Ciclo terminado».",
     "estado": "Aprobada",
-    "fechaUTC": "2026-11-26T14:45:01.078Z"
+    "fechaUTC": "2026-11-26T14:49:33.808Z"
   },
   {
     "id": "CP-P22",
@@ -173,7 +173,7 @@
     "esperado": "Todas tienen control Volver y este regresa a la pantalla anterior.",
     "obtenido": "Vistas sin Volver: ninguna; tras Volver la ruta es #/derivaciones.",
     "estado": "Aprobada",
-    "fechaUTC": "2026-11-26T14:45:01.781Z"
+    "fechaUTC": "2026-11-26T14:49:34.406Z"
   },
   {
     "id": "CP-P23",
@@ -181,7 +181,7 @@
     "esperado": "No se crea una segunda alerta para el mismo caso mientras la anterior no se resuelva.",
     "obtenido": "Alertas totales: 2; nuevas en la segunda revisión: 0.",
     "estado": "Aprobada",
-    "fechaUTC": "2026-11-26T14:45:01.787Z"
+    "fechaUTC": "2026-11-26T14:49:34.410Z"
   },
   {
     "id": "CP-P24",
@@ -189,7 +189,7 @@
     "esperado": "Benjamín queda con un caso nuevo (primera derivación); Sofía no aparece porque no ingresó al programa.",
     "obtenido": "Sofía no ingresada encontrada en el buscador: false; casos de Benjamín: 1; área: KINESIOLOGIA; tipo: INGRESO.",
     "estado": "Aprobada",
-    "fechaUTC": "2026-11-26T14:45:03.167Z"
+    "fechaUTC": "2026-11-26T14:49:35.730Z"
   },
   {
     "id": "CP-P25",
@@ -197,7 +197,7 @@
     "esperado": "El tutor no puede evaluar; el rechazo exige motivo; no se duplican postulaciones en curso ni se postula a quien ya ingresó.",
     "obtenido": "Postulación pública: registrada; tutor acepta: denegado; rechazo sin comentario: rechazado; RUT repetido: rechazado; NNA ya ingresado: rechazado.",
     "estado": "Aprobada",
-    "fechaUTC": "2026-11-26T14:45:03.171Z"
+    "fechaUTC": "2026-11-26T14:49:35.734Z"
   },
   {
     "id": "CP-P26",
@@ -205,7 +205,7 @@
     "esperado": "Se exige el número de credencial; se guardan los antecedentes válidos y se rechaza la hospitalización incoherente.",
     "obtenido": "Credencial sin número: rechazada; antecedentes válidos: true; hospitalización incoherente: rechazada; credencial CD-999 (70%), centros: Hospital Exequiel González Cortés, Teletón; hospitalizaciones: 1.",
     "estado": "Aprobada",
-    "fechaUTC": "2026-11-26T14:45:03.173Z"
+    "fechaUTC": "2026-11-26T14:49:35.736Z"
   },
   {
     "id": "CP-P27",
@@ -213,7 +213,7 @@
     "esperado": "Consulta no puede; el formato no admitido se rechaza; la imagen válida queda en la ficha y en el historial.",
     "obtenido": "Consulta: denegado; PDF: rechazado; PNG: guardado; historial: «Foto identificatoria».",
     "estado": "Aprobada",
-    "fechaUTC": "2026-11-26T14:45:03.174Z"
+    "fechaUTC": "2026-11-26T14:49:35.737Z"
   },
   {
     "id": "CP-P28",
@@ -221,7 +221,7 @@
     "esperado": "El cambio se guarda y aplica de inmediato; la TENS no puede guardar atenciones ni editar permisos; al restablecer vuelve la matriz original.",
     "obtenido": "Permiso inicial: sí; quitado y guardado: sí; Guardar atención deshabilitado para TENS: sí; TENS sin casillas editables: sí; matriz restablecida: sí.",
     "estado": "Aprobada",
-    "fechaUTC": "2026-11-26T14:45:03.707Z"
+    "fechaUTC": "2026-11-26T14:49:36.288Z"
   },
   {
     "id": "CP-P29",
@@ -229,7 +229,7 @@
     "esperado": "El Administrador completa todas las operaciones; solo él edita permisos y sus propios permisos no se pueden quitar.",
     "obtenido": "Operaciones del Administrador: 4/4; edición por Trabajo social: denegada; quitar permiso al Administrador: rechazado; restablecer por Trabajo social: denegado.",
     "estado": "Aprobada",
-    "fechaUTC": "2026-11-26T14:45:03.711Z"
+    "fechaUTC": "2026-11-26T14:49:36.292Z"
   },
   {
     "id": "CP-P30",
@@ -237,7 +237,7 @@
     "esperado": "Cinco años de datos; el ingreso y la baja nuevos suman 1 al año en curso y a su causal; el Inicio muestra los cuatro gráficos con su tabla de datos y el filtro deja 3 años.",
     "obtenido": "Años: 2022, 2023, 2024, 2025, 2026; ingresos 2026: 102 → 103; bajas 2026: 33 → 34; desvinculaciones: 56 → 57; activos al cierre: 432 → 432; cuatro gráficos visibles: sí; filtro «Últimos 3 años»: 3 años en la tabla.",
     "estado": "Aprobada",
-    "fechaUTC": "2026-11-26T14:45:03.839Z"
+    "fechaUTC": "2026-11-26T14:49:36.424Z"
   },
   {
     "id": "CP-P31",
@@ -245,7 +245,7 @@
     "esperado": "Código incorrecto: mensaje claro; correcto: muestra el estado (Recibida); rechazada: muestra la respuesta del equipo sin datos sensibles.",
     "obtenido": "Código incorrecto: mensaje mostrado; P-01: Recibida, en espera de revisión; P-02 rechazada con respuesta: sí, sin datos del apoderado.",
     "estado": "Aprobada",
-    "fechaUTC": "2026-11-26T14:45:03.971Z"
+    "fechaUTC": "2026-11-26T14:49:36.574Z"
   },
   {
     "id": "CP-P32",
@@ -253,7 +253,7 @@
     "esperado": "El enlace abre WhatsApp al +56 9 del apoderado con un mensaje prellenado acorde (atención o postulación); Consulta no ve el botón.",
     "obtenido": "Ficha: https://wa.me/56912345678 · «Hola María. Le escribimos por Camila: queremos coordinar su próxima at…»; postulación: «Hola Inés. Le escribimos por la postulación de Sofía Muñoz A…»; perfil Consulta sin botón.",
     "estado": "Aprobada",
-    "fechaUTC": "2026-11-26T14:45:04.268Z"
+    "fechaUTC": "2026-11-26T14:49:36.918Z"
   },
   {
     "id": "CP-P33",
@@ -261,14 +261,14 @@
     "esperado": "La línea de tiempo muestra todos los eventos del más reciente al ingreso; la ficha imprimible se genera y queda registrada; Consulta no puede imprimir.",
     "obtenido": "Eventos en la línea de tiempo: 5/5; primero: «noviembre de 202622-novAtenciónSesión 3 »; último: «19-octIngreso al programaPostulación ace»; vista imprimible: sí; registro PDF: sí; Consulta: denegado.",
     "estado": "Aprobada",
-    "fechaUTC": "2026-11-26T14:45:04.608Z"
+    "fechaUTC": "2026-11-26T14:49:37.268Z"
   },
   {
     "id": "CP-P34",
     "requisito": "RF-34, RNF-7 (protección de datos personales)",
     "esperado": "El anonimizado no contiene ningún dato personal, identifica a cada beneficiario con un ID de análisis que solo el Excel completo vincula al RUT, incluye un diccionario y la descarga queda registrada como anonimizada.",
-    "obtenido": "Datos personales encontrados: 0; filas verificadas: 18; ID de Camila en el completo: BEN-0005 (enlaza: true); hoja Diccionario: true; registro: anonimizada.",
+    "obtenido": "Datos personales encontrados: 0; filas verificadas: 18; ID de Camila en el completo: BEN-0005 (enlaza: true; ID en la primera columna de todas las hojas del informe completo: true); hoja Diccionario: true; registro: anonimizada.",
     "estado": "Aprobada",
-    "fechaUTC": "2026-11-26T14:45:04.817Z"
+    "fechaUTC": "2026-11-26T14:49:37.493Z"
   }
 ]

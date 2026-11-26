@@ -505,8 +505,9 @@ describe('Matriz 03 · prototipo v2', () => {
     const fugaInforme = personales.filter((x: string) => x && textoInforme.includes(x)) .concat(e.postulaciones.map((p: { nna: { rut: string } }) => p.nna.rut).filter((r: string) => textoInforme.includes(r)));
     const ids = idsAnalisis(e);
     const camilaId = ids.get('B-01');
-    const filaCompleta = completo[0].filas.find(f => f[1] === e.beneficiarios.find((b: { id: string }) => b.id === 'B-01').rut);
-    const enlaza = filaCompleta?.[4] === camilaId && anon[0].filas.some(f => f[0] === camilaId);
+    const filaCompleta = completo[0].filas.find(f => f[2] === e.beneficiarios.find((b: { id: string }) => b.id === 'B-01').rut);
+    const idEnTodas = consolidar(e, 'INFORME_MENSUAL', '2000-01-01', hoy, false).every(t => t.columnas[0] === 'ID análisis');
+    const enlaza = idEnTodas && filaCompleta?.[0] === camilaId && anon[0].filas.some(f => f[0] === camilaId);
     const diccionario = wb.getWorksheet('Diccionario') !== undefined;
     // Interfaz: un perfil sin permiso de exportar solo puede elegir la versión anonimizada.
     const { user } = montar(); await ingresar(user, SOCIAL); await act(() => ir('/reportes'));
@@ -518,7 +519,7 @@ describe('Matriz 03 · prototipo v2', () => {
     await screen.findByText(/Excel anonimizado generado/);
     const reg = almacenamiento().reportes.at(-1);
     const ok = fuga.length === 0 && fugaInforme.length === 0 && filasVerificadas > 0 && enlaza && diccionario && habilitadaSocial && reg?.anonimizado === true && reg?.incluyeApoderado === false;
-    evidencia('CP-P34', { requisito: 'RF-34, RNF-7 (protección de datos personales)', prueba: 'Generar el Excel general y el informe mensual en versión anonimizada, buscar en el archivo nombres, RUT y contactos reales del sistema, y comparar con el Excel completo.', esperado: 'El anonimizado no contiene ningún dato personal, identifica a cada beneficiario con un ID de análisis que solo el Excel completo vincula al RUT, incluye un diccionario y la descarga queda registrada como anonimizada.', obtenido: `Datos personales encontrados: ${fuga.length + fugaInforme.length}; filas verificadas: ${filasVerificadas}; ID de Camila en el completo: ${filaCompleta?.[4]} (enlaza: ${enlaza}); hoja Diccionario: ${diccionario}; registro: ${reg?.anonimizado ? 'anonimizada' : 'completa'}.`, aprobada: ok });
+    evidencia('CP-P34', { requisito: 'RF-34, RNF-7 (protección de datos personales)', prueba: 'Generar el Excel general y el informe mensual en versión anonimizada, buscar en el archivo nombres, RUT y contactos reales del sistema, y comparar con el Excel completo.', esperado: 'El anonimizado no contiene ningún dato personal, identifica a cada beneficiario con un ID de análisis que solo el Excel completo vincula al RUT, incluye un diccionario y la descarga queda registrada como anonimizada.', obtenido: `Datos personales encontrados: ${fuga.length + fugaInforme.length}; filas verificadas: ${filasVerificadas}; ID de Camila en el completo: ${filaCompleta?.[0]} (enlaza: ${enlaza}; ID en la primera columna de todas las hojas del informe completo: ${idEnTodas}); hoja Diccionario: ${diccionario}; registro: ${reg?.anonimizado ? 'anonimizada' : 'completa'}.`, aprobada: ok });
     expect(ok).toBe(true);
   });
 });

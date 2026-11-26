@@ -98,7 +98,7 @@ En la pantalla de ingreso está el enlace **«Restablecer datos de demostración
 10. **Filtro de período** (últimos 5 o 3 años) y **descarga en PNG** de cada gráfico del Inicio.
 11. **Versión para celular**: menú desplegable, tablas con desplazamiento y formularios a una columna.
 12. **Más datos de ejemplo**: 12 beneficiarios ficticios en distintas comunas y estados (en atención, ciclo terminado, de baja, sin derivación).
-13. **Excel completo y Excel anonimizado** (Reportes → «Versión del archivo»): la versión completa trae nombres, RUT y el «ID análisis» de cada beneficiario y solo la descargan perfiles con permiso de exportar datos personales; la versión anonimizada reemplaza nombre y RUT por el ID de análisis (BEN-0001…), entrega fechas por mes y edad por tramo, quita contacto, salud y texto libre, e incluye una hoja «Diccionario», para enviarla a terceros que hagan análisis.
+13. **Excel completo y Excel anonimizado** (Reportes → «Versión del archivo»): la versión completa trae el «ID análisis» en la primera columna de cada hoja, junto al nombre y RUT, para saber a quién corresponde cada código, y solo la descargan perfiles con permiso de exportar datos personales; la versión anonimizada reemplaza nombre y RUT por el ID de análisis (BEN-0001…), entrega fechas por mes y edad por tramo, quita contacto, salud y texto libre, e incluye una hoja «Diccionario», para enviarla a terceros que hagan análisis.
 
 Todas las vistas tienen botón **Volver** (RNF-1). Fuera del alcance de esta versión: stock de bodega (RF-19), informes sociales (RF-24), rutas e integración con Dental Soft.
 

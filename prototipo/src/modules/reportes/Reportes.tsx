@@ -71,7 +71,7 @@ export default function Reportes() {
         <legend>Versión del archivo</legend>
         <label className={`opcion-version${!anonima ? ' activa' : ''}`}>
           <input type="radio" name="version" checked={!anonima} onChange={() => { setVersion('COMPLETA'); setVista(null); }} disabled={!puedeExportar} />
-          <span><strong>Completa (datos personales)</strong><small>Nombres, RUT y demás datos para uso interno. Solo perfiles autorizados.{!puedeExportar && ' Su perfil no tiene este permiso.'}</small></span>
+          <span><strong>Completa (datos personales)</strong><small>Nombres, RUT y demás datos para uso interno, con el «ID análisis» en la primera columna para saber a quién corresponde cada código. Solo perfiles autorizados.{!puedeExportar && ' Su perfil no tiene este permiso.'}</small></span>
         </label>
         <label className={`opcion-version${anonima ? ' activa' : ''}`}>
           <input type="radio" name="version" checked={anonima} onChange={() => { setVersion('ANONIMIZADA'); setApoderado(false); setVista(null); }} />
