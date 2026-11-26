@@ -55,7 +55,7 @@ export const DESCRIPCION_PERMISO: Record<Permiso, string> = {
   DATOS_SENSIBLES_EDITAR: 'Editar datos sensibles', OBSERVACION_REGISTRAR: 'Registrar observaciones',
   ATENCION_REGISTRAR: 'Registrar atenciones', CICLO_ACTUALIZAR: 'Actualizar estado y cerrar ciclo',
   ALERTA_CONSULTAR: 'Consultar y revisar alertas', BAJA_REGISTRAR: 'Registrar bajas', AYUDA_REGISTRAR: 'Registrar ayudas entregadas',
-  URGENCIA_MARCAR: 'Marcar urgencias', REPORTE_GENERAR: 'Generar reportes', EXPORTAR_FICHA: 'Exportar con datos del apoderado',
+  URGENCIA_MARCAR: 'Marcar urgencias', REPORTE_GENERAR: 'Generar reportes', EXPORTAR_FICHA: 'Exportar datos personales (Excel completo, ficha)',
   PARAMETROS_EDITAR: 'Configurar umbrales de alerta', PERMISOS_EDITAR: 'Modificar permisos de los perfiles',
 };
 export const TODOS_LOS_PERMISOS = Object.keys(DESCRIPCION_PERMISO) as Permiso[];

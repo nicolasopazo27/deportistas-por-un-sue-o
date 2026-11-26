@@ -7,7 +7,7 @@ import { almacenamiento, evidencia, ingresar, ir, montar, reiniciarEntorno } fro
 import { crearDatosIniciales } from '../data/seed';
 import { calcularEstadisticas } from '../data/estadisticas';
 import { actualizarFicha, actualizarFoto, cambiarPermiso, consultarPostulacionPublica, evaluarPostulacion, registrarBaja, restablecerPermisos, marcarAlertaRevisada, registrarAtencion, registrarPostulacionPublica, revisarAlertas } from '../data/servicios';
-import { consolidar, generarXlsx } from '../modules/reportes/exportar';
+import { consolidar, consolidarAnonimo, generarXlsx, idsAnalisis } from '../modules/reportes/exportar';
 import type { Usuario } from '../domain/tipos';
 import ExcelJS from 'exceljs';
 
@@ -486,6 +486,39 @@ describe('Matriz 03 · prototipo v2', () => {
     const denegado = screen.queryByText('Su perfil no tiene permiso para imprimir o exportar fichas.') !== null && screen.queryByText('Josefa Reyes Castro') === null;
     const ok = lt.length === nHist && primero.includes('Atención') && ultimo.includes('Ingreso al programa') && conBoton && registro && denegado;
     evidencia('CP-P33', { requisito: 'RF-15 (historial), RF-25 (salidas protegidas) · revisión final', prueba: 'Abrir el historial de Josefa como línea de tiempo; abrir su ficha imprimible; intentar lo mismo con perfil Consulta.', esperado: 'La línea de tiempo muestra todos los eventos del más reciente al ingreso; la ficha imprimible se genera y queda registrada; Consulta no puede imprimir.', obtenido: `Eventos en la línea de tiempo: ${lt.length}/${nHist}; primero: «${primero.slice(0, 40)}»; último: «${ultimo.slice(0, 40)}»; vista imprimible: ${conBoton ? 'sí' : 'no'}; registro PDF: ${registro ? 'sí' : 'no'}; Consulta: ${denegado ? 'denegado' : 'permitido'}.`, aprobada: ok });
+    expect(ok).toBe(true);
+  });
+
+  it('CP-P34 · RF-34, RNF-7 · Excel completo y Excel anonimizado para terceros', async () => {
+    const e = crearDatosIniciales();
+    const hoy = new Date().toISOString().slice(0, 10);
+    const completo = consolidar(e, 'EXPORT_EXCEL_GENERAL', '2000-01-01', hoy, true);
+    const anon = consolidarAnonimo(e, 'EXPORT_EXCEL_GENERAL', '2000-01-01', hoy);
+    const informeAnon = consolidarAnonimo(e, 'INFORME_MENSUAL', '2000-01-01', hoy);
+    const { buffer, filasVerificadas } = await generarXlsx(anon);
+    const ExcelJS = (await import('exceljs')).default;
+    const wb = new ExcelJS.Workbook(); await wb.xlsx.load(buffer);
+    const texto = wb.worksheets.flatMap(ws => ws.getSheetValues().flat().map(v => String(v ?? ''))).join(' | ');
+    const personales = e.beneficiarios.flatMap((b: { rut: string; nombres: string; apellidos: string; apoderado: { nombre: string; telefono: string } }) => [b.rut, `${b.nombres} ${b.apellidos}`, b.apoderado.nombre, b.apoderado.telefono]);
+    const fuga = personales.filter((x: string) => x && texto.includes(x));
+    const textoInforme = informeAnon.flatMap(t => t.filas.flat().map(String)).join(' | ');
+    const fugaInforme = personales.filter((x: string) => x && textoInforme.includes(x)) .concat(e.postulaciones.map((p: { nna: { rut: string } }) => p.nna.rut).filter((r: string) => textoInforme.includes(r)));
+    const ids = idsAnalisis(e);
+    const camilaId = ids.get('B-01');
+    const filaCompleta = completo[0].filas.find(f => f[1] === e.beneficiarios.find((b: { id: string }) => b.id === 'B-01').rut);
+    const enlaza = filaCompleta?.[4] === camilaId && anon[0].filas.some(f => f[0] === camilaId);
+    const diccionario = wb.getWorksheet('Diccionario') !== undefined;
+    // Interfaz: un perfil sin permiso de exportar solo puede elegir la versión anonimizada.
+    const { user } = montar(); await ingresar(user, SOCIAL); await act(() => ir('/reportes'));
+    const radioCompleta = screen.getByRole('radio', { name: /Completa \(datos personales\)/ }) as HTMLInputElement;
+    const habilitadaSocial = !radioCompleta.disabled && radioCompleta.checked;
+    await user.selectOptions(screen.getByLabelText('Tipo de salida *'), 'EXPORT_EXCEL_GENERAL');
+    await user.click(screen.getByRole('radio', { name: /Anonimizada \(para terceros\)/ }));
+    await user.click(screen.getByRole('button', { name: 'Descargar Excel' }));
+    await screen.findByText(/Excel anonimizado generado/);
+    const reg = almacenamiento().reportes.at(-1);
+    const ok = fuga.length === 0 && fugaInforme.length === 0 && filasVerificadas > 0 && enlaza && diccionario && habilitadaSocial && reg?.anonimizado === true && reg?.incluyeApoderado === false;
+    evidencia('CP-P34', { requisito: 'RF-34, RNF-7 (protección de datos personales)', prueba: 'Generar el Excel general y el informe mensual en versión anonimizada, buscar en el archivo nombres, RUT y contactos reales del sistema, y comparar con el Excel completo.', esperado: 'El anonimizado no contiene ningún dato personal, identifica a cada beneficiario con un ID de análisis que solo el Excel completo vincula al RUT, incluye un diccionario y la descarga queda registrada como anonimizada.', obtenido: `Datos personales encontrados: ${fuga.length + fugaInforme.length}; filas verificadas: ${filasVerificadas}; ID de Camila en el completo: ${filaCompleta?.[4]} (enlaza: ${enlaza}); hoja Diccionario: ${diccionario}; registro: ${reg?.anonimizado ? 'anonimizada' : 'completa'}.`, aprobada: ok });
     expect(ok).toBe(true);
   });
 });

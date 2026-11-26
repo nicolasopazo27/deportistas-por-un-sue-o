@@ -39,7 +39,7 @@ Otros comandos (dentro de `prototipo/`):
 
 | Comando | Qué hace |
 |---|---|
-| `npm test` | Ejecuta los 33 casos de prueba automatizados y regenera las evidencias en `pruebas/evidencias/` |
+| `npm test` | Ejecuta los 34 casos de prueba automatizados y regenera las evidencias en `pruebas/evidencias/` |
 | `npm run build` | Compila la versión de producción en `prototipo/dist/` (se puede abrir con `npm run preview`) |
 | `npm run lint` | Revisa la calidad del código |
 
@@ -98,6 +98,7 @@ En la pantalla de ingreso está el enlace **«Restablecer datos de demostración
 10. **Filtro de período** (últimos 5 o 3 años) y **descarga en PNG** de cada gráfico del Inicio.
 11. **Versión para celular**: menú desplegable, tablas con desplazamiento y formularios a una columna.
 12. **Más datos de ejemplo**: 12 beneficiarios ficticios en distintas comunas y estados (en atención, ciclo terminado, de baja, sin derivación).
+13. **Excel completo y Excel anonimizado** (Reportes → «Versión del archivo»): la versión completa trae nombres, RUT y el «ID análisis» de cada beneficiario y solo la descargan perfiles con permiso de exportar datos personales; la versión anonimizada reemplaza nombre y RUT por el ID de análisis (BEN-0001…), entrega fechas por mes y edad por tramo, quita contacto, salud y texto libre, e incluye una hoja «Diccionario», para enviarla a terceros que hagan análisis.
 
 Todas las vistas tienen botón **Volver** (RNF-1). Fuera del alcance de esta versión: stock de bodega (RF-19), informes sociales (RF-24), rutas e integración con Dental Soft.
 
@@ -114,7 +115,7 @@ Todas las vistas tienen botón **Volver** (RNF-1). Fuera del alcance de esta ver
 │       └── test/           Casos de prueba automatizados (Matriz 03)
 ├── database/               Script DDL PostgreSQL 16 (28 tablas, 41 FK, 43 índices, 2 vistas),
 │                           pruebas de integridad y su resultado
-├── pruebas/evidencias/     EV-CP-P01 … EV-CP-P33 (.json y .html), resultados.json, ejecucion.txt
+├── pruebas/evidencias/     EV-CP-P01 … EV-CP-P34 (.json y .html), resultados.json, ejecucion.txt
 └── docs/                   BPMN AS-IS / TO-BE e informe final
 ```
 
@@ -132,7 +133,7 @@ Resultado verificado (`database/resultado_pruebas_integridad.txt`): 28 tablas, 4
 
 ## 8. Pruebas
 
-`npm test` ejecuta 33 casos (CP-P01 a CP-P33) mediante integración de componentes React con DOM emulado (jsdom). Cada caso parte del conjunto inicial ficticio y deja su evidencia en `pruebas/evidencias/`. Última ejecución: **33 aprobados, 0 fallidos**. Los HTML de evidencia son registros del DOM emulado, no capturas de navegador.
+`npm test` ejecuta 34 casos (CP-P01 a CP-P34) mediante integración de componentes React con DOM emulado (jsdom). Cada caso parte del conjunto inicial ficticio y deja su evidencia en `pruebas/evidencias/`. Última ejecución: **34 aprobados, 0 fallidos**. Los HTML de evidencia son registros del DOM emulado, no capturas de navegador.
 
 ## 9. Limitaciones conocidas y siguiente etapa
 

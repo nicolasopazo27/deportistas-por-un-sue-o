@@ -230,3 +230,13 @@ a.boton{text-decoration:none;display:inline-flex;align-items:center;justify-cont
   .segmentado button{padding:6px 9px;font-size:12px}
 }
 @media (max-width:600px){.ilustracion{display:none}.ingreso-v2 .tarjeta-ingreso{order:-1}}
+
+/* Versión del Excel: completa vs. anonimizada */
+.version-excel { border: 1px solid var(--borde, #e2e2e2); border-radius: 10px; padding: 10px 14px 12px; margin: 14px 0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.version-excel legend { font-weight: 600; padding: 0 6px; }
+.opcion-version { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border: 1px solid var(--borde, #e2e2e2); border-radius: 8px; cursor: pointer; }
+.opcion-version.activa { border-color: var(--rojo, #b3262c); background: var(--rojo-suave); }
+.opcion-version span { display: flex; flex-direction: column; gap: 3px; }
+.opcion-version small { color: var(--gris); line-height: 1.35; }
+.opcion-version input { margin-top: 4px; }
+@media (max-width: 860px) { .version-excel { grid-template-columns: 1fr; } }
