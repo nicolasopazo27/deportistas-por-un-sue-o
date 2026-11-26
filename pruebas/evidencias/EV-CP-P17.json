@@ -3,9 +3,9 @@
   "requisito": "RF-11, RNF-4",
   "prueba": "Generar el informe consolidado (postulaciones, derivaciones, atenciones, bajas, ayudas) en XLSX y releerlo.",
   "esperado": "Filas del archivo = registros de origen y caracteres preservados.",
-  "obtenido": "Registros de origen: 7; filas verificadas: 7; «Sofía Ñúñez Peña» y «Peñalolén» preservados: true.",
+  "obtenido": "Registros de origen: 35; filas verificadas: 35; «Sofía Ñúñez Peña» y «Peñalolén» preservados: true.",
   "aprobada": true,
   "estado": "Aprobada",
-  "fechaUTC": "2026-11-26T00:01:23.637Z",
+  "fechaUTC": "2026-11-26T00:19:53.948Z",
   "almacenamiento": null
 }

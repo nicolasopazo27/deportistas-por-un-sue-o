@@ -201,3 +201,32 @@ export function estadoTexto(b: Beneficiario): { texto: string; tono: 'rojo' | 'v
   if (!c) return b.casos.length ? { texto: 'Ciclo terminado', tono: 'verde' } : { texto: 'Ingresado, sin derivación', tono: 'gris' };
   return { texto: ESTADOS_CASO.find(e => e.codigo === c.estado)!.nombre, tono: c.urgencias.length ? 'rojo' : 'amarillo' };
 }
+
+// ---------- Contacto por WhatsApp (revisión final) ----------
+/** Enlace wa.me con mensaje prellenado. Acepta teléfonos chilenos con o sin +56. */
+export function enlaceWhatsApp(telefono: string, mensaje: string): string | null {
+  let n = telefono.replace(/\D/g, '');
+  if (n.length === 9 && n.startsWith('9')) n = '56' + n;
+  if (n.length < 10 || n.length > 13) return null;
+  return `https://wa.me/${n}?text=${encodeURIComponent(mensaje)}`;
+}
+const FIRMA = 'Saludos, equipo social de la Fundación Deportistas por un Sueño.';
+const nombrePila = (nombre: string) => nombre.trim().split(/\s+/)[0];
+export function mensajeWhatsAppPostulacion(p: { id: string; estado: string; nna: { nombres: string; apellidos: string }; apoderado: { nombre: string } }): string {
+  const nna = `${p.nna.nombres} ${p.nna.apellidos}`;
+  const cuerpo = p.estado === 'ACEPTADA'
+    ? `¡Buenas noticias! La postulación de ${nna} (código ${p.id}) fue aceptada y ya ingresó al programa. Queremos coordinar su primera atención.`
+    : p.estado === 'RECHAZADA'
+      ? `Le escribimos por la postulación de ${nna} (código ${p.id}). Queremos explicarle la resolución y orientarle sobre otras alternativas.`
+      : `Le escribimos por la postulación de ${nna} (código ${p.id}). Estamos revisando sus antecedentes y queremos coordinar una breve conversación.`;
+  return `Hola ${nombrePila(p.apoderado.nombre)}. ${cuerpo} ${FIRMA}`;
+}
+export function mensajeWhatsAppFicha(b: Beneficiario): string {
+  const c = casoActivo(b);
+  const codigo = c?.derivaciones.at(-1)?.area;
+  const proxima = codigo === 'DENTAL' ? 'próxima atención dental' : codigo === 'KINESIOLOGIA' ? 'próxima sesión de kinesiología' : 'próxima atención';
+  const cuerpo = c
+    ? `Le escribimos por ${b.nombres}: queremos coordinar su ${proxima}. ¿Qué día y horario le acomoda?`
+    : `Le escribimos por ${b.nombres}: queremos saber cómo ha estado y coordinar los próximos pasos con la Fundación.`;
+  return `Hola ${nombrePila(b.apoderado.nombre)}. ${cuerpo} ${FIRMA}`;
+}

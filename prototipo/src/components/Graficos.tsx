@@ -1,6 +1,7 @@
 // Gráficos SVG livianos para el Inicio: barras agrupadas, línea y barras horizontales.
 // Cada gráfico trae leyenda (si hay más de una serie), tooltip al pasar el mouse y una tabla con los datos.
-import { useState, type ReactNode } from 'react';
+import { useRef, useState, type ReactNode } from 'react';
+import { Download } from 'lucide-react';
 
 export interface Serie { nombre: string; color: string; valores: number[] }
 const fmt = (n: number) => n.toLocaleString('es-CL');
@@ -22,10 +23,39 @@ function barraH(x: number, y: number, w: number, h: number) {
   return `M${x},${y}H${x + w - r}Q${x + w},${y} ${x + w},${y + r}V${y + h - r}Q${x + w},${y + h} ${x + w - r},${y + h}H${x}Z`;
 }
 
+/** Descarga el gráfico como PNG (con título y leyenda) copiando los estilos calculados al SVG. */
+async function descargarPng(fig: HTMLElement, titulo: string, subtitulo: string | undefined, leyenda: Serie[] | undefined) {
+  const svg = fig.querySelector('svg'); if (!svg) return;
+  const copia = svg.cloneNode(true) as SVGSVGElement;
+  const orig = svg.querySelectorAll('*'), dest = copia.querySelectorAll('*');
+  orig.forEach((el, i) => {
+    const cs = getComputedStyle(el), d = dest[i] as SVGElement;
+    for (const prop of ['fill', 'stroke', 'stroke-width', 'stroke-dasharray', 'font-size', 'font-weight', 'font-family', 'opacity']) d.style.setProperty(prop, cs.getPropertyValue(prop));
+  });
+  const vb = svg.viewBox.baseVal, escala = 2, cab = leyenda && leyenda.length > 1 ? 62 : 42;
+  const w = vb.width, h = vb.height + cab + 10;
+  copia.setAttribute('width', String(vb.width)); copia.setAttribute('height', String(vb.height));
+  const url = URL.createObjectURL(new Blob([new XMLSerializer().serializeToString(copia)], { type: 'image/svg+xml' }));
+  const img = new Image();
+  await new Promise<void>((ok, mal) => { img.onload = () => ok(); img.onerror = () => mal(new Error('svg')); img.src = url; });
+  const canvas = document.createElement('canvas'); canvas.width = w * escala; canvas.height = h * escala;
+  const ctx = canvas.getContext('2d'); if (!ctx) return;
+  ctx.scale(escala, escala); ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, w, h);
+  ctx.fillStyle = '#1f2328'; ctx.font = 'bold 14px Arial'; ctx.fillText(titulo, 10, 20);
+  if (subtitulo) { ctx.fillStyle = '#5f6368'; ctx.font = '11px Arial'; ctx.fillText(subtitulo, 10, 36); }
+  if (leyenda && leyenda.length > 1) { let x = 10; ctx.font = '11px Arial'; for (const s of leyenda) { ctx.fillStyle = s.color; ctx.fillRect(x, 46, 10, 10); ctx.fillStyle = '#3c4043'; ctx.fillText(s.nombre, x + 14, 55); x += ctx.measureText(s.nombre).width + 32; } }
+  ctx.drawImage(img, 0, cab, vb.width, vb.height);
+  URL.revokeObjectURL(url);
+  const a = document.createElement('a'); a.download = `${titulo.replace(/[^\wáéíóúñ ]/gi, '').trim().replace(/\s+/g, '_')}.png`; a.href = canvas.toDataURL('image/png'); a.click();
+}
+
 function Marco({ titulo, subtitulo, leyenda, tabla, children }: { titulo: string; subtitulo?: string; leyenda?: Serie[]; tabla: { columnas: string[]; filas: (string | number)[][] }; children: ReactNode }) {
+  const ref = useRef<HTMLElement>(null);
   return (
-    <figure className="grafico" aria-label={titulo}>
-      <figcaption><b>{titulo}</b>{subtitulo && <span className="tenue"> · {subtitulo}</span>}</figcaption>
+    <figure className="grafico" aria-label={titulo} ref={ref}>
+      <figcaption><b>{titulo}</b>{subtitulo && <span className="tenue"> · {subtitulo}</span>}
+        <button type="button" className="descargar-grafico" title="Descargar como imagen PNG" aria-label={`Descargar ${titulo} como imagen`} onClick={() => ref.current && descargarPng(ref.current, titulo, subtitulo, leyenda).catch(() => undefined)}><Download size={14} /></button>
+      </figcaption>
       {leyenda && leyenda.length > 1 && (
         <ul className="leyenda">{leyenda.map(s => <li key={s.nombre}><i style={{ background: s.color }} />{s.nombre}</li>)}</ul>
       )}

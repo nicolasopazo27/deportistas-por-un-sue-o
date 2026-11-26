@@ -3,6 +3,8 @@ import { SistemaProvider } from './data/SistemaContext';
 import type { IRepositorioEstado } from './data/repositorio';
 import Layout from './components/Layout';
 import PostulacionPublica from './modules/publico/PostulacionPublica';
+import SeguimientoPublico from './modules/publico/SeguimientoPublico';
+import FichaImprimible from './modules/beneficiarios/FichaImprimible';
 import Ingreso from './modules/seguridad/Ingreso';
 import NuevaDerivacion from './modules/derivaciones/NuevaDerivacion';
 import Beneficiarios from './modules/beneficiarios/Beneficiarios';
@@ -22,6 +24,8 @@ export default function App({ repositorio }: { repositorio?: IRepositorioEstado 
         <Routes>
           <Route path="/ingreso" element={<Ingreso />} />
           <Route path="/postular" element={<PostulacionPublica />} />
+          <Route path="/seguimiento" element={<SeguimientoPublico />} />
+          <Route path="/ficha-imprimir" element={<FichaImprimible />} />
           <Route element={<Layout />}>
             <Route path="/inicio" element={<Inicio />} />
             <Route path="/postulaciones" element={<Postulaciones />} />

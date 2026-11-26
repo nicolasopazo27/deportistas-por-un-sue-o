@@ -6,7 +6,7 @@ import { act } from 'react';
 import { almacenamiento, evidencia, ingresar, ir, montar, reiniciarEntorno } from './ayudantes';
 import { crearDatosIniciales } from '../data/seed';
 import { calcularEstadisticas } from '../data/estadisticas';
-import { actualizarFicha, actualizarFoto, cambiarPermiso, evaluarPostulacion, registrarBaja, restablecerPermisos, marcarAlertaRevisada, registrarAtencion, registrarPostulacionPublica, revisarAlertas } from '../data/servicios';
+import { actualizarFicha, actualizarFoto, cambiarPermiso, consultarPostulacionPublica, evaluarPostulacion, registrarBaja, restablecerPermisos, marcarAlertaRevisada, registrarAtencion, registrarPostulacionPublica, revisarAlertas } from '../data/servicios';
 import { consolidar, generarXlsx } from '../modules/reportes/exportar';
 import type { Usuario } from '../domain/tipos';
 import ExcelJS from 'exceljs';
@@ -16,6 +16,8 @@ const U_SOCIAL: Usuario = { id: 'U-01', nombre: 'Valentina Muñoz', email: SOCIA
 const U_ADMIN: Usuario = { id: 'U-07', nombre: 'Patricia Soto', email: ADMIN, rol: 'ADMIN' };
 const U_TUTOR: Usuario = { id: 'U-06', nombre: 'Francisca Herrera', email: TUTOR, rol: 'TUTOR' };
 const nBenef = () => almacenamiento().beneficiarios.length;
+/** Cantidad de beneficiarios del conjunto inicial (2 de los casos base + adicionales de ejemplo). */
+const N0 = crearDatosIniciales().beneficiarios.length;
 const camila = () => almacenamiento().beneficiarios.find((b: { id: string }) => b.id === 'B-01');
 const tomas = () => almacenamiento().beneficiarios.find((b: { id: string }) => b.id === 'B-02');
 const POST_OK = { nombres: 'Martina', apellidos: 'Núñez Peña', rut: '9876543-3', fechaNacimiento: '2016-04-02', comuna: 'Peñalolén', apoderado: 'Jorge Núñez', telefono: '+56 9 7777 8888', prevision: 'FONASA', patologias: ['Neurológica'], centrosSalud: ['Teletón'], credencial: true, numeroCredencial: 'CD-777', porcentaje: '50', electrodependiente: false, descripcion: 'Dato ficticio', motivo: 'Requiere apoyo kinesiológico' };
@@ -65,7 +67,7 @@ describe('Matriz 03 · prototipo v2', () => {
     await r3.user.click(await screen.findByRole('button', { name: 'Martina Núñez Peña' }));
     const ficha = screen.getByLabelText(/Ficha de Martina/);
     const b = almacenamiento().beneficiarios.at(-1);
-    const ok = nBenef() === 3 && p.tutor === 'Inés Araya Núñez' && p.origen === 'WEB' && almacenamiento().postulaciones.find((x: { id: string }) => x.id === p.id).estado === 'ACEPTADA' && b.historial[0].tipo === 'Ingreso al programa' && within(ficha).getByText(/9876543-3/) !== null;
+    const ok = nBenef() === N0 + 1 && p.tutor === 'Inés Araya Núñez' && p.origen === 'WEB' && almacenamiento().postulaciones.find((x: { id: string }) => x.id === p.id).estado === 'ACEPTADA' && b.historial[0].tipo === 'Ingreso al programa' && within(ficha).getByText(/9876543-3/) !== null;
     evidencia('CP-P02', { requisito: 'M8, RF-01, RF-04', prueba: 'Un apoderado envía la postulación desde el formulario público (sin sesión); Trabajo social la acepta; se remonta la aplicación y se abre la ficha.', esperado: 'La postulación queda aceptada, se crea la ficha (ingreso al programa) y se recupera tras remontar.', obtenido: `Postulación ${p.id} enviada en línea por ${p.tutor} (origen ${p.origen}); estado final ACEPTADA; beneficiarios: ${nBenef()}; primer evento: «${b.historial[0].tipo}»; ficha recuperada tras remontar. Persistencia local (no SQL).`, aprobada: ok });
     expect(ok).toBe(true);
   });
@@ -79,7 +81,7 @@ describe('Matriz 03 · prototipo v2', () => {
     const muestra = within(modal).getByText(/Camila Rojas Soto · Santiago/) !== null;
     await user.click(within(modal).getByRole('button', { name: 'Cancelar' }));
     const derivs = camila().casos[0].derivaciones.length;
-    const ok = muestra && nBenef() === 2 && derivs === 1 && camila().casos.length === 1;
+    const ok = muestra && nBenef() === N0 && derivs === 1 && camila().casos.length === 1;
     evidencia('CP-P03', { requisito: 'RF-02', prueba: 'Buscar por RUT a Camila (caso activo), derivar a Dental y cancelar ante la advertencia.', esperado: 'Se muestra el caso activo y cancelar no crea caso ni derivación.', obtenido: `Advertencia con el caso de Camila Rojas Soto. Beneficiarios: ${nBenef()}; casos: ${camila().casos.length}; derivaciones del caso: ${derivs}.`, aprobada: ok });
     expect(ok).toBe(true);
   });
@@ -92,7 +94,7 @@ describe('Matriz 03 · prototipo v2', () => {
     await user.selectOptions(screen.getByLabelText('Filtro comuna'), 'Puente Alto');
     await user.click(screen.getByRole('button', { name: 'Buscar' }));
     const vacio = screen.queryByText('Sin resultados para los filtros seleccionados.') !== null;
-    const ok = filas1.length === 1 && filas1[0].includes('Camila Rojas Soto') && vacio && nBenef() === 2;
+    const ok = filas1.length === 1 && filas1[0].includes('Camila Rojas Soto') && vacio && nBenef() === N0;
     evidencia('CP-P04', { requisito: 'RF-12', prueba: 'Filtrar por Santiago y luego por Puente Alto.', esperado: 'Santiago devuelve solo a Camila; Puente Alto queda sin resultados.', obtenido: `Santiago: ${filas1.length} fila(s). Puente Alto: ${vacio ? 'sin resultados' : 'con filas'}. Fichas sin modificar.`, aprobada: ok });
     expect(ok).toBe(true);
   });
@@ -237,7 +239,7 @@ describe('Matriz 03 · prototipo v2', () => {
     await user.click(screen.getByRole('button', { name: 'Guardar derivación' }));
     await user.click(within(await screen.findByRole('dialog')).getByRole('button', { name: 'Asociar al caso activo' }));
     const c = camila();
-    const ok = nBenef() === 2 && c.casos.length === 1 && c.casos[0].derivaciones.length === 2 && c.casos[0].derivaciones[1].advertenciaIgnorada === true;
+    const ok = nBenef() === N0 && c.casos.length === 1 && c.casos[0].derivaciones.length === 2 && c.casos[0].derivaciones[1].advertenciaIgnorada === true;
     evidencia('CP-P16', { requisito: 'RF-02', prueba: 'Encargada de comunicación confirma la advertencia de caso activo al derivar a Camila.', esperado: 'Con el supuesto DP-02, la derivación se asocia al caso activo sin crear otro caso ni otra ficha.', obtenido: `Beneficiarios: ${nBenef()}; casos: ${c.casos.length}; derivaciones del caso: ${c.casos[0].derivaciones.length}; advertencia_ignorada: ${c.casos[0].derivaciones[1]?.advertenciaIgnorada}. Regla pendiente de validación (DP-02).`, aprobada: ok });
     expect(ok).toBe(true);
   });
@@ -350,7 +352,7 @@ describe('Matriz 03 · prototipo v2', () => {
     const r3 = evaluarPostulacion(e, U_SOCIAL, id, 'RECHAZADA', '');
     const r4 = registrarPostulacionPublica(e, POST_OK);
     const r5 = registrarPostulacionPublica(e, { ...POST_OK, rut: '12345678-5' });
-    const ok = r1.ok && !r2.ok && 'permiso' in (r2.ok ? {} : r2.errores) && !r3.ok && !r4.ok && !r5.ok && e.beneficiarios.length === 2;
+    const ok = r1.ok && !r2.ok && 'permiso' in (r2.ok ? {} : r2.errores) && !r3.ok && !r4.ok && !r5.ok && e.beneficiarios.length === N0;
     evidencia('CP-P25', { requisito: 'M8 · perfil Tutor (mandante), RNF-3', prueba: 'Se registra una postulación pública y el Tutor trata de aceptarla; Trabajo social rechaza sin comentario; se repite el RUT y se postula a un NNA ya ingresado.', esperado: 'El tutor no puede evaluar; el rechazo exige motivo; no se duplican postulaciones en curso ni se postula a quien ya ingresó.', obtenido: `Postulación pública: ${r1.ok ? 'registrada' : 'rechazada'}; tutor acepta: ${r2.ok ? 'permitido' : 'denegado'}; rechazo sin comentario: ${r3.ok ? 'aceptado' : 'rechazado'}; RUT repetido: ${r4.ok ? 'aceptado' : 'rechazado'}; NNA ya ingresado: ${r5.ok ? 'aceptado' : 'rechazado'}.`, aprobada: !!ok });
     expect(ok).toBeTruthy();
   });
@@ -429,8 +431,61 @@ describe('Matriz 03 · prototipo v2', () => {
     const { user } = montar(); await ingresar(user, SOCIAL); await act(() => ir('/inicio'));
     const figuras = ['Postulaciones, ingresos y bajas por año', 'Beneficiarios activos al cierre de cada año', 'Bajas por causal', 'Derivaciones por prestación'].every(t => screen.getAllByRole('figure', { name: t }).length === 1);
     const tabla = within(screen.getByRole('figure', { name: 'Postulaciones, ingresos y bajas por año' })).getByRole('table', { hidden: true }).textContent ?? '';
-    const ok = calc && figuras && tabla.includes(String(anio)) && tabla.includes(String(fila(e0).ingresos));
-    evidencia('CP-P30', { requisito: 'RF-10 · gráficos comparativos (revisión de la profesora)', prueba: 'Calcular los indicadores, aceptar una postulación y registrar una baja; abrir el Inicio con Trabajo social.', esperado: 'Cinco años de datos; el ingreso y la baja nuevos suman 1 al año en curso y a su causal; el Inicio muestra los cuatro gráficos con su tabla de datos.', obtenido: `Años: ${e0.anios.map(a => a.anio).join(', ')}; ingresos ${anio}: ${fila(e0).ingresos} → ${fila(e1).ingresos}; bajas ${anio}: ${fila(e0).bajas} → ${fila(e1).bajas}; desvinculaciones: ${egCausal(e0)} → ${egCausal(e1)}; activos al cierre: ${fila(e0).activosCierre} → ${fila(e1).activosCierre}; cuatro gráficos visibles: ${figuras ? 'sí' : 'no'}.`, aprobada: ok });
+    await user.click(screen.getByRole('button', { name: 'Últimos 3 años' }));
+    const filas3 = within(screen.getByRole('figure', { name: 'Postulaciones, ingresos y bajas por año' })).getByRole('table', { hidden: true }).querySelectorAll('tbody tr').length;
+    const ok = calc && figuras && tabla.includes(String(anio)) && tabla.includes(String(fila(e0).ingresos)) && filas3 === 3;
+    evidencia('CP-P30', { requisito: 'RF-10 · gráficos comparativos (revisión de la profesora)', prueba: 'Calcular los indicadores, aceptar una postulación y registrar una baja; abrir el Inicio con Trabajo social y cambiar el período a 3 años.', esperado: 'Cinco años de datos; el ingreso y la baja nuevos suman 1 al año en curso y a su causal; el Inicio muestra los cuatro gráficos con su tabla de datos y el filtro deja 3 años.', obtenido: `Años: ${e0.anios.map(a => a.anio).join(', ')}; ingresos ${anio}: ${fila(e0).ingresos} → ${fila(e1).ingresos}; bajas ${anio}: ${fila(e0).bajas} → ${fila(e1).bajas}; desvinculaciones: ${egCausal(e0)} → ${egCausal(e1)}; activos al cierre: ${fila(e0).activosCierre} → ${fila(e1).activosCierre}; cuatro gráficos visibles: ${figuras ? 'sí' : 'no'}; filtro «Últimos 3 años»: ${filas3} años en la tabla.`, aprobada: ok });
+    expect(ok).toBe(true);
+  });
+
+  it('CP-P31 · M8 · seguimiento público de la postulación con RUT y código', async () => {
+    const { user } = montar(); await act(() => ir('/seguimiento'));
+    await user.type(screen.getByLabelText('RUT del NNA *'), '22345678-2');
+    await user.type(screen.getByLabelText('Código de seguimiento *'), 'p-99');
+    await user.click(screen.getByRole('button', { name: /Consultar estado/ }));
+    const errorCodigo = screen.queryByText(/No encontramos una postulación/) !== null;
+    await user.clear(screen.getByLabelText('Código de seguimiento *')); await user.type(screen.getByLabelText('Código de seguimiento *'), 'p-01');
+    await user.click(screen.getByRole('button', { name: /Consultar estado/ }));
+    const enviada = (await screen.findByText('Recibida, en espera de revisión')) !== null;
+    const e = crearDatosIniciales();
+    evaluarPostulacion(e, U_SOCIAL, 'P-02', 'RECHAZADA', 'No cumple el rango de edad del programa');
+    const r = consultarPostulacionPublica(e, '23456789-6', 'P-02');
+    const rechazada = r.ok && r.dato!.estado === 'RECHAZADA' && r.dato!.resolucion === 'No cumple el rango de edad del programa' && !('apoderado' in r.dato!);
+    const ok = errorCodigo && enviada && rechazada;
+    evidencia('CP-P31', { requisito: 'M8 · seguimiento de postulaciones (revisión final)', prueba: 'Consultar sin sesión con un código incorrecto y luego con RUT 22345678-2 y código «p-01» (minúsculas); consultar una postulación rechazada.', esperado: 'Código incorrecto: mensaje claro; correcto: muestra el estado (Recibida); rechazada: muestra la respuesta del equipo sin datos sensibles.', obtenido: `Código incorrecto: ${errorCodigo ? 'mensaje mostrado' : 'sin mensaje'}; P-01: ${enviada ? 'Recibida, en espera de revisión' : 'no encontrada'}; P-02 rechazada con respuesta: ${rechazada ? 'sí, sin datos del apoderado' : 'no'}.`, aprobada: ok });
+    expect(ok).toBe(true);
+  });
+
+  it('CP-P32 · Contacto por WhatsApp con mensaje prellenado según perfil', async () => {
+    const { user } = montar(); await ingresar(user, SOCIAL); await act(() => ir('/beneficiarios?b=B-01'));
+    const enlace = screen.getByRole('link', { name: /Contactar por WhatsApp/ }) as HTMLAnchorElement;
+    const url = new URL(enlace.href), texto = url.searchParams.get('text') ?? '';
+    await act(() => ir('/postulaciones?p=P-01'));
+    const enlaceP = screen.getByRole('link', { name: /Contactar por WhatsApp/ }) as HTMLAnchorElement;
+    const textoP = new URL(enlaceP.href).searchParams.get('text') ?? '';
+    cleanup(); window.sessionStorage.clear(); window.location.hash = '#/ingreso';
+    const r2 = montar(); await ingresar(r2.user, CONSULTA); await act(() => ir('/beneficiarios?b=B-01'));
+    const consultaSin = screen.queryByRole('link', { name: /Contactar por WhatsApp/ }) === null;
+    const ok = url.origin + url.pathname === 'https://wa.me/56912345678' && texto.startsWith('Hola María') && texto.includes('atención dental') && textoP.includes('código P-01') && enlace.target === '_blank' && consultaSin;
+    evidencia('CP-P32', { requisito: 'Contacto con el apoderado (revisión final), RNF-3', prueba: 'Trabajo social abre la ficha de Camila y la postulación P-01; luego el perfil Consulta abre la ficha.', esperado: 'El enlace abre WhatsApp al +56 9 del apoderado con un mensaje prellenado acorde (atención o postulación); Consulta no ve el botón.', obtenido: `Ficha: ${url.origin + url.pathname} · «${texto.slice(0, 70)}…»; postulación: «${textoP.slice(0, 60)}…»; perfil Consulta ${consultaSin ? 'sin botón' : 'con botón'}.`, aprobada: ok });
+    expect(ok).toBe(true);
+  });
+
+  it('CP-P33 · RF-15, RF-25 · historial en línea de tiempo y ficha imprimible con permisos', async () => {
+    const { user } = montar(); await ingresar(user, SOCIAL); await act(() => ir('/beneficiarios?b=B-03'));
+    await user.click(screen.getByRole('tab', { name: /Historial/ }));
+    const lt = within(screen.getByRole('list', { name: 'Historial unificado' })).getAllByRole('listitem');
+    const nHist = almacenamiento().beneficiarios.find((b: { id: string }) => b.id === 'B-03').historial.length;
+    const primero = lt[0].textContent ?? '', ultimo = lt.at(-1)!.textContent ?? '';
+    await act(() => ir('/ficha-imprimir?b=B-03'));
+    const vista = screen.getByLabelText('Ficha imprimible de Josefa Reyes Castro');
+    const conBoton = within(vista).getByRole('button', { name: /Imprimir \/ Guardar PDF/ }) !== null;
+    const registro = almacenamiento().reportes.some((r: { formato: string; idBeneficiario?: string }) => r.formato === 'PDF' && r.idBeneficiario === 'B-03');
+    cleanup(); window.sessionStorage.clear(); window.location.hash = '#/ingreso';
+    const r2 = montar(); await ingresar(r2.user, CONSULTA); await act(() => ir('/ficha-imprimir?b=B-03'));
+    const denegado = screen.queryByText('Su perfil no tiene permiso para imprimir o exportar fichas.') !== null && screen.queryByText('Josefa Reyes Castro') === null;
+    const ok = lt.length === nHist && primero.includes('Atención') && ultimo.includes('Ingreso al programa') && conBoton && registro && denegado;
+    evidencia('CP-P33', { requisito: 'RF-15 (historial), RF-25 (salidas protegidas) · revisión final', prueba: 'Abrir el historial de Josefa como línea de tiempo; abrir su ficha imprimible; intentar lo mismo con perfil Consulta.', esperado: 'La línea de tiempo muestra todos los eventos del más reciente al ingreso; la ficha imprimible se genera y queda registrada; Consulta no puede imprimir.', obtenido: `Eventos en la línea de tiempo: ${lt.length}/${nHist}; primero: «${primero.slice(0, 40)}»; último: «${ultimo.slice(0, 40)}»; vista imprimible: ${conBoton ? 'sí' : 'no'}; registro PDF: ${registro ? 'sí' : 'no'}; Consulta: ${denegado ? 'denegado' : 'permitido'}.`, aprobada: ok });
     expect(ok).toBe(true);
   });
 });

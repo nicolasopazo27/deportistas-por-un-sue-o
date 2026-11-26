@@ -42,9 +42,10 @@ export default function PostulacionPublica() {
             <CheckCircle2 size={44} aria-hidden="true" />
             <h2>¡Postulación enviada!</h2>
             <p>Recibimos la postulación de <b>{enviada.nombre}</b>. Código de seguimiento: <b>{enviada.codigo}</b>.</p>
-            <p>El equipo social la revisará y te contactará. Si es aceptada, el NNA ingresa al programa.</p>
+            <p>Guarda este código: con él y el RUT del NNA puedes revisar el estado cuando quieras. El equipo social la revisará y te contactará.</p>
             <div className="acciones">
-              <Boton onClick={() => setEnviada(null)}>Enviar otra postulación</Boton>
+              <Link to={`/seguimiento?codigo=${enviada.codigo}`} className="boton boton-primario">Ver estado de la postulación</Link>
+              <Boton tipo="borde" onClick={() => setEnviada(null)}>Enviar otra postulación</Boton>
               <Link to="/ingreso" className="boton boton-borde">Volver al inicio</Link>
             </div>
           </div>

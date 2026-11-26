@@ -81,7 +81,7 @@ export interface Notificacion {
 }
 
 export interface ReporteGenerado {
-  id: string; tipo: string; formato: 'XLSX'; desde?: string; hasta?: string; idBeneficiario?: string;
+  id: string; tipo: string; formato: 'XLSX' | 'PDF'; desde?: string; hasta?: string; idBeneficiario?: string;
   incluyeApoderado: boolean; totalRegistros: number; resultado: 'GENERADO' | 'VACIO' | 'FALLIDO';
   usuario: string; fecha: string;
 }

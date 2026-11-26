@@ -5,9 +5,9 @@ import { useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useSistema } from '../../data/useSistema';
 import { evaluarPostulacion } from '../../data/servicios';
-import { fmtFecha, puede } from '../../domain/reglas';
+import { fmtFecha, mensajeWhatsAppPostulacion, puede } from '../../domain/reglas';
 import type { EstadoPostulacion, Postulacion } from '../../domain/tipos';
-import { Aviso, Boton, Encabezado, Etiqueta, Modal, Pasos, Texto, Volver } from '../../components/ui';
+import { Aviso, Boton, BotonWhatsApp, Encabezado, Etiqueta, Modal, Pasos, Texto, Volver } from '../../components/ui';
 
 const TEXTO_ESTADO: Record<EstadoPostulacion, string> = { ENVIADA: 'Enviada', EN_EVALUACION: 'En evaluación', ACEPTADA: 'Aceptada · ingresado', RECHAZADA: 'Rechazada' };
 const TONO: Record<EstadoPostulacion, 'amarillo' | 'gris' | 'verde' | 'rojo'> = { ENVIADA: 'amarillo', EN_EVALUACION: 'amarillo', ACEPTADA: 'verde', RECHAZADA: 'rojo' };
@@ -108,7 +108,7 @@ function Detalle({ p, evalua, onVolver, onResuelta, ejecutar }: {
         </div>
       </>}
       {!evalua && abierta && <Aviso tipo="info">La postulación está en manos del área social. Recibirá la resolución en esta pantalla.</Aviso>}
-      <div className="acciones"><Boton tipo="secundario" onClick={onVolver}>Volver al listado</Boton></div>
+      <div className="acciones"><Boton tipo="secundario" onClick={onVolver}>Volver al listado</Boton>{evalua && <BotonWhatsApp telefono={p.apoderado.telefono} mensaje={mensajeWhatsAppPostulacion(p)} />}</div>
       {conf && (
         <Modal titulo={conf === 'ACEPTADA' ? 'Confirmar ingreso al programa' : 'Confirmar rechazo'} onCerrar={() => setConf(null)} acciones={<>
           <Boton tipo="secundario" onClick={() => setConf(null)}>Cancelar</Boton>

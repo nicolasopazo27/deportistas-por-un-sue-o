@@ -28,6 +28,20 @@ function notificar(e: EstadoSistema, rol: Usuario['rol'], tipo: 'ATENCION_REALIZ
 }
 
 // ---------- M8 Postulación: etapa previa al ingreso del NNA ----------
+/** Seguimiento público: el apoderado consulta el estado con el RUT del NNA y el código entregado al postular.
+ *  Devuelve solo datos no sensibles (nombre, estado, fechas y la respuesta del equipo). */
+export interface EstadoPublico { codigo: string; nombre: string; fecha: string; estado: Postulacion['estado']; fechaResolucion?: string; resolucion?: string }
+export function consultarPostulacionPublica(e: EstadoSistema, rut: string, codigo: string): Resultado<EstadoPublico> {
+  const errores: Record<string, string> = {};
+  if (!rut.trim()) errores.rut = 'Ingrese el RUT del NNA.';
+  if (!codigo.trim()) errores.codigo = 'Ingrese el código de seguimiento.';
+  if (Object.keys(errores).length) return { ok: false, errores };
+  const r = normalizarRut(rut), c = codigo.trim().toUpperCase();
+  const p = e.postulaciones.find(x => x.id.toUpperCase() === c && x.nna.rut === r);
+  if (!p) return { ok: false, errores: { codigo: 'No encontramos una postulación con ese RUT y código. Revísalos e intenta de nuevo.' } };
+  return { ok: true, dato: { codigo: p.id, nombre: `${p.nna.nombres} ${p.nna.apellidos}`, fecha: p.fecha, estado: p.estado, fechaResolucion: p.fechaResolucion, resolucion: p.resolucion } };
+}
+
 /** Postulación pública (sin sesión): la envía el apoderado/a o tutor/a desde la web; la evalúa el área social. */
 export function registrarPostulacionPublica(e: EstadoSistema, d: DatosPostulacion): Resultado<{ id: string }> {
   const errores = validarPostulacion(d);

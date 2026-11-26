@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { NavLink, Outlet, Navigate, useLocation } from 'react-router-dom';
-import { Bell, ClipboardList, FileBarChart, HandHeart, Home, LogOut, Send, ShieldCheck, Stethoscope, TriangleAlert, UserMinus, Users } from 'lucide-react';
+import { Bell, Menu, X, ClipboardList, FileBarChart, HandHeart, Home, LogOut, Send, ShieldCheck, Stethoscope, TriangleAlert, UserMinus, Users } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { useSistema } from '../data/useSistema';
 import { NOMBRE_ROL, puede } from '../domain/reglas';
@@ -9,9 +9,10 @@ import type { Permiso } from '../domain/tipos';
 
 interface ItemMenu { ruta: string; texto: string; icono: LucideIcon; permiso?: Permiso | Permiso[]; cuenta?: number }
 
-export function Cabecera({ titulo = 'Gestión interna · Atención de beneficiarios' }: { titulo?: string }) {
+export function Cabecera({ titulo = 'Gestión interna · Atención de beneficiarios', onMenu, menuAbierto }: { titulo?: string; onMenu?: () => void; menuAbierto?: boolean }) {
   return (
     <header className="cabecera">
+      {onMenu && <button type="button" className="boton-menu" aria-label={menuAbierto ? 'Cerrar menú' : 'Abrir menú'} aria-expanded={!!menuAbierto} onClick={onMenu}>{menuAbierto ? <X size={22} /> : <Menu size={22} />}</button>}
       <img src={`${import.meta.env.BASE_URL}logo-fundacion.png`} alt="Fundación Deportistas por un Sueño" className="logo" />
       <span className="titulo-sistema">{titulo}</span>
     </header>
@@ -22,6 +23,9 @@ export default function Layout() {
   const { usuario, estado, cerrarSesion, ejecutar } = useSistema();
   const loc = useLocation();
   const [verAvisos, setVerAvisos] = useState(false);
+  const [menu, setMenu] = useState(false);
+  const [rutaMenu, setRutaMenu] = useState(loc.pathname);
+  if (rutaMenu !== loc.pathname) { setRutaMenu(loc.pathname); setMenu(false); }
   // RNF-3: sin sesión no se muestra ningún dato; se redirige al inicio de sesión.
   if (!usuario) return <Navigate to="/ingreso" replace state={{ desde: loc.pathname + loc.search }} />;
   const pendientes = estado.notificaciones.filter(n => (n.rolDestino === usuario.rol || usuario.rol === 'ADMIN') && n.estado === 'PENDIENTE');
@@ -50,9 +54,10 @@ export default function Layout() {
 
   return (
     <div className="app">
-      <Cabecera />
+      <Cabecera onMenu={() => setMenu(m => !m)} menuAbierto={menu} />
       <div className="cuerpo">
-        <aside className="lateral">
+        {menu && <div className="velo-menu" onClick={() => setMenu(false)} aria-hidden="true" />}
+        <aside className={`lateral ${menu ? 'abierto' : ''}`}>
           <div className="usuario-lateral">
             <span className="avatar avatar-sm avatar-ini">{usuario.nombre.split(' ').map(p => p[0]).join('').slice(0, 2)}</span>
             <div><b>{usuario.nombre}</b><span>{NOMBRE_ROL[usuario.rol]}</span></div>

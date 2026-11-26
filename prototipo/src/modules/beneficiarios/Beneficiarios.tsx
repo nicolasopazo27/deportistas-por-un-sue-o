@@ -3,13 +3,14 @@
 // (patologías, centros hospitalarios, credencial de discapacidad, hospitalizaciones).
 import { useMemo, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Camera } from 'lucide-react';
+import { Camera, Printer } from 'lucide-react';
 import { useSistema } from '../../data/useSistema';
 import { actualizarFicha, actualizarFoto, agregarObservacion, type CambiosFicha } from '../../data/servicios';
-import { AREAS, CENTROS_SALUD, COMUNAS, ENFERMEDADES, PREVISIONES, casoActivo, edad, estaDeBaja, estadoTexto, fmtFecha, nombreCompleto, puede, sesionesRealizadas } from '../../domain/reglas';
+import { AREAS, CENTROS_SALUD, COMUNAS, ENFERMEDADES, PREVISIONES, casoActivo, edad, estaDeBaja, estadoTexto, fmtFecha, mensajeWhatsAppFicha, nombreCompleto, puede, sesionesRealizadas } from '../../domain/reglas';
 import type { Beneficiario } from '../../domain/tipos';
-import { Aviso, Avatar, Boton, Encabezado, Etiqueta, Modal, Pestanas, Selector, Texto, Volver } from '../../components/ui';
+import { Aviso, Avatar, Boton, BotonWhatsApp, Encabezado, Etiqueta, Modal, Pestanas, Selector, Texto, Volver } from '../../components/ui';
 import { exportarFicha } from '../reportes/exportar';
+import { LineaTiempo } from '../../components/LineaTiempo';
 
 type Tab = 'resumen' | 'antecedentes' | 'historial' | 'atenciones' | 'observaciones';
 
@@ -161,12 +162,7 @@ export default function Beneficiarios() {
             </div>
           ) : <Aviso tipo="alerta">Los antecedentes de salud del NNA están restringidos para su perfil.</Aviso>)}
 
-          {tab === 'historial' && (
-            <table className="tabla" aria-label="Historial unificado">
-              <thead><tr><th>Fecha</th><th>Tipo</th><th>Detalle</th><th>Registrado por</th></tr></thead>
-              <tbody>{[...sel.historial].reverse().map((h, i) => <tr key={i}><td>{fmtFecha(h.fecha)}</td><td>{h.tipo}</td><td>{h.detalle}</td><td>{h.autor}</td></tr>)}</tbody>
-            </table>
-          )}
+          {tab === 'historial' && <LineaTiempo eventos={sel.historial} />}
 
           {tab === 'atenciones' && (
             <table className="tabla" aria-label="Atenciones del beneficiario">
@@ -187,6 +183,8 @@ export default function Beneficiarios() {
             {puede(rol, 'BAJA_REGISTRAR') && !estaDeBaja(sel) && <Boton onClick={() => nav(`/bajas?b=${sel.id}`)}>Dar de baja</Boton>}
             {puede(rol, 'OBSERVACION_REGISTRAR') && <Boton tipo="secundario" onClick={() => { setObs(''); setErrObs(''); }}>Agregar observación</Boton>}
             {puede(rol, 'EXPORTAR_FICHA') && <Boton tipo="borde" onClick={async () => { await exportarFicha(sel, usuario!, ejecutar); setMsg('Ficha exportada a Excel; la descarga quedó registrada.'); }}>Exportar ficha (XLSX)</Boton>}
+            {puede(rol, 'EXPORTAR_FICHA') && <Boton tipo="borde" onClick={() => window.open(`#/ficha-imprimir?b=${sel.id}`, '_blank')}><Printer size={15} /> Imprimir / PDF</Boton>}
+            {(puede(rol, 'FICHA_EDITAR') || puede(rol, 'ATENCION_REGISTRAR')) && <BotonWhatsApp telefono={sel.apoderado.telefono} mensaje={mensajeWhatsAppFicha(sel)} />}
           </div>
         </div>
       )}

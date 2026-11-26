@@ -49,7 +49,10 @@ export default function Ingreso() {
           <div className="cta-postula">
             <Megaphone size={30} className="cta-icono" aria-hidden="true" />
             <div><b>Postula a nuestros programas</b><span>Cualquier persona puede acceder y realizar su postulación en línea.</span></div>
-            <Link to="/postular" className="boton boton-primario cta-boton">Ir a postulación pública <ArrowRight size={16} /></Link>
+            <div className="cta-acciones">
+              <Link to="/postular" className="boton boton-primario cta-boton">Ir a postulación pública <ArrowRight size={16} /></Link>
+              <Link to="/seguimiento" className="cta-seguimiento">¿Ya postulaste? Revisa el estado</Link>
+            </div>
           </div>
         </section>
 

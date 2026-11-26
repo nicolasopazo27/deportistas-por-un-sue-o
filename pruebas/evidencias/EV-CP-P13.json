@@ -6,9 +6,9 @@
   "obtenido": "Error RUT: true; error teléfono: true; postulaciones: 2.",
   "aprobada": true,
   "estado": "Aprobada",
-  "fechaUTC": "2026-11-26T00:01:23.406Z",
+  "fechaUTC": "2026-11-26T00:19:53.652Z",
   "almacenamiento": {
-    "version": 3,
+    "version": 4,
     "parametros": {
       "umbralDiasAlerta": 14,
       "umbralDiasDerivacion": 7
@@ -138,14 +138,14 @@
         ],
         "bajas": [],
         "ayudas": [],
-        "fechaRegistro": "2026-10-12T00:01:22.873Z",
+        "fechaRegistro": "2026-10-12T00:19:53.159Z",
         "observaciones": [],
         "casos": [
           {
             "id": "K-01",
             "estado": "EN_ATENCION",
             "fechaInicio": "2026-10-17",
-            "ultimaActualizacion": "2026-11-07T00:01:22.873Z",
+            "ultimaActualizacion": "2026-11-07T00:19:53.159Z",
             "derivaciones": [
               {
                 "id": "D-01",
@@ -187,25 +187,25 @@
         ],
         "historial": [
           {
-            "fecha": "2026-10-12T00:01:22.873Z",
+            "fecha": "2026-10-12T00:19:53.159Z",
             "tipo": "Ingreso al programa",
             "detalle": "Postulación aceptada",
             "autor": "Trabajo social (demo)"
           },
           {
-            "fecha": "2026-10-17T00:01:22.873Z",
+            "fecha": "2026-10-17T00:19:53.159Z",
             "tipo": "Derivación",
             "detalle": "Primera derivación · Dental · llamado semanal",
             "autor": "Trabajo social (demo)"
           },
           {
-            "fecha": "2026-10-31T00:01:22.873Z",
+            "fecha": "2026-10-31T00:19:53.159Z",
             "tipo": "Atención",
             "detalle": "Sesión 1 · Realizada · Atención dental",
             "autor": "TENS (demo)"
           },
           {
-            "fecha": "2026-11-07T00:01:22.873Z",
+            "fecha": "2026-11-07T00:19:53.159Z",
             "tipo": "Atención",
             "detalle": "Sesión 2 · Realizada · Atención dental",
             "autor": "TENS (demo)"
@@ -241,14 +241,14 @@
         "hospitalizaciones": [],
         "bajas": [],
         "ayudas": [],
-        "fechaRegistro": "2026-09-17T00:01:22.873Z",
+        "fechaRegistro": "2026-09-17T00:19:53.159Z",
         "observaciones": [],
         "casos": [
           {
             "id": "K-02",
             "estado": "EN_ATENCION",
             "fechaInicio": "2026-09-27",
-            "ultimaActualizacion": "2026-09-27T00:01:22.873Z",
+            "ultimaActualizacion": "2026-09-27T00:19:53.159Z",
             "derivaciones": [
               {
                 "id": "D-02",
@@ -266,15 +266,972 @@
         ],
         "historial": [
           {
-            "fecha": "2026-09-17T00:01:22.873Z",
+            "fecha": "2026-09-17T00:19:53.159Z",
             "tipo": "Ingreso al programa",
             "detalle": "Ingreso registrado antes del sistema",
             "autor": "Trabajo social (demo)"
           },
           {
-            "fecha": "2026-09-27T00:01:22.873Z",
+            "fecha": "2026-09-27T00:19:53.159Z",
             "tipo": "Derivación",
             "detalle": "Primera derivación · Kinesiología · solicitud del apoderado",
+            "autor": "Trabajo social (demo)"
+          }
+        ]
+      },
+      {
+        "id": "B-03",
+        "rut": "20111222-2",
+        "nombres": "Josefa",
+        "apellidos": "Reyes Castro",
+        "fechaNacimiento": "2014-06-12",
+        "comuna": "La Florida",
+        "apoderado": {
+          "nombre": "Paola Castro Ríos",
+          "telefono": "+56 9 3111 2233",
+          "prevision": "FONASA"
+        },
+        "situacionDocumental": "DOCUMENTADO",
+        "electrodependiente": false,
+        "enfermedades": [
+          {
+            "nombre": "Renal"
+          }
+        ],
+        "centrosSalud": [
+          "Hospital Sótero del Río"
+        ],
+        "credencial": {
+          "tiene": true,
+          "numero": "CD-020111",
+          "porcentaje": 30
+        },
+        "hospitalizaciones": [],
+        "fechaRegistro": "2026-10-19T00:19:53.159Z",
+        "bajas": [],
+        "ayudas": [],
+        "observaciones": [],
+        "casos": [
+          {
+            "id": "K-B-03",
+            "estado": "EN_ATENCION",
+            "fechaInicio": "2026-10-25",
+            "ultimaActualizacion": "2026-11-22T00:19:53.159Z",
+            "derivaciones": [
+              {
+                "id": "D-B-03",
+                "fecha": "2026-10-25",
+                "tipoIngreso": "INGRESO",
+                "area": "DENTAL",
+                "origen": "LLAMADO_SEMANAL",
+                "advertenciaIgnorada": false,
+                "autor": "Trabajo social (demo)"
+              }
+            ],
+            "atenciones": [
+              {
+                "id": "A-B-03-1",
+                "fecha": "2026-11-01",
+                "profesional": "Diego Fuentes · Dental",
+                "prestacion": "Atención dental",
+                "numeroSesion": 1,
+                "asistencia": "ASISTIO",
+                "resultado": "REALIZADA",
+                "observacion": "Evaluación inicial.",
+                "autor": "TENS (demo)"
+              },
+              {
+                "id": "A-B-03-2",
+                "fecha": "2026-11-12",
+                "profesional": "Diego Fuentes · Dental",
+                "prestacion": "Atención dental",
+                "numeroSesion": 2,
+                "asistencia": "ASISTIO",
+                "resultado": "REALIZADA",
+                "autor": "TENS (demo)"
+              },
+              {
+                "id": "A-B-03-3",
+                "fecha": "2026-11-22",
+                "profesional": "Diego Fuentes · Dental",
+                "prestacion": "Atención dental",
+                "numeroSesion": 3,
+                "asistencia": "ASISTIO",
+                "resultado": "REALIZADA",
+                "observacion": "Tratamiento avanzando bien.",
+                "autor": "TENS (demo)"
+              }
+            ],
+            "urgencias": []
+          }
+        ],
+        "historial": [
+          {
+            "fecha": "2026-10-19T00:19:53.159Z",
+            "tipo": "Ingreso al programa",
+            "detalle": "Postulación aceptada",
+            "autor": "Trabajo social (demo)"
+          },
+          {
+            "fecha": "2026-10-25T00:19:53.159Z",
+            "tipo": "Derivación",
+            "detalle": "Primera derivación · Dental · llamado semanal",
+            "autor": "Trabajo social (demo)"
+          },
+          {
+            "fecha": "2026-11-01T00:19:53.159Z",
+            "tipo": "Atención",
+            "detalle": "Sesión 1 · Realizada · Atención dental",
+            "autor": "TENS (demo)"
+          },
+          {
+            "fecha": "2026-11-12T00:19:53.159Z",
+            "tipo": "Atención",
+            "detalle": "Sesión 2 · Realizada · Atención dental",
+            "autor": "TENS (demo)"
+          },
+          {
+            "fecha": "2026-11-22T00:19:53.159Z",
+            "tipo": "Atención",
+            "detalle": "Sesión 3 · Realizada · Atención dental",
+            "autor": "TENS (demo)"
+          }
+        ]
+      },
+      {
+        "id": "B-04",
+        "rut": "19876123-0",
+        "nombres": "Matías",
+        "apellidos": "González Fuentes",
+        "fechaNacimiento": "2011-02-03",
+        "comuna": "Peñalolén",
+        "apoderado": {
+          "nombre": "Rodrigo González Vidal",
+          "telefono": "+56 9 4555 6677",
+          "prevision": "ISAPRE"
+        },
+        "situacionDocumental": "DOCUMENTADO",
+        "electrodependiente": false,
+        "enfermedades": [
+          {
+            "nombre": "Neurológica"
+          }
+        ],
+        "centrosSalud": [
+          "Teletón"
+        ],
+        "credencial": {
+          "tiene": false
+        },
+        "hospitalizaciones": [],
+        "fechaRegistro": "2026-10-30T00:19:53.159Z",
+        "bajas": [],
+        "ayudas": [],
+        "observaciones": [
+          {
+            "id": "O-B-04",
+            "fechaHora": "2026-11-20T00:19:53.159Z",
+            "texto": "Apoderado pide horario de tarde (dato ficticio).",
+            "autor": "Valentina Muñoz"
+          }
+        ],
+        "casos": [
+          {
+            "id": "K-B-04",
+            "estado": "EN_ATENCION",
+            "fechaInicio": "2026-11-05",
+            "ultimaActualizacion": "2026-11-20T00:19:53.159Z",
+            "derivaciones": [
+              {
+                "id": "D-B-04",
+                "fecha": "2026-11-05",
+                "tipoIngreso": "INGRESO",
+                "area": "KINESIOLOGIA",
+                "origen": "LLAMADO_SEMANAL",
+                "advertenciaIgnorada": false,
+                "autor": "Trabajo social (demo)"
+              }
+            ],
+            "atenciones": [
+              {
+                "id": "A-B-04-1",
+                "fecha": "2026-11-13",
+                "profesional": "Camila Ríos · Kinesiología",
+                "prestacion": "Kinesiología",
+                "numeroSesion": 1,
+                "asistencia": "ASISTIO",
+                "resultado": "REALIZADA",
+                "observacion": "Plan de ejercicios en casa.",
+                "autor": "TENS (demo)"
+              },
+              {
+                "id": "A-B-04-2",
+                "fecha": "2026-11-20",
+                "profesional": "Camila Ríos · Kinesiología",
+                "prestacion": "Kinesiología",
+                "numeroSesion": 2,
+                "asistencia": "ASISTIO",
+                "resultado": "REALIZADA",
+                "autor": "TENS (demo)"
+              }
+            ],
+            "urgencias": []
+          }
+        ],
+        "historial": [
+          {
+            "fecha": "2026-10-30T00:19:53.159Z",
+            "tipo": "Ingreso al programa",
+            "detalle": "Postulación aceptada",
+            "autor": "Trabajo social (demo)"
+          },
+          {
+            "fecha": "2026-11-05T00:19:53.159Z",
+            "tipo": "Derivación",
+            "detalle": "Primera derivación · Kinesiología · llamado semanal",
+            "autor": "Trabajo social (demo)"
+          },
+          {
+            "fecha": "2026-11-13T00:19:53.159Z",
+            "tipo": "Atención",
+            "detalle": "Sesión 1 · Realizada · Kinesiología",
+            "autor": "TENS (demo)"
+          },
+          {
+            "fecha": "2026-11-20T00:19:53.159Z",
+            "tipo": "Atención",
+            "detalle": "Sesión 2 · Realizada · Kinesiología",
+            "autor": "TENS (demo)"
+          }
+        ]
+      },
+      {
+        "id": "B-05",
+        "rut": "22987456-K",
+        "nombres": "Isidora",
+        "apellidos": "Pino Herrera",
+        "fechaNacimiento": "2016-09-30",
+        "comuna": "Recoleta",
+        "apoderado": {
+          "nombre": "Daniela Herrera Soto",
+          "telefono": "+56 9 6888 1122",
+          "prevision": "FONASA"
+        },
+        "situacionDocumental": "DOCUMENTADO",
+        "electrodependiente": false,
+        "enfermedades": [
+          {
+            "nombre": "Cardiopatía"
+          }
+        ],
+        "centrosSalud": [
+          "Hospital Roberto del Río"
+        ],
+        "credencial": {
+          "tiene": false
+        },
+        "hospitalizaciones": [],
+        "fechaRegistro": "2026-11-17T00:19:53.159Z",
+        "bajas": [],
+        "ayudas": [],
+        "observaciones": [],
+        "casos": [
+          {
+            "id": "K-B-05",
+            "estado": "EN_ATENCION",
+            "fechaInicio": "2026-11-23",
+            "ultimaActualizacion": "2026-11-23T00:19:53.159Z",
+            "derivaciones": [
+              {
+                "id": "D-B-05",
+                "fecha": "2026-11-23",
+                "tipoIngreso": "INGRESO",
+                "area": "DENTAL",
+                "origen": "LLAMADO_SEMANAL",
+                "advertenciaIgnorada": false,
+                "autor": "Trabajo social (demo)"
+              }
+            ],
+            "atenciones": [],
+            "urgencias": []
+          }
+        ],
+        "historial": [
+          {
+            "fecha": "2026-11-17T00:19:53.159Z",
+            "tipo": "Ingreso al programa",
+            "detalle": "Postulación aceptada",
+            "autor": "Trabajo social (demo)"
+          },
+          {
+            "fecha": "2026-11-23T00:19:53.159Z",
+            "tipo": "Derivación",
+            "detalle": "Primera derivación · Dental · llamado semanal",
+            "autor": "Trabajo social (demo)"
+          }
+        ]
+      },
+      {
+        "id": "B-06",
+        "rut": "21555333-7",
+        "nombres": "Joaquín",
+        "apellidos": "Muñoz Silva",
+        "fechaNacimiento": "2012-12-01",
+        "comuna": "San Bernardo",
+        "apoderado": {
+          "nombre": "Claudia Silva Mora",
+          "telefono": "+56 9 7222 3344",
+          "prevision": "FONASA"
+        },
+        "situacionDocumental": "DOCUMENTADO",
+        "electrodependiente": false,
+        "enfermedades": [
+          {
+            "nombre": "Respiratoria"
+          }
+        ],
+        "centrosSalud": [
+          "Hospital Exequiel González Cortés"
+        ],
+        "credencial": {
+          "tiene": false
+        },
+        "hospitalizaciones": [],
+        "fechaRegistro": "2026-07-29T01:19:53.159Z",
+        "bajas": [],
+        "ayudas": [],
+        "observaciones": [],
+        "casos": [
+          {
+            "id": "K-B-06",
+            "estado": "ATENDIDO",
+            "fechaInicio": "2026-08-08",
+            "ultimaActualizacion": "2026-11-14T00:19:53.159Z",
+            "fechaCierreCiclo": "2026-11-14",
+            "derivaciones": [
+              {
+                "id": "D-B-06",
+                "fecha": "2026-08-08",
+                "tipoIngreso": "INGRESO",
+                "area": "KINESIOLOGIA",
+                "origen": "LLAMADO_SEMANAL",
+                "advertenciaIgnorada": false,
+                "autor": "Trabajo social (demo)"
+              }
+            ],
+            "atenciones": [
+              {
+                "id": "A-B-06-1",
+                "fecha": "2026-08-23",
+                "profesional": "Camila Ríos · Kinesiología",
+                "prestacion": "Kinesiología",
+                "numeroSesion": 1,
+                "asistencia": "ASISTIO",
+                "resultado": "REALIZADA",
+                "autor": "TENS (demo)"
+              },
+              {
+                "id": "A-B-06-2",
+                "fecha": "2026-09-17",
+                "profesional": "Camila Ríos · Kinesiología",
+                "prestacion": "Kinesiología",
+                "numeroSesion": 2,
+                "asistencia": "ASISTIO",
+                "resultado": "REALIZADA",
+                "autor": "TENS (demo)"
+              },
+              {
+                "id": "A-B-06-3",
+                "fecha": "2026-10-17",
+                "profesional": "Camila Ríos · Kinesiología",
+                "prestacion": "Kinesiología",
+                "numeroSesion": 3,
+                "asistencia": "ASISTIO",
+                "resultado": "REALIZADA",
+                "autor": "TENS (demo)"
+              },
+              {
+                "id": "A-B-06-4",
+                "fecha": "2026-11-14",
+                "profesional": "Camila Ríos · Kinesiología",
+                "prestacion": "Kinesiología",
+                "numeroSesion": 4,
+                "asistencia": "ASISTIO",
+                "resultado": "REALIZADA",
+                "observacion": "Alta kinesiológica.",
+                "autor": "TENS (demo)"
+              }
+            ],
+            "urgencias": []
+          }
+        ],
+        "historial": [
+          {
+            "fecha": "2026-07-29T01:19:53.159Z",
+            "tipo": "Ingreso al programa",
+            "detalle": "Postulación aceptada",
+            "autor": "Trabajo social (demo)"
+          },
+          {
+            "fecha": "2026-08-08T01:19:53.159Z",
+            "tipo": "Derivación",
+            "detalle": "Primera derivación · Kinesiología · llamado semanal",
+            "autor": "Trabajo social (demo)"
+          },
+          {
+            "fecha": "2026-08-23T01:19:53.159Z",
+            "tipo": "Atención",
+            "detalle": "Sesión 1 · Realizada · Kinesiología",
+            "autor": "TENS (demo)"
+          },
+          {
+            "fecha": "2026-09-17T00:19:53.159Z",
+            "tipo": "Atención",
+            "detalle": "Sesión 2 · Realizada · Kinesiología",
+            "autor": "TENS (demo)"
+          },
+          {
+            "fecha": "2026-10-17T00:19:53.159Z",
+            "tipo": "Atención",
+            "detalle": "Sesión 3 · Realizada · Kinesiología",
+            "autor": "TENS (demo)"
+          },
+          {
+            "fecha": "2026-11-14T00:19:53.159Z",
+            "tipo": "Atención",
+            "detalle": "Sesión 4 · Realizada · Kinesiología",
+            "autor": "TENS (demo)"
+          },
+          {
+            "fecha": "2026-11-14T00:19:53.159Z",
+            "tipo": "Ciclo terminado",
+            "detalle": "Ciclo de Kinesiología completado",
+            "autor": "TENS (demo)"
+          }
+        ]
+      },
+      {
+        "id": "B-07",
+        "rut": "23111444-0",
+        "nombres": "Florencia",
+        "apellidos": "Vera Ramírez",
+        "fechaNacimiento": "2018-04-17",
+        "comuna": "Maipú",
+        "apoderado": {
+          "nombre": "Natalia Ramírez Pinto",
+          "telefono": "+56 9 8111 4455",
+          "prevision": "Sin previsión"
+        },
+        "situacionDocumental": "DOCUMENTADO",
+        "electrodependiente": false,
+        "enfermedades": [
+          {
+            "nombre": "Neurológica"
+          }
+        ],
+        "centrosSalud": [
+          "CESFAM de la comuna"
+        ],
+        "credencial": {
+          "tiene": true,
+          "numero": "CD-023111",
+          "porcentaje": 50
+        },
+        "hospitalizaciones": [],
+        "fechaRegistro": "2026-11-24T00:19:53.159Z",
+        "bajas": [],
+        "ayudas": [],
+        "observaciones": [],
+        "casos": [],
+        "historial": [
+          {
+            "fecha": "2026-11-24T00:19:53.159Z",
+            "tipo": "Ingreso al programa",
+            "detalle": "Postulación aceptada",
+            "autor": "Trabajo social (demo)"
+          }
+        ]
+      },
+      {
+        "id": "B-08",
+        "rut": "20444777-2",
+        "nombres": "Agustín",
+        "apellidos": "Rojas Morales",
+        "fechaNacimiento": "2009-07-08",
+        "comuna": "La Florida",
+        "apoderado": {
+          "nombre": "Patricio Rojas Leiva",
+          "telefono": "+56 9 5333 7788",
+          "prevision": "FONASA"
+        },
+        "situacionDocumental": "DOCUMENTADO",
+        "electrodependiente": false,
+        "enfermedades": [
+          {
+            "nombre": "Renal"
+          }
+        ],
+        "centrosSalud": [
+          "Hospital Sótero del Río"
+        ],
+        "credencial": {
+          "tiene": false
+        },
+        "hospitalizaciones": [],
+        "fechaRegistro": "2026-04-30T01:19:53.159Z",
+        "bajas": [
+          {
+            "id": "BJ-B-08",
+            "causal": "EGRESO",
+            "fecha": "2026-11-11",
+            "observacion": "Cumplió 18 años y completó su tratamiento",
+            "autor": "Trabajo social (demo)"
+          }
+        ],
+        "ayudas": [],
+        "observaciones": [],
+        "casos": [
+          {
+            "id": "K-B-08",
+            "estado": "ATENDIDO",
+            "fechaInicio": "2026-05-10",
+            "ultimaActualizacion": "2026-10-27T00:19:53.159Z",
+            "fechaCierreCiclo": "2026-11-11",
+            "derivaciones": [
+              {
+                "id": "D-B-08",
+                "fecha": "2026-05-10",
+                "tipoIngreso": "INGRESO",
+                "area": "DENTAL",
+                "origen": "LLAMADO_SEMANAL",
+                "advertenciaIgnorada": false,
+                "autor": "Trabajo social (demo)"
+              }
+            ],
+            "atenciones": [
+              {
+                "id": "A-B-08-1",
+                "fecha": "2026-05-30",
+                "profesional": "Paula Vera · Dental",
+                "prestacion": "Atención dental",
+                "numeroSesion": 1,
+                "asistencia": "ASISTIO",
+                "resultado": "REALIZADA",
+                "autor": "TENS (demo)"
+              },
+              {
+                "id": "A-B-08-2",
+                "fecha": "2026-06-29",
+                "profesional": "Paula Vera · Dental",
+                "prestacion": "Atención dental",
+                "numeroSesion": 2,
+                "asistencia": "ASISTIO",
+                "resultado": "REALIZADA",
+                "autor": "TENS (demo)"
+              },
+              {
+                "id": "A-B-08-3",
+                "fecha": "2026-10-27",
+                "profesional": "Paula Vera · Dental",
+                "prestacion": "Atención dental",
+                "numeroSesion": 3,
+                "asistencia": "ASISTIO",
+                "resultado": "REALIZADA",
+                "autor": "TENS (demo)"
+              }
+            ],
+            "urgencias": []
+          }
+        ],
+        "historial": [
+          {
+            "fecha": "2026-04-30T01:19:53.159Z",
+            "tipo": "Ingreso al programa",
+            "detalle": "Postulación aceptada",
+            "autor": "Trabajo social (demo)"
+          },
+          {
+            "fecha": "2026-05-10T01:19:53.159Z",
+            "tipo": "Derivación",
+            "detalle": "Primera derivación · Dental · llamado semanal",
+            "autor": "Trabajo social (demo)"
+          },
+          {
+            "fecha": "2026-05-30T01:19:53.159Z",
+            "tipo": "Atención",
+            "detalle": "Sesión 1 · Realizada · Atención dental",
+            "autor": "TENS (demo)"
+          },
+          {
+            "fecha": "2026-06-29T01:19:53.159Z",
+            "tipo": "Atención",
+            "detalle": "Sesión 2 · Realizada · Atención dental",
+            "autor": "TENS (demo)"
+          },
+          {
+            "fecha": "2026-10-27T00:19:53.159Z",
+            "tipo": "Atención",
+            "detalle": "Sesión 3 · Realizada · Atención dental",
+            "autor": "TENS (demo)"
+          },
+          {
+            "fecha": "2026-11-11T00:19:53.159Z",
+            "tipo": "Baja",
+            "detalle": "Egreso · Cumplió 18 años y completó su tratamiento",
+            "autor": "Trabajo social (demo)"
+          }
+        ]
+      },
+      {
+        "id": "B-09",
+        "rut": "22222111-0",
+        "nombres": "Antonia",
+        "apellidos": "Castillo Díaz",
+        "fechaNacimiento": "2015-01-25",
+        "comuna": "Peñalolén",
+        "apoderado": {
+          "nombre": "Verónica Díaz Rojas",
+          "telefono": "+56 9 9444 5566",
+          "prevision": "FONASA"
+        },
+        "situacionDocumental": "DOCUMENTADO",
+        "electrodependiente": false,
+        "enfermedades": [
+          {
+            "nombre": "Respiratoria"
+          }
+        ],
+        "centrosSalud": [
+          "Hospital Sótero del Río"
+        ],
+        "credencial": {
+          "tiene": false
+        },
+        "hospitalizaciones": [],
+        "fechaRegistro": "2026-11-08T00:19:53.159Z",
+        "bajas": [],
+        "ayudas": [
+          {
+            "id": "AY-B-09",
+            "tipo": "Traslado",
+            "fecha": "2026-11-21",
+            "numeroGuia": "GT-2041",
+            "autor": "Trabajo social (demo)"
+          }
+        ],
+        "observaciones": [],
+        "casos": [
+          {
+            "id": "K-B-09",
+            "estado": "EN_ATENCION",
+            "fechaInicio": "2026-11-14",
+            "ultimaActualizacion": "2026-11-21T00:19:53.159Z",
+            "derivaciones": [
+              {
+                "id": "D-B-09",
+                "fecha": "2026-11-14",
+                "tipoIngreso": "INGRESO",
+                "area": "KINESIOLOGIA",
+                "origen": "LLAMADO_SEMANAL",
+                "advertenciaIgnorada": false,
+                "autor": "Trabajo social (demo)"
+              }
+            ],
+            "atenciones": [
+              {
+                "id": "A-B-09-1",
+                "fecha": "2026-11-21",
+                "profesional": "Camila Ríos · Kinesiología",
+                "prestacion": "Kinesiología",
+                "numeroSesion": 1,
+                "asistencia": "ASISTIO",
+                "resultado": "REALIZADA",
+                "observacion": "Requiere traslado para próximas sesiones.",
+                "autor": "TENS (demo)"
+              }
+            ],
+            "urgencias": []
+          }
+        ],
+        "historial": [
+          {
+            "fecha": "2026-11-08T00:19:53.159Z",
+            "tipo": "Ingreso al programa",
+            "detalle": "Postulación aceptada",
+            "autor": "Trabajo social (demo)"
+          },
+          {
+            "fecha": "2026-11-14T00:19:53.159Z",
+            "tipo": "Derivación",
+            "detalle": "Primera derivación · Kinesiología · llamado semanal",
+            "autor": "Trabajo social (demo)"
+          },
+          {
+            "fecha": "2026-11-21T00:19:53.159Z",
+            "tipo": "Atención",
+            "detalle": "Sesión 1 · Realizada · Kinesiología",
+            "autor": "TENS (demo)"
+          },
+          {
+            "fecha": "2026-11-21T00:19:53.159Z",
+            "tipo": "Ayuda entregada",
+            "detalle": "Traslado · guía GT-2041",
+            "autor": "Trabajo social (demo)"
+          }
+        ]
+      },
+      {
+        "id": "B-10",
+        "rut": "19333888-7",
+        "nombres": "Lucas",
+        "apellidos": "Fernández Torres",
+        "fechaNacimiento": "2010-10-14",
+        "comuna": "Recoleta",
+        "apoderado": {
+          "nombre": "Marcela Torres Vega",
+          "telefono": "+56 9 2777 8899",
+          "prevision": "ISAPRE"
+        },
+        "situacionDocumental": "DOCUMENTADO",
+        "electrodependiente": false,
+        "enfermedades": [
+          {
+            "nombre": "Cardiopatía"
+          }
+        ],
+        "centrosSalud": [
+          "Hospital Roberto del Río"
+        ],
+        "credencial": {
+          "tiene": false
+        },
+        "hospitalizaciones": [],
+        "fechaRegistro": "2026-06-19T01:19:53.159Z",
+        "bajas": [
+          {
+            "id": "BJ-B-10",
+            "causal": "DESVINCULACION",
+            "fecha": "2026-10-27",
+            "observacion": "Familia se trasladó a otra región",
+            "autor": "Trabajo social (demo)"
+          }
+        ],
+        "ayudas": [],
+        "observaciones": [],
+        "casos": [
+          {
+            "id": "K-B-10",
+            "estado": "ATENDIDO",
+            "fechaInicio": "2026-06-29",
+            "ultimaActualizacion": "2026-07-29T01:19:53.159Z",
+            "fechaCierreCiclo": "2026-10-27",
+            "derivaciones": [
+              {
+                "id": "D-B-10",
+                "fecha": "2026-06-29",
+                "tipoIngreso": "INGRESO",
+                "area": "DENTAL",
+                "origen": "LLAMADO_SEMANAL",
+                "advertenciaIgnorada": false,
+                "autor": "Trabajo social (demo)"
+              }
+            ],
+            "atenciones": [
+              {
+                "id": "A-B-10-1",
+                "fecha": "2026-07-09",
+                "profesional": "Diego Fuentes · Dental",
+                "prestacion": "Atención dental",
+                "numeroSesion": 1,
+                "asistencia": "ASISTIO",
+                "resultado": "REALIZADA",
+                "autor": "TENS (demo)"
+              },
+              {
+                "id": "A-B-10-2",
+                "fecha": "2026-07-29",
+                "profesional": "Diego Fuentes · Dental",
+                "prestacion": "Atención dental",
+                "asistencia": "NO_ASISTIO",
+                "resultado": "NO_REALIZADA",
+                "motivo": "Falta de adherencia al programa",
+                "autor": "TENS (demo)"
+              }
+            ],
+            "urgencias": []
+          }
+        ],
+        "historial": [
+          {
+            "fecha": "2026-06-19T01:19:53.159Z",
+            "tipo": "Ingreso al programa",
+            "detalle": "Postulación aceptada",
+            "autor": "Trabajo social (demo)"
+          },
+          {
+            "fecha": "2026-06-29T01:19:53.159Z",
+            "tipo": "Derivación",
+            "detalle": "Primera derivación · Dental · llamado semanal",
+            "autor": "Trabajo social (demo)"
+          },
+          {
+            "fecha": "2026-07-09T01:19:53.159Z",
+            "tipo": "Atención",
+            "detalle": "Sesión 1 · Realizada · Atención dental",
+            "autor": "TENS (demo)"
+          },
+          {
+            "fecha": "2026-07-29T01:19:53.159Z",
+            "tipo": "Atención",
+            "detalle": "No realizada · Atención dental · Falta de adherencia al programa",
+            "autor": "TENS (demo)"
+          },
+          {
+            "fecha": "2026-10-27T00:19:53.159Z",
+            "tipo": "Baja",
+            "detalle": "Desvinculación · Familia se trasladó a otra región",
+            "autor": "Trabajo social (demo)"
+          }
+        ]
+      },
+      {
+        "id": "B-11",
+        "rut": "24015632-6",
+        "nombres": "Emilia",
+        "apellidos": "Navarro Pizarro",
+        "fechaNacimiento": "2017-03-09",
+        "comuna": "San Bernardo",
+        "apoderado": {
+          "nombre": "Felipe Navarro Cid",
+          "telefono": "+56 9 3666 1200",
+          "prevision": "FONASA"
+        },
+        "situacionDocumental": "DOCUMENTADO",
+        "electrodependiente": false,
+        "enfermedades": [
+          {
+            "nombre": "Neurológica"
+          }
+        ],
+        "centrosSalud": [
+          "Teletón"
+        ],
+        "credencial": {
+          "tiene": true,
+          "numero": "CD-024015",
+          "porcentaje": 70
+        },
+        "hospitalizaciones": [],
+        "fechaRegistro": "2026-11-02T00:19:53.159Z",
+        "bajas": [],
+        "ayudas": [],
+        "observaciones": [],
+        "casos": [
+          {
+            "id": "K-B-11",
+            "estado": "EN_ATENCION",
+            "fechaInicio": "2026-11-08",
+            "ultimaActualizacion": "2026-11-24T00:19:53.159Z",
+            "derivaciones": [
+              {
+                "id": "D-B-11",
+                "fecha": "2026-11-08",
+                "tipoIngreso": "INGRESO",
+                "area": "DENTAL",
+                "origen": "LLAMADO_SEMANAL",
+                "advertenciaIgnorada": false,
+                "autor": "Trabajo social (demo)"
+              }
+            ],
+            "atenciones": [
+              {
+                "id": "A-B-11-1",
+                "fecha": "2026-11-18",
+                "profesional": "Paula Vera · Dental",
+                "prestacion": "Atención dental",
+                "asistencia": "NO_ASISTIO",
+                "resultado": "NO_REALIZADA",
+                "motivo": "Contraindicación médica",
+                "autor": "TENS (demo)"
+              },
+              {
+                "id": "A-B-11-2",
+                "fecha": "2026-11-24",
+                "profesional": "Paula Vera · Dental",
+                "prestacion": "Atención dental",
+                "numeroSesion": 1,
+                "asistencia": "ASISTIO",
+                "resultado": "REALIZADA",
+                "observacion": "Se realizó con sedación consciente.",
+                "autor": "TENS (demo)"
+              }
+            ],
+            "urgencias": []
+          }
+        ],
+        "historial": [
+          {
+            "fecha": "2026-11-02T00:19:53.159Z",
+            "tipo": "Ingreso al programa",
+            "detalle": "Postulación aceptada",
+            "autor": "Trabajo social (demo)"
+          },
+          {
+            "fecha": "2026-11-08T00:19:53.159Z",
+            "tipo": "Derivación",
+            "detalle": "Primera derivación · Dental · llamado semanal",
+            "autor": "Trabajo social (demo)"
+          },
+          {
+            "fecha": "2026-11-18T00:19:53.159Z",
+            "tipo": "Atención",
+            "detalle": "No realizada · Atención dental · Contraindicación médica",
+            "autor": "TENS (demo)"
+          },
+          {
+            "fecha": "2026-11-24T00:19:53.159Z",
+            "tipo": "Atención",
+            "detalle": "Sesión 1 · Realizada · Atención dental",
+            "autor": "TENS (demo)"
+          }
+        ]
+      },
+      {
+        "id": "B-12",
+        "rut": "21789004-7",
+        "nombres": "Vicente",
+        "apellidos": "Soto Carrasco",
+        "fechaNacimiento": "2013-11-19",
+        "comuna": "Maipú",
+        "apoderado": {
+          "nombre": "Lorena Carrasco Bravo",
+          "telefono": "+56 9 4123 9876",
+          "prevision": "FONASA"
+        },
+        "situacionDocumental": "DOCUMENTADO",
+        "electrodependiente": false,
+        "enfermedades": [
+          {
+            "nombre": "Por completar"
+          }
+        ],
+        "centrosSalud": [
+          "CESFAM de la comuna"
+        ],
+        "credencial": {
+          "tiene": false
+        },
+        "hospitalizaciones": [],
+        "fechaRegistro": "2026-11-20T00:19:53.159Z",
+        "bajas": [],
+        "ayudas": [],
+        "observaciones": [],
+        "casos": [],
+        "historial": [
+          {
+            "fecha": "2026-11-20T00:19:53.159Z",
+            "tipo": "Ingreso al programa",
+            "detalle": "Postulación aceptada",
             "autor": "Trabajo social (demo)"
           }
         ]
@@ -351,22 +1308,22 @@
     ],
     "alertas": [
       {
-        "id": "AL-vzz70ota1",
+        "id": "AL-54mbbolzb",
         "tipo": "CASO_SIN_ACTUALIZACION",
         "idBeneficiario": "B-01",
         "idCaso": "K-01",
-        "fechaGeneracion": "2026-11-26T00:01:22.873Z",
+        "fechaGeneracion": "2026-11-26T00:19:53.159Z",
         "diasSinActualizacion": 19,
         "umbralDias": 14,
         "estado": "ACTIVA"
       },
       {
-        "id": "AL-k0zy69ta1",
+        "id": "AL-vk3g52lzb",
         "tipo": "DERIVACION_SIN_ATENCION",
         "idBeneficiario": "B-02",
         "idCaso": "K-02",
         "idDerivacion": "D-02",
-        "fechaGeneracion": "2026-11-26T00:01:22.873Z",
+        "fechaGeneracion": "2026-11-26T00:19:53.159Z",
         "diasSinActualizacion": 60,
         "umbralDias": 7,
         "estado": "ACTIVA"
@@ -374,40 +1331,40 @@
     ],
     "notificaciones": [
       {
-        "id": "N-2aoefpta1",
+        "id": "N-l8dwwmlzb",
         "tipo": "ALERTA_CASO",
         "canal": "PLATAFORMA",
         "rolDestino": "TRABAJO_SOCIAL",
         "mensaje": "Caso de Camila Rojas Soto lleva 19 días sin actualización (umbral 14).",
         "estado": "PENDIENTE",
-        "fecha": "2026-11-26T00:01:22.873Z"
+        "fecha": "2026-11-26T00:19:53.159Z"
       },
       {
-        "id": "N-s2jm6lta1",
+        "id": "N-32cv1jlzb",
         "tipo": "ALERTA_CASO",
         "canal": "PLATAFORMA",
         "rolDestino": "TENS",
         "mensaje": "Caso de Camila Rojas Soto lleva 19 días sin actualización (umbral 14).",
         "estado": "PENDIENTE",
-        "fecha": "2026-11-26T00:01:22.873Z"
+        "fecha": "2026-11-26T00:19:53.159Z"
       },
       {
-        "id": "N-5u1z9yta1",
+        "id": "N-xgv7t2lzb",
         "tipo": "ALERTA_CASO",
         "canal": "PLATAFORMA",
         "rolDestino": "TRABAJO_SOCIAL",
         "mensaje": "Derivación de Tomás Díaz Pérez a Kinesiología lleva 60 días sin atención (umbral 7).",
         "estado": "PENDIENTE",
-        "fecha": "2026-11-26T00:01:22.873Z"
+        "fecha": "2026-11-26T00:19:53.159Z"
       },
       {
-        "id": "N-f3ss1dta1",
+        "id": "N-4kojr7lzb",
         "tipo": "ALERTA_CASO",
         "canal": "PLATAFORMA",
         "rolDestino": "TENS",
         "mensaje": "Derivación de Tomás Díaz Pérez a Kinesiología lleva 60 días sin atención (umbral 7).",
         "estado": "PENDIENTE",
-        "fecha": "2026-11-26T00:01:22.873Z"
+        "fecha": "2026-11-26T00:19:53.159Z"
       }
     ],
     "reportes": []

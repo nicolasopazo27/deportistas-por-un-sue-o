@@ -8,7 +8,75 @@ const diasAtras = (n: number) => {
 };
 const fecha = (n: number) => diasAtras(n).slice(0, 10);
 
-export const VERSION_DATOS = 3;
+export const VERSION_DATOS = 4;
+
+// ---------- Beneficiarios adicionales FICTICIOS (para que listas, filtros y gráficos se vean con datos) ----------
+// Se evitan las comunas Santiago y Puente Alto y la patología Oncológica para no alterar los casos de prueba base.
+type Sesion = { dias: number; prof: string; prest: string; ok?: boolean; motivo?: string; obs?: string };
+interface Extra {
+  id: string; rut: string; nombres: string; apellidos: string; nac: string; comuna: string; apoderado: string; tel: string; prev: string;
+  pat: string; centro: string; registro: number; area?: 'DENTAL' | 'KINESIOLOGIA'; derivacion?: number; sesiones?: Sesion[];
+  cierre?: number; baja?: { causal: 'EGRESO' | 'DESVINCULACION'; dias: number; obs: string }; ayuda?: { tipo: string; dias: number; guia: string };
+  credencial?: number; obs?: { dias: number; texto: string; autor: string };
+}
+const TS = 'Trabajo social (demo)', TN = 'TENS (demo)';
+function construir(x: Extra): EstadoSistema['beneficiarios'][number] {
+  const historial = [{ fecha: diasAtras(x.registro), tipo: 'Ingreso al programa', detalle: 'Postulación aceptada', autor: TS }];
+  const casos: EstadoSistema['beneficiarios'][number]['casos'] = [];
+  if (x.area && x.derivacion !== undefined) {
+    const nombreArea = x.area === 'DENTAL' ? 'Dental' : 'Kinesiología';
+    historial.push({ fecha: diasAtras(x.derivacion), tipo: 'Derivación', detalle: `Primera derivación · ${nombreArea} · llamado semanal`, autor: TS });
+    let n = 0;
+    const atenciones = (x.sesiones ?? []).map((a, i) => {
+      const realizada = a.ok !== false; if (realizada) n++;
+      historial.push({ fecha: diasAtras(a.dias), tipo: 'Atención', detalle: realizada ? `Sesión ${n} · Realizada · ${a.prest}` : `No realizada · ${a.prest} · ${a.motivo}`, autor: TN });
+      return { id: `A-${x.id}-${i + 1}`, fecha: fecha(a.dias), profesional: a.prof, prestacion: a.prest, numeroSesion: realizada ? n : undefined,
+        asistencia: realizada ? 'ASISTIO' as const : 'NO_ASISTIO' as const, resultado: realizada ? 'REALIZADA' as const : 'NO_REALIZADA' as const,
+        motivo: realizada ? undefined : a.motivo, observacion: a.obs, autor: TN };
+    });
+    const cerrado = x.cierre !== undefined || !!x.baja;
+    const ultima = Math.min(x.derivacion, ...(x.sesiones ?? []).map(a => a.dias));
+    casos.push({ id: `K-${x.id}`, estado: cerrado ? 'ATENDIDO' : 'EN_ATENCION', fechaInicio: fecha(x.derivacion), ultimaActualizacion: diasAtras(x.cierre ?? ultima),
+      fechaCierreCiclo: cerrado ? fecha(x.cierre ?? x.baja!.dias) : undefined,
+      derivaciones: [{ id: `D-${x.id}`, fecha: fecha(x.derivacion), tipoIngreso: 'INGRESO', area: x.area, origen: 'LLAMADO_SEMANAL', advertenciaIgnorada: false, autor: TS }],
+      atenciones, urgencias: [] } as EstadoSistema['beneficiarios'][number]['casos'][number]);
+    if (x.cierre !== undefined) historial.push({ fecha: diasAtras(x.cierre), tipo: 'Ciclo terminado', detalle: `Ciclo de ${nombreArea} completado`, autor: TN });
+  }
+  if (x.ayuda) historial.push({ fecha: diasAtras(x.ayuda.dias), tipo: 'Ayuda entregada', detalle: `${x.ayuda.tipo} · guía ${x.ayuda.guia}`, autor: TS });
+  if (x.baja) historial.push({ fecha: diasAtras(x.baja.dias), tipo: 'Baja', detalle: `${x.baja.causal === 'EGRESO' ? 'Egreso' : 'Desvinculación'} · ${x.baja.obs}`, autor: TS });
+  historial.sort((a, b) => a.fecha.localeCompare(b.fecha));
+  return {
+    id: x.id, rut: x.rut, nombres: x.nombres, apellidos: x.apellidos, fechaNacimiento: x.nac, comuna: x.comuna,
+    apoderado: { nombre: x.apoderado, telefono: x.tel, prevision: x.prev }, situacionDocumental: 'DOCUMENTADO', electrodependiente: false,
+    enfermedades: [{ nombre: x.pat }], centrosSalud: [x.centro], credencial: x.credencial ? { tiene: true, numero: `CD-0${x.rut.slice(0, 5)}`, porcentaje: x.credencial } : { tiene: false },
+    hospitalizaciones: [], fechaRegistro: diasAtras(x.registro),
+    bajas: x.baja ? [{ id: `BJ-${x.id}`, causal: x.baja.causal, fecha: fecha(x.baja.dias), observacion: x.baja.obs, autor: TS }] : [],
+    ayudas: x.ayuda ? [{ id: `AY-${x.id}`, tipo: x.ayuda.tipo, fecha: fecha(x.ayuda.dias), numeroGuia: x.ayuda.guia, autor: TS }] : [],
+    observaciones: x.obs ? [{ id: `O-${x.id}`, fechaHora: diasAtras(x.obs.dias), texto: x.obs.texto, autor: x.obs.autor }] : [],
+    casos, historial,
+  } as EstadoSistema['beneficiarios'][number];
+}
+const DEN = 'Diego Fuentes · Dental', DEN2 = 'Paula Vera · Dental', KIN = 'Camila Ríos · Kinesiología';
+const EXTRAS: Extra[] = [
+  { id: 'B-03', rut: '20111222-2', nombres: 'Josefa', apellidos: 'Reyes Castro', nac: '2014-06-12', comuna: 'La Florida', apoderado: 'Paola Castro Ríos', tel: '+56 9 3111 2233', prev: 'FONASA', pat: 'Renal', centro: 'Hospital Sótero del Río', registro: 38, area: 'DENTAL', derivacion: 32, credencial: 30,
+    sesiones: [{ dias: 25, prof: DEN, prest: 'Atención dental', obs: 'Evaluación inicial.' }, { dias: 14, prof: DEN, prest: 'Atención dental' }, { dias: 4, prof: DEN, prest: 'Atención dental', obs: 'Tratamiento avanzando bien.' }] },
+  { id: 'B-04', rut: '19876123-0', nombres: 'Matías', apellidos: 'González Fuentes', nac: '2011-02-03', comuna: 'Peñalolén', apoderado: 'Rodrigo González Vidal', tel: '+56 9 4555 6677', prev: 'ISAPRE', pat: 'Neurológica', centro: 'Teletón', registro: 27, area: 'KINESIOLOGIA', derivacion: 21,
+    sesiones: [{ dias: 13, prof: KIN, prest: 'Kinesiología', obs: 'Plan de ejercicios en casa.' }, { dias: 6, prof: KIN, prest: 'Kinesiología' }], obs: { dias: 6, texto: 'Apoderado pide horario de tarde (dato ficticio).', autor: 'Valentina Muñoz' } },
+  { id: 'B-05', rut: '22987456-K', nombres: 'Isidora', apellidos: 'Pino Herrera', nac: '2016-09-30', comuna: 'Recoleta', apoderado: 'Daniela Herrera Soto', tel: '+56 9 6888 1122', prev: 'FONASA', pat: 'Cardiopatía', centro: 'Hospital Roberto del Río', registro: 9, area: 'DENTAL', derivacion: 3 },
+  { id: 'B-06', rut: '21555333-7', nombres: 'Joaquín', apellidos: 'Muñoz Silva', nac: '2012-12-01', comuna: 'San Bernardo', apoderado: 'Claudia Silva Mora', tel: '+56 9 7222 3344', prev: 'FONASA', pat: 'Respiratoria', centro: 'Hospital Exequiel González Cortés', registro: 120, area: 'KINESIOLOGIA', derivacion: 110, cierre: 12,
+    sesiones: [{ dias: 95, prof: KIN, prest: 'Kinesiología' }, { dias: 70, prof: KIN, prest: 'Kinesiología' }, { dias: 40, prof: KIN, prest: 'Kinesiología' }, { dias: 12, prof: KIN, prest: 'Kinesiología', obs: 'Alta kinesiológica.' }] },
+  { id: 'B-07', rut: '23111444-0', nombres: 'Florencia', apellidos: 'Vera Ramírez', nac: '2018-04-17', comuna: 'Maipú', apoderado: 'Natalia Ramírez Pinto', tel: '+56 9 8111 4455', prev: 'Sin previsión', pat: 'Neurológica', centro: 'CESFAM de la comuna', registro: 2, credencial: 50 },
+  { id: 'B-08', rut: '20444777-2', nombres: 'Agustín', apellidos: 'Rojas Morales', nac: '2009-07-08', comuna: 'La Florida', apoderado: 'Patricio Rojas Leiva', tel: '+56 9 5333 7788', prev: 'FONASA', pat: 'Renal', centro: 'Hospital Sótero del Río', registro: 210, area: 'DENTAL', derivacion: 200,
+    sesiones: [{ dias: 180, prof: DEN2, prest: 'Atención dental' }, { dias: 150, prof: DEN2, prest: 'Atención dental' }, { dias: 30, prof: DEN2, prest: 'Atención dental' }], baja: { causal: 'EGRESO', dias: 15, obs: 'Cumplió 18 años y completó su tratamiento' } },
+  { id: 'B-09', rut: '22222111-0', nombres: 'Antonia', apellidos: 'Castillo Díaz', nac: '2015-01-25', comuna: 'Peñalolén', apoderado: 'Verónica Díaz Rojas', tel: '+56 9 9444 5566', prev: 'FONASA', pat: 'Respiratoria', centro: 'Hospital Sótero del Río', registro: 18, area: 'KINESIOLOGIA', derivacion: 12,
+    sesiones: [{ dias: 5, prof: KIN, prest: 'Kinesiología', obs: 'Requiere traslado para próximas sesiones.' }], ayuda: { tipo: 'Traslado', dias: 5, guia: 'GT-2041' } },
+  { id: 'B-10', rut: '19333888-7', nombres: 'Lucas', apellidos: 'Fernández Torres', nac: '2010-10-14', comuna: 'Recoleta', apoderado: 'Marcela Torres Vega', tel: '+56 9 2777 8899', prev: 'ISAPRE', pat: 'Cardiopatía', centro: 'Hospital Roberto del Río', registro: 160, area: 'DENTAL', derivacion: 150,
+    sesiones: [{ dias: 140, prof: DEN, prest: 'Atención dental' }, { dias: 120, prof: DEN, prest: 'Atención dental', ok: false, motivo: 'Falta de adherencia al programa' }], baja: { causal: 'DESVINCULACION', dias: 30, obs: 'Familia se trasladó a otra región' } },
+  { id: 'B-11', rut: '24015632-6', nombres: 'Emilia', apellidos: 'Navarro Pizarro', nac: '2017-03-09', comuna: 'San Bernardo', apoderado: 'Felipe Navarro Cid', tel: '+56 9 3666 1200', prev: 'FONASA', pat: 'Neurológica', centro: 'Teletón', registro: 24, area: 'DENTAL', derivacion: 18, credencial: 70,
+    sesiones: [{ dias: 8, prof: DEN2, prest: 'Atención dental', ok: false, motivo: 'Contraindicación médica' }, { dias: 2, prof: DEN2, prest: 'Atención dental', obs: 'Se realizó con sedación consciente.' }] },
+  { id: 'B-12', rut: '21789004-7', nombres: 'Vicente', apellidos: 'Soto Carrasco', nac: '2013-11-19', comuna: 'Maipú', apoderado: 'Lorena Carrasco Bravo', tel: '+56 9 4123 9876', prev: 'FONASA', pat: 'Por completar', centro: 'CESFAM de la comuna', registro: 6 },
+];
+
 
 export function crearDatosIniciales(): EstadoSistema {
   return {
@@ -66,6 +134,7 @@ export function crearDatosIniciales(): EstadoSistema {
           { fecha: diasAtras(60), tipo: 'Derivación', detalle: 'Primera derivación · Kinesiología · solicitud del apoderado', autor: 'Trabajo social (demo)' },
         ],
       },
+      ...EXTRAS.map(construir),
     ],
     postulaciones: [
       {

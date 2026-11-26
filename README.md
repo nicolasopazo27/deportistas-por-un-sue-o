@@ -39,7 +39,7 @@ Otros comandos (dentro de `prototipo/`):
 
 | Comando | Qué hace |
 |---|---|
-| `npm test` | Ejecuta los 30 casos de prueba automatizados y regenera las evidencias en `pruebas/evidencias/` |
+| `npm test` | Ejecuta los 33 casos de prueba automatizados y regenera las evidencias en `pruebas/evidencias/` |
 | `npm run build` | Compila la versión de producción en `prototipo/dist/` (se puede abrir con `npm run preview`) |
 | `npm run lint` | Revisa la calidad del código |
 
@@ -91,6 +91,13 @@ En la pantalla de ingreso está el enlace **«Restablecer datos de demostración
 3. **Gráficos comparativos** de los últimos 5 años en el Inicio: postulaciones, ingresos y bajas por año; beneficiarios activos al cierre de cada año; bajas por causal y derivaciones por prestación. Suman un consolidado anual ficticio de las planillas anteriores con lo registrado en el sistema. Cada gráfico tiene tooltip y una tabla «Ver datos».
 4. **Pantalla de ingreso con bienvenida** de la Fundación (presentación, beneficios y botón «Ir a postulación pública»).
 5. **Postulación pública:** la postulación se hace desde una página abierta (`#/postular`); la gestión interna ya no registra postulaciones, solo las evalúa.
+6. **Seguimiento público** (`#/seguimiento`): el apoderado consulta el estado de su postulación con el RUT del NNA y el código entregado al postular.
+7. **Contactar por WhatsApp** desde la postulación y la ficha, con mensaje prellenado según la situación.
+8. **Historial como línea de tiempo** en la ficha (íconos y colores por tipo de evento, agrupado por mes).
+9. **Ficha imprimible / PDF** (`Imprimir / PDF` en la ficha), con permisos y registro de la salida.
+10. **Filtro de período** (últimos 5 o 3 años) y **descarga en PNG** de cada gráfico del Inicio.
+11. **Versión para celular**: menú desplegable, tablas con desplazamiento y formularios a una columna.
+12. **Más datos de ejemplo**: 12 beneficiarios ficticios en distintas comunas y estados (en atención, ciclo terminado, de baja, sin derivación).
 
 Todas las vistas tienen botón **Volver** (RNF-1). Fuera del alcance de esta versión: stock de bodega (RF-19), informes sociales (RF-24), rutas e integración con Dental Soft.
 
@@ -107,7 +114,7 @@ Todas las vistas tienen botón **Volver** (RNF-1). Fuera del alcance de esta ver
 │       └── test/           Casos de prueba automatizados (Matriz 03)
 ├── database/               Script DDL PostgreSQL 16 (28 tablas, 41 FK, 43 índices, 2 vistas),
 │                           pruebas de integridad y su resultado
-├── pruebas/evidencias/     EV-CP-P01 … EV-CP-P30 (.json y .html), resultados.json, ejecucion.txt
+├── pruebas/evidencias/     EV-CP-P01 … EV-CP-P33 (.json y .html), resultados.json, ejecucion.txt
 └── docs/                   BPMN AS-IS / TO-BE e informe final
 ```
 
@@ -125,7 +132,7 @@ Resultado verificado (`database/resultado_pruebas_integridad.txt`): 28 tablas, 4
 
 ## 8. Pruebas
 
-`npm test` ejecuta 30 casos (CP-P01 a CP-P30) mediante integración de componentes React con DOM emulado (jsdom). Cada caso parte del conjunto inicial ficticio y deja su evidencia en `pruebas/evidencias/`. Última ejecución: **30 aprobados, 0 fallidos**. Los HTML de evidencia son registros del DOM emulado, no capturas de navegador.
+`npm test` ejecuta 33 casos (CP-P01 a CP-P33) mediante integración de componentes React con DOM emulado (jsdom). Cada caso parte del conjunto inicial ficticio y deja su evidencia en `pruebas/evidencias/`. Última ejecución: **33 aprobados, 0 fallidos**. Los HTML de evidencia son registros del DOM emulado, no capturas de navegador.
 
 ## 9. Limitaciones conocidas y siguiente etapa
 

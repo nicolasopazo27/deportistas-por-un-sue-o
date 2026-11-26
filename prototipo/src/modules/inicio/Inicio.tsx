@@ -1,6 +1,6 @@
 // Inicio: panel con indicadores y pendientes según el perfil (respuesta a «completar la pantalla faltante»
 // y «revisar el diseño y la navegación», observaciones del mandante en el Certamen 1).
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ClipboardList, Users, Stethoscope, TriangleAlert, UserPlus, UserMinus } from 'lucide-react';
 import { calcularEstadisticas } from '../../data/estadisticas';
@@ -22,7 +22,8 @@ export default function Inicio() {
   const nombre = (id: string) => { const b = estado.beneficiarios.find(x => x.id === id); return b ? nombreCompleto(b) : id; };
   const ultimos = estado.beneficiarios.flatMap(b => b.historial.map(h => ({ ...h, b }))).sort((a, b) => b.fecha.localeCompare(a.fecha)).slice(0, 6);
   const verFichas = puede(rol, 'FICHA_CONSULTAR');
-  const est = useMemo(() => calcularEstadisticas(estado), [estado]);
+  const [periodo, setPeriodo] = useState<3 | 5>(5);
+  const est = useMemo(() => calcularEstadisticas(estado, undefined, periodo), [estado, periodo]);
   const anioAct = est.anios[est.anios.length - 1], anioAnt = est.anios[est.anios.length - 2];
   const categorias = est.anios.map(a => String(a.anio));
   const desde = categorias[0], hasta = categorias[categorias.length - 1];
@@ -48,7 +49,12 @@ export default function Inicio() {
 
       {verFichas && (
         <div className="panel panel-graficos">
-          <h2>Indicadores {desde}–{hasta}</h2>
+          <div className="graficos-cabecera">
+            <h2>Indicadores {desde}–{hasta}</h2>
+            <div className="segmentado" role="group" aria-label="Período de comparación">
+              {([5, 3] as const).map(n => <button key={n} type="button" className={periodo === n ? 'activo' : ''} aria-pressed={periodo === n} onClick={() => setPeriodo(n)}>Últimos {n} años</button>)}
+            </div>
+          </div>
           <p className="nota">Comparación anual: consolidado de las planillas anteriores (datos ficticios de demostración) más lo registrado en el sistema. {hasta} considera el año en curso.</p>
           <div className="graficos">
             <BarrasAgrupadas titulo="Postulaciones, ingresos y bajas por año" subtitulo="NNA por año" categorias={categorias} series={[
